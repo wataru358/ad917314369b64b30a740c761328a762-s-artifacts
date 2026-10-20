@@ -1,0 +1,56 @@
+{
+  "started_at_utc": "2026-10-20T23:13:34.629317+00:00",
+  "steps": [
+    {
+      "command": [
+        "python",
+        "build_trip_calendar.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python",
+        "build_publication.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "node",
+        "render_publication.mjs"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python",
+        "verify_publication.py"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "status": "passed",
+  "finished_at_utc": "2026-10-20T23:13:39.563215+00:00",
+  "sha256": {
+    "publication/README.md": "c84d19f47ba22d0e84b39b82f82eef05a5afdbdf113bc21e8e19aacc5384bf54",
+    "publication/baseline_sha256.json": "9004bd88f3c0825445bc2bf0a225235eaecdd80922d1513b8090920be854a9b0",
+    "publication/build_summary.json": "32223719f78d4de90220de6c7afe1a72e5afab1f8af64995276373bcc4769d6c",
+    "publication/destination_months.csv": "ffd700b2d1bc851f038158e67bab9e37d4296520c3ec6a631b4a670f85481a5e",
+    "publication/holidays_2016_2027.csv": "3b010672403556673a4cdb5ad81abd988c1150820dbb77e33308ae0d9092ce2e",
+    "publication/monthly-tables.md": "2f56c5230faad65e57914c6b5e13d4faf9a4ef5ca04f345e489e60876af13445",
+    "publication/monthly_leaders.csv": "43c80edcec70b71c16eebc776a8ad8fb7d2263d9edbc4bcf3f438bbe726a212c",
+    "publication/monthly_top3.csv": "c9f893637307c230f565309ae2df9fbe6c71072632767163a46475c5b6cc0d92",
+    "publication/run.log": "d4bd1476464b6f42878003bb3649e8bbf3417086c7f0498bb58fbfc2117dd33a",
+    "publication/score_policy_kyoto_august.csv": "2e74a14773e5d88f53e21d4c9e24a219891f79017d5f9c6be7f5a7a76eb8e864",
+    "publication/score_policy_risks.csv": "7313f862aa18c142dc7e59c95828fc095518a3dfd772d41da8d8e618100886ba",
+    "publication/trip_calendar_2016_2025.csv": "80068a67aae40700555e347d66a68e056887eabd77877f8153cb6bcfcdeaffbe",
+    "publication/trip_calendar_2026_2027.csv": "afe8001331f230ef0bd6a1a6397b39bacd71c6e4e0b17aa7e3eb941393de6837",
+    "publication/trip_calendar_monthly_2016_2025.csv": "f0b565343b1471c4c0964cdeff52fc8bee3977e8801bd317620818b72dcfa4da",
+    "publication/validation.json": "c858c5654df2ed0b4f992af2b98e381caa6e6c17179a448a501a684416fce0ea",
+    "publication/weather-monthly.png": "9f928861293ae3cfaa97deca10137ad2e8f7868fcdbf5be71716bdc6129a6d6b",
+    "publication/weather-monthly.svg": "ac93666577e74b7dc042ec5afd5792cb21d2cd83227d6ed2b39dbcde0cf1644a",
+    "run_publication_review.py": "e9cedfdc2e7dece550ade2409d76ca4775b85cbcf4ca5c35483eb0e520ad4dcd",
+    "render_publication.mjs": "27eea2c2707181d0a947a105853723e62b587384e015de0e4af0c0895c72d194"
+  }
+}

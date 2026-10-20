@@ -22,12 +22,13 @@ def main():
     execution = {'started_at_utc':datetime.now(timezone.utc).isoformat(), 'steps':[], 'status':'running'}
     with (OUT/'run.log').open('w',encoding='utf-8') as log:
         for command in commands:
-            log.write('$ '+' '.join(command)+'\n')
+            recorded_command = ['python', *command[1:]] if command[0] == sys.executable else command
+            log.write('$ '+' '.join(recorded_command)+'\n')
             log.flush()
             result = subprocess.run(command,cwd=BASE,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
             log.write(result.stdout+'\n')
             print(result.stdout,end='')
-            execution['steps'].append({'command':command,'exit_code':result.returncode})
+            execution['steps'].append({'command':recorded_command,'exit_code':result.returncode})
             if result.returncode:
                 execution['status']='failed'
                 break

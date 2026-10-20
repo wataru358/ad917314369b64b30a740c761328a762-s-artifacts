@@ -1,6 +1,6 @@
-"""既存672行からレビュー用の表・図・英語草稿を生成する。既存成果物は変更しない。
+"""既存672行からブログ記事に添える表・図を生成する。分析用データは変更しない。
 
-順位方針は2026-10-19のユーザー回答で確定。公開・デプロイは行わない。
+天候の達成率で順位を付け、宿泊需要は参考情報として併記する。
 小数1桁の既存達成率で同順位（1,1,3）とし、微差に順位の意味を持たせすぎない。
 """
 
@@ -133,22 +133,14 @@ def main():
     heatmap(rows)
     methods = """Ranks use the existing weather percentages rounded to one decimal place. Equal percentages share a rank (1, 1, 3); a top-three group can contain more than three destinations. No lodging penalty or minimum weather cutoff has been applied. A rank describes this comparison, not a promise of suitable weather. Lodging ratios compare each prefecture with its own annual average; 1.000 is that average. They do not measure street crowding, hotel prices, or availability."""
     (OUT / "monthly-tables.md").write_text("# Monthly weather comparison\n\n" + methods + "\n\n" + table(top) + "\n", encoding="utf-8")
-    sections = []
-    for m in range(1,13):
-        sections.append(f"## {calendar.month_name[m]}\n\n" + table([r for r in top if r["start_month"] == m], False))
-    template = (BASE / "publication-travel-template.md").read_text(encoding="utf-8")
-    text = template.replace("{{LEADERS}}", table(leaders)).replace("{{MONTHLY_TABLES}}", "\n\n".join(sections))
-    if "{{" in text:
-        raise ValueError("記事テンプレートに未展開の項目があります")
-    (OUT / "travel-article.en.md").write_text(text, encoding="utf-8")
     (OUT / "build_summary.json").write_text(json.dumps({
-        "status": "editorial_review", "policy": "weather_only_with_lodging_context",
+        "status": "built", "policy": "weather_only_with_lodging_context",
         "policy_basis": "Rank by weather match rate and show lodging demand as context",
         "rows": len(rows), "top3_rows": len(top), "leader_rows": len(leaders),
         "minimum_valid_coverage_pct": min(r["valid_trips_pct"] for r in rows),
         "score_policy_risks": risks,
     }, indent=2) + "\n")
-    print(f"Publication draft: {len(rows)} rows, {len(top)} top-three rows, {len(leaders)} leaders; SVG and English article")
+    print(f"Publication artifacts: {len(rows)} rows, {len(top)} top-three rows, {len(leaders)} leaders; Markdown tables and SVG")
 
 
 if __name__ == "__main__":

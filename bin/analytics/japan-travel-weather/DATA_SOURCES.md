@@ -1,7 +1,7 @@
 # Data sources and reproduction
 
 The analysis uses public, aggregate observations and tourism statistics. Derived
-CSV/Parquet files, tables, charts, and articles were extracted, joined, or calculated
+CSV/Parquet files, tables, and charts were extracted, joined, or calculated
 by this project; they are not official publications or forecasts.
 
 | Data | Official source | Reuse information |
@@ -9,7 +9,7 @@ by this project; they are not official publications or forecasts.
 | Daily weather, 2016–2025; station catalog | [Japan Meteorological Agency](https://www.data.jma.go.jp/risk/obsdl/index.php) | [JMA terms](https://www.jma.go.jp/jma/kishou/info/coment.html): Public Data License 1.0, subject to stated exceptions; credit JMA and identify processing. |
 | Monthly prefectural guest nights, 2023–2025 | [Japan Tourism Agency, Accommodation Survey](https://www.mlit.go.jp/kankocho/tokei_hakusyo/shukuhakutokei.html) | [Tourism Agency terms](https://www.mlit.go.jp/kankocho/site-policy.html): Public Data License 1.0, subject to stated exceptions; credit the agency and identify processing. |
 | Municipal monthly tourism counts | [Hokkaido tourism survey](https://www.pref.hokkaido.lg.jp/kz/kkd/irikomi.html) | [Hokkaido site policy](https://www.pref.hokkaido.lg.jp/site-info/sitepolicy.html): CC BY unless otherwise indicated; third-party rights remain separate. |
-| Kyoto City monthly visitor counts | [2024 report](https://www.city.kyoto.lg.jp/sankan/cmsfiles/contents/0000109/109809/R6honsatsu.pdf), [2025 report](https://www.city.kyoto.lg.jp/sankan/cmsfiles/contents/0000354/354593/honsatsu.pdf) | Only extracted numerical facts and project calculations are included. The reports themselves are omitted under the [city site policy](https://www.city.kyoto.lg.jp/main/site_policy/0000000005.html). See article notes about retrospective revisions and the research-only 2023 values. |
+| Kyoto City monthly visitor counts | [2024 report](https://www.city.kyoto.lg.jp/sankan/cmsfiles/contents/0000109/109809/R6honsatsu.pdf), [2025 report](https://www.city.kyoto.lg.jp/sankan/cmsfiles/contents/0000354/354593/honsatsu.pdf) | Only extracted numerical facts and project calculations are included. The reports themselves are omitted under the [city site policy](https://www.city.kyoto.lg.jp/main/site_policy/0000000005.html). The extracted 2023 values remain research material pending confirmation of retrospective revisions; use the 2024–2025 comparison from the 2025 report. |
 | Japanese national holidays | [Cabinet Office holiday calendar](https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html) | Source of holiday dates and names; the downloaded CSV and its provenance/hash are in `data/calendar/`. |
 
 Source and reuse pages were checked on 2026-10-20. This repository does not grant a

@@ -1,5 +1,5 @@
 {
-  "status": "editorial_review",
+  "status": "built",
   "policy": "weather_only_with_lodging_context",
   "policy_basis": "Rank by weather match rate and show lodging demand as context",
   "rows": 672,

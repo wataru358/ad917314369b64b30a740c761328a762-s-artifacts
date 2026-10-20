@@ -1,7 +1,7 @@
 # Publication review — 2026-10-20
 
 Reviewed the files selected for the initial public commit, including hidden files,
-source/configuration files, article Markdown/HTML, CSV/JSON, Office archive members,
+source/configuration files, CSV/JSON, Office archive members,
 and decoded values from all seven Parquet files.
 
 - No credentials, personal email addresses, private machine paths, or private-key
@@ -20,5 +20,5 @@ and decoded values from all seven Parquet files.
 - The initial commit uses a GitHub noreply author address.
 
 These checks are a point-in-time review of this initial publication, not a guarantee
-that every possible secret format can be detected. Article drafts retain their
-editorial/research status and caveats.
+that every possible secret format can be detected. Article drafts were subsequently removed; article text is maintained separately
+on wataruito.com.

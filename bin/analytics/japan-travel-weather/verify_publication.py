@@ -177,14 +177,15 @@ def verify_publication():
         }
         for k,v in expected.items():
             check(int(r[k])==v,f'policy risk {k}')
-    # 本文の固定した数値も出典行に照合する。
-    kurashiki = old['kurashiki','11']
-    check((kurashiki['matching_trips'],kurashiki['valid_trips'])==('264','296'),'article Kurashiki numerator')
-    article = (OUT/'travel-article.en.md').read_text()
-    check('{{' not in article and len(article.split())>1000,'complete article template')
-    for r in read(OUT/'monthly_top3.csv'):
-        expected = f"| {r['weather_rank']} | {r['destination_en']} | {float(r['matching_trips_pct']):.1f}% | {r['matching_trips']} / {r['valid_trips']} | {float(r['valid_trips_pct']):.1f}% | {r['prefecture_en']} | {float(r['demand_ratio_mean']):.3f} |"
-        check(expected in article,'article table row')
+    # 公開用Markdown表の全行をCSVの値と照合する。
+    table_lines = (OUT/'monthly-tables.md').read_text().splitlines()
+    data_lines = [line for line in table_lines if line.startswith('| ')]
+    top_rows = read(OUT/'monthly_top3.csv')
+    check(len(data_lines) == len(top_rows) + 2, 'monthly table row count')
+    expected_lines = []
+    for r in top_rows:
+        expected_lines.append(f"| {calendar.month_name[int(r['start_month'])]} | {r['weather_rank']} | {r['destination_en']} | {float(r['matching_trips_pct']):.1f}% | {r['matching_trips']} / {r['valid_trips']} | {float(r['valid_trips_pct']):.1f}% | {r['prefecture_en']} | {float(r['demand_ratio_mean']):.3f} |")
+    check(data_lines[2:] == expected_lines, 'monthly table values and order')
     # 図のセルを位置から読み戻し、CSVと数値・コントラストを照合する。
     svg = ET.parse(OUT/'weather-monthly.svg').getroot()
     ns = {'s':'http://www.w3.org/2000/svg'}
@@ -202,7 +203,7 @@ def verify_publication():
         lum=sum(c*w for c,w in zip(linear,(0.2126,0.7152,0.0722)))
         contrast=(lum+0.05)/0.05 if label.get('fill')=='#000' else 1.05/(lum+0.05)
         check(contrast>=4.5,'chart text contrast')
-    for name in ['travel-article.en.md','learning-article.en.md','README.md']:
+    for name in ['monthly-tables.md','README.md']:
         for target in re.findall(r'\]\(([^)]+)\)',(OUT/name).read_text()):
             if not target.startswith(('https://','http://','#')):
                 check((OUT/target.split('#')[0]).is_file(),f'local link {name}: {target}')
@@ -221,8 +222,8 @@ def main():
     for path,digest in baseline.items():
         check(hashlib.sha256((BASE/path).read_bytes()).hexdigest()==digest,f'preserved {path}')
     inputs = [DATA/'jma_56_regions_daily_2016_2025.parquet',DATA/'accommodation_monthly_2023_2025.parquet',DATA/'weather_accommodation_56_regions.csv',BASE/'data/calendar/syukujitsu.csv']
-    artifacts = list(OUT.glob('*.csv'))+list(OUT.glob('*.svg'))+list(OUT.glob('*.md'))
-    codes = [BASE/p for p in ['build_trip_calendar.py','build_publication.py','verify_publication.py','publication-travel-template.md']]
+    artifacts = list(OUT.glob('*.csv'))+list(OUT.glob('*.svg'))+list(OUT.glob('*.png'))+list(OUT.glob('*.md'))
+    codes = [BASE/p for p in ['build_trip_calendar.py','build_publication.py','verify_publication.py','render_publication.mjs','run_publication_review.py']]
     result = {
         'status':'passed','checks':checks,'verified_at_utc':datetime.now(timezone.utc).isoformat(),
         'weather_daily_rows':204568,'destination_months':672,'lodging_months':1692,

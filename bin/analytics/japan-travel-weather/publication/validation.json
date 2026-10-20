@@ -1,7 +1,7 @@
 {
   "status": "passed",
-  "checks": 264442,
-  "verified_at_utc": "2026-10-20T23:04:12.337755+00:00",
+  "checks": 264404,
+  "verified_at_utc": "2026-10-20T23:13:39.548255+00:00",
   "weather_daily_rows": 204568,
   "destination_months": 672,
   "lodging_months": 1692,
@@ -23,13 +23,13 @@
     "publication/score_policy_kyoto_august.csv": "2e74a14773e5d88f53e21d4c9e24a219891f79017d5f9c6be7f5a7a76eb8e864",
     "publication/trip_calendar_2016_2025.csv": "80068a67aae40700555e347d66a68e056887eabd77877f8153cb6bcfcdeaffbe",
     "publication/weather-monthly.svg": "ac93666577e74b7dc042ec5afd5792cb21d2cd83227d6ed2b39dbcde0cf1644a",
-    "publication/learning-article.en.md": "e52863bda594e091a2a0518abd9b8eed79fc9413b5f1f513b4933f6ba38361ee",
-    "publication/README.md": "cac67fd6dbac355c6c4d9a5108183ac59ec7654b2b1768d896823c113e87e999",
+    "publication/weather-monthly.png": "9f928861293ae3cfaa97deca10137ad2e8f7868fcdbf5be71716bdc6129a6d6b",
+    "publication/README.md": "c84d19f47ba22d0e84b39b82f82eef05a5afdbdf113bc21e8e19aacc5384bf54",
     "publication/monthly-tables.md": "2f56c5230faad65e57914c6b5e13d4faf9a4ef5ca04f345e489e60876af13445",
-    "publication/travel-article.en.md": "f7eb624a580920167d9236472490d24901dcc16591a0fa9149ac959743cbea03",
     "build_trip_calendar.py": "8a527b5f197c8c4f20fb2430e0ca61d8181a37dafffa524c34dc82c7745441e2",
-    "build_publication.py": "42e59a143b0b2f9c0f64ebce30ef533669abf2d5408ddad8e34c4450a4bcbeb5",
-    "verify_publication.py": "7fdfc4835da569cbfe537cd1bec09e99d2f7b1a2db0762b59e91a2fdf133fe09",
-    "publication-travel-template.md": "32ffa2b1b33341dff7a581d44bbd7d56607b091667d160b83e08fd924aa1cc1f"
+    "build_publication.py": "f69c7b901de7534b27fcfe9f48596f1f2a67362e28eb5ec12494f39aac98766d",
+    "verify_publication.py": "68df6e114472d07339c4c41328edad80833c9b447314829dce04327358b46650",
+    "render_publication.mjs": "27eea2c2707181d0a947a105853723e62b587384e015de0e4af0c0895c72d194",
+    "run_publication_review.py": "e9cedfdc2e7dece550ade2409d76ca4775b85cbcf4ca5c35483eb0e520ad4dcd"
   }
 }
