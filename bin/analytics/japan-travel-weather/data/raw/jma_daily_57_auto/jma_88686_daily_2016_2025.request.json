@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"s47836\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:51:57.906229+00:00",
+  "sha256": "5d307ce203375f868ba9cfc9405366ad35ff28005864f3909049422c7000745d",
+  "station": {
+    "kind": "station",
+    "stid": "s47836",
+    "stname": "屋久島",
+    "prid": "88",
+    "kansoku": "111111",
+    "small": true,
+    "ended": false,
+    "x": 427,
+    "y": 499,
+    "w": 11,
+    "h": 11,
+    "title": "地点名：屋久島\nカナ:ヤクシマ\n北緯：30度23.1分\n東経：130度39.5分\n標高：37.3m"
+  },
+  "mapping_station_number": "88686"
+}

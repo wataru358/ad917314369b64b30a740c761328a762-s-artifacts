@@ -1,0 +1,9 @@
+{
+  "name": "wataruito-article-artifacts",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@astrojs/markdown-remark": "6.3.10",
+    "sharp": "0.33.5"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "status": "editorial_review",
+  "policy": "weather_only_with_lodging_context",
+  "policy_basis": "Rank by weather match rate and show lodging demand as context",
+  "rows": 672,
+  "top3_rows": 36,
+  "leader_rows": 12,
+  "minimum_valid_coverage_pct": 80.3,
+  "score_policy_risks": [
+    {
+      "coefficient": 10,
+      "changed_destination_months": 184,
+      "negative_scores": 44,
+      "zero_weather_promoted": 11,
+      "max_rank_change": 22,
+      "months_with_changed_leader": 0
+    },
+    {
+      "coefficient": 20,
+      "changed_destination_months": 273,
+      "negative_scores": 53,
+      "zero_weather_promoted": 15,
+      "max_rank_change": 33,
+      "months_with_changed_leader": 0
+    },
+    {
+      "coefficient": 30,
+      "changed_destination_months": 336,
+      "negative_scores": 59,
+      "zero_weather_promoted": 32,
+      "max_rank_change": 40,
+      "months_with_changed_leader": 1
+    }
+  ]
+}

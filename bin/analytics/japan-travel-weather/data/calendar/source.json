@@ -1,0 +1,26 @@
+{
+  "url": "https://www8.cao.go.jp/chosei/shukujitsu/syukujitsu.csv",
+  "page_url": "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html",
+  "retrieved_at_utc": "2026-10-19T17:42:22.909360+00:00",
+  "sha256": "cec37a743c96995cdb9cb52b685c9003634682a9b0e1a640a6b9b96881fe964a",
+  "encoding": "cp932",
+  "first_holiday": "1955-01-01",
+  "last_holiday": "2027-11-23",
+  "coverage_through": "2027-12-31",
+  "coverage_basis": "Official page lists calendar years 1955–2027",
+  "response_headers": {
+    "Date": "Mon, 19 Oct 2026 17:42:22 GMT",
+    "Server": "Apache",
+    "X-Frame-Options": "SAMEORIGIN",
+    "Last-Modified": "Mon, 02 Feb 2026 00:30:17 GMT",
+    "ETag": "\"5422-649cc6d5b552a\"",
+    "Accept-Ranges": "bytes",
+    "Content-Length": "21538",
+    "Cache-Control": "no-store",
+    "Expires": "Mon, 19 Oct 2026 17:42:22 GMT",
+    "X-Content-Type-Options": "nosniff",
+    "Pragma": "no-cache",
+    "Connection": "close",
+    "Content-Type": "text/csv"
+  }
+}

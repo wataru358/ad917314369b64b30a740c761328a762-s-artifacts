@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"s47605\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:46:42.038702+00:00",
+  "sha256": "ce21bb683e32e29e857c88f1dafb3e6d3d4e01eb5ca5e367c5d312c0228624e1",
+  "station": {
+    "kind": "station",
+    "stid": "s47605",
+    "stname": "金沢",
+    "prid": "56",
+    "kansoku": "111111",
+    "small": true,
+    "ended": false,
+    "x": 122,
+    "y": 248,
+    "w": 11,
+    "h": 11,
+    "title": "地点名：金沢\nカナ:カナザワ\n北緯：36度35.3分\n東経：136度38.0分\n標高：5.7m"
+  },
+  "mapping_station_number": "56227"
+}

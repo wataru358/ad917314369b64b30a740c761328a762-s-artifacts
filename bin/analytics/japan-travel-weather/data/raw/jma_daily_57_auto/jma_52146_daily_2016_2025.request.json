@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"s47617\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:46:12.602798+00:00",
+  "sha256": "bde57b276bfa61300ae651363b8e197deea57bafdc260f07b46ed439d8e2aa1a",
+  "station": {
+    "kind": "station",
+    "stid": "s47617",
+    "stname": "高山",
+    "prid": "52",
+    "kansoku": "111111",
+    "small": true,
+    "ended": false,
+    "x": 246,
+    "y": 81,
+    "w": 11,
+    "h": 11,
+    "title": "地点名：高山\nカナ:タカヤマ\n北緯：36度09.3分\n東経：137度15.2分\n標高：560m"
+  },
+  "mapping_station_number": "52146"
+}

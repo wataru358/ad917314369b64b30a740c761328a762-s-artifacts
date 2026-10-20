@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"s47819\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:50:55.090639+00:00",
+  "sha256": "f6d3eba627d737e49fb9bdd89e9ae8a913af73ba55669ea163de1c28c1a9a52e",
+  "station": {
+    "kind": "station",
+    "stid": "s47819",
+    "stname": "熊本",
+    "prid": "86",
+    "kansoku": "111111",
+    "small": true,
+    "ended": false,
+    "x": 176,
+    "y": 142,
+    "w": 11,
+    "h": 11,
+    "title": "地点名：熊本\nカナ:クマモト\n北緯：32度48.8分\n東経：130度42.4分\n標高：37.7m"
+  },
+  "mapping_station_number": "86141"
+}

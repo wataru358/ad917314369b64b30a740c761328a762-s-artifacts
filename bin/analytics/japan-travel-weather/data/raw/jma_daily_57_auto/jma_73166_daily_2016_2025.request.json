@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"s47887\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:50:10.189774+00:00",
+  "sha256": "8fa9533a4385b41e6cfbad7a4e9ae5adb56b43eeb5e733b724e7e073ffae343b",
+  "station": {
+    "kind": "station",
+    "stid": "s47887",
+    "stname": "松山",
+    "prid": "73",
+    "kansoku": "111111",
+    "small": true,
+    "ended": false,
+    "x": 150,
+    "y": 159,
+    "w": 11,
+    "h": 11,
+    "title": "地点名：松山\nカナ:マツヤマ\n北緯：33度50.6分\n東経：132度46.6分\n標高：32.2m"
+  },
+  "mapping_station_number": "73166"
+}

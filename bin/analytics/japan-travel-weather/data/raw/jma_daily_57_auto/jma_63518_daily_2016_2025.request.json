@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"s47770\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:47:53.838440+00:00",
+  "sha256": "a6ec7f4c18237679949664270f376a1b3b6a8a9ff4fce13a8c97b596df8e28ea",
+  "station": {
+    "kind": "station",
+    "stid": "s47770",
+    "stname": "神戸",
+    "prid": "63",
+    "kansoku": "111111",
+    "small": true,
+    "ended": false,
+    "x": 237,
+    "y": 296,
+    "w": 11,
+    "h": 11,
+    "title": "地点名：神戸\nカナ:コウベ\n北緯：34度41.8分\n東経：135度12.7分\n標高：5.3m"
+  },
+  "mapping_station_number": "63518"
+}

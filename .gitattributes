@@ -1,0 +1,4 @@
+# Preserve downloaded and generated CSV bytes for provenance hash checks.
+*.csv -text
+*.parquet binary
+*.png binary

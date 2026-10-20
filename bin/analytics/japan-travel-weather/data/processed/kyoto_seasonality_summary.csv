@@ -1,0 +1,4 @@
+destination_id,destination_name,municipality,metric,tourism_peak_months,lodging_peak_months,mean_absolute_gap,max_absolute_gap,opposite_season_months
+kyoto,京都,京都市,day_visitors,11,11,0.09566732241303043,0.3031483350566341,4
+kyoto,京都,京都市,guest_nights,11,11,0.021543985910885726,0.05265512320498922,2
+kyoto,京都,京都市,visitors,11,11,0.07455426370350042,0.22396656442566398,3

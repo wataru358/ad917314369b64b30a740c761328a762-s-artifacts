@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"s47411\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:41:37.358149+00:00",
+  "sha256": "c86b1b00121141fbd13f50f3bea6afd33738d1f4e4df48520eda3d21d9e1a4e0",
+  "station": {
+    "kind": "station",
+    "stid": "s47411",
+    "stname": "小樽",
+    "prid": "16",
+    "kansoku": "111111",
+    "small": true,
+    "ended": false,
+    "x": 258,
+    "y": 75,
+    "w": 11,
+    "h": 11,
+    "title": "地点名：小樽\nカナ:オタル\n北緯：43度10.9分\n東経：141度00.9分\n標高：24.9m"
+  },
+  "mapping_station_number": "16091"
+}

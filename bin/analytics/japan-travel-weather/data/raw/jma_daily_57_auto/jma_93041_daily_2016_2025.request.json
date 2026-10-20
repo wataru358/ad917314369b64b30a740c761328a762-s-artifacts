@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"s47927\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:52:57.151207+00:00",
+  "sha256": "f6e63d90e27b89e985f6f17cfc0f9c7c8dccbe9113bcb80724ce4d6784d8fcd8",
+  "station": {
+    "kind": "station",
+    "stid": "s47927",
+    "stname": "宮古島",
+    "prid": "91",
+    "kansoku": "111111",
+    "small": true,
+    "ended": false,
+    "x": 511,
+    "y": 317,
+    "w": 11,
+    "h": 11,
+    "title": "地点名：宮古島\nカナ:ミヤコジマ\n北緯：24度47.6分\n東経：125度16.7分\n標高：38.5m"
+  },
+  "mapping_station_number": "93041"
+}

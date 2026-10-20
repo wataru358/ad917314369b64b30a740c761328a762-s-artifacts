@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"s47769\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:47:59.501171+00:00",
+  "sha256": "67c6101f836e8c732e80cd54c2d7aa475e40f68725ce38029ae7707f545c6d16",
+  "station": {
+    "kind": "station",
+    "stid": "s47769",
+    "stname": "姫路",
+    "prid": "63",
+    "kansoku": "111111",
+    "small": true,
+    "ended": false,
+    "x": 129,
+    "y": 260,
+    "w": 11,
+    "h": 11,
+    "title": "地点名：姫路\nカナ:ヒメジ\n北緯：34度50.3分\n東経：134度40.2分\n標高：38.2m"
+  },
+  "mapping_station_number": "63383"
+}

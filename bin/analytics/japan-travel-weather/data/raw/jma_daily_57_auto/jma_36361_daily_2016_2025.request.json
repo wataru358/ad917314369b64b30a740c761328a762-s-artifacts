@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"s47570\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:43:35.427904+00:00",
+  "sha256": "7342a06d10bb6ba8d86ff17ce8777fb1cc5bbce53f7ccdf5094c634a4f1e0d32",
+  "station": {
+    "kind": "station",
+    "stid": "s47570",
+    "stname": "若松",
+    "prid": "36",
+    "kansoku": "111111",
+    "small": true,
+    "ended": false,
+    "x": 177,
+    "y": 148,
+    "w": 11,
+    "h": 11,
+    "title": "地点名：若松\nカナ:ワカマツ\n北緯：37度29.3分\n東経：139度54.6分\n標高：211.7m"
+  },
+  "mapping_station_number": "36361"
+}

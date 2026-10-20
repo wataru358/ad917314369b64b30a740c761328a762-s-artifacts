@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"s47430\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:41:28.301706+00:00",
+  "sha256": "475c37b15fa0034d98ab31341d97c5b080a3c62a6c157d154bbfe3add01d30d7",
+  "station": {
+    "kind": "station",
+    "stid": "s47430",
+    "stname": "函館",
+    "prid": "23",
+    "kansoku": "111111",
+    "small": true,
+    "ended": false,
+    "x": 246,
+    "y": 241,
+    "w": 11,
+    "h": 11,
+    "title": "地点名：函館\nカナ:ハコダテ\n北緯：41度49.0分\n東経：140度45.2分\n標高：35m"
+  },
+  "mapping_station_number": "23232"
+}

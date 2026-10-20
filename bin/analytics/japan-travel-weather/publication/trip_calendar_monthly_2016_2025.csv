@@ -1,0 +1,13 @@
+start_month,candidate_trips,trips_with_holiday,trips_with_holiday_pct,trips_with_weekend,denominator
+1,310,52,16.774193548387096,220,all_candidate_trips_not_weather_valid_trips
+2,283,68,24.02826855123675,202,all_candidate_trips_not_weather_valid_trips
+3,310,41,13.225806451612904,223,all_candidate_trips_not_weather_valid_trips
+4,300,50,16.666666666666668,214,all_candidate_trips_not_weather_valid_trips
+5,310,54,17.419354838709676,220,all_candidate_trips_not_weather_valid_trips
+6,300,0,0.0,216,all_candidate_trips_not_weather_valid_trips
+7,310,42,13.548387096774194,221,all_candidate_trips_not_weather_valid_trips
+8,310,43,13.870967741935484,221,all_candidate_trips_not_weather_valid_trips
+9,300,77,25.666666666666668,215,all_candidate_trips_not_weather_valid_trips
+10,310,46,14.838709677419354,220,all_candidate_trips_not_weather_valid_trips
+11,300,73,24.333333333333332,215,all_candidate_trips_not_weather_valid_trips
+12,307,40,13.029315960912053,221,all_candidate_trips_not_weather_valid_trips

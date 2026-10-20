@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"a0799\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:51:43.899297+00:00",
+  "sha256": "19a36b3bc031af40e86e3a67fe384900f83dce59157140b466009129739cb5b0",
+  "station": {
+    "kind": "station",
+    "stid": "a0799",
+    "stname": "湯布院",
+    "prid": "83",
+    "kansoku": "111201",
+    "small": true,
+    "ended": false,
+    "x": 166,
+    "y": 134,
+    "w": 7,
+    "h": 7,
+    "title": "地点名：湯布院\nカナ:ユフイン\n北緯：33度15.2分\n東経：131度20.8分\n標高：435m"
+  },
+  "mapping_station_number": "83201"
+}

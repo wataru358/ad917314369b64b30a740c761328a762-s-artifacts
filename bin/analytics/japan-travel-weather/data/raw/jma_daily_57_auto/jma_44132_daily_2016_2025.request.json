@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"s47662\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:43:43.117789+00:00",
+  "sha256": "fcf04c9ccddbc4e5057525626b61404d7a152e506a3ed5efbb1532d8e8bb3711",
+  "station": {
+    "kind": "station",
+    "stid": "s47662",
+    "stname": "東京",
+    "prid": "44",
+    "kansoku": "111111",
+    "small": true,
+    "ended": false,
+    "x": 165,
+    "y": 72,
+    "w": 11,
+    "h": 11,
+    "title": "地点名：東京\nカナ:トウキヨウ\n北緯：35度41.5分\n東経：139度45.0分\n標高：25.2m"
+  },
+  "mapping_station_number": "44132"
+}

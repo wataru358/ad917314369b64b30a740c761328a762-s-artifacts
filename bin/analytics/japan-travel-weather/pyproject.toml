@@ -1,0 +1,9 @@
+[project]
+name = "japan-travel-weather"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "duckdb>=1.5.5",
+    "openpyxl>=3.1.5",
+    "pypdf==6.21.0",
+]

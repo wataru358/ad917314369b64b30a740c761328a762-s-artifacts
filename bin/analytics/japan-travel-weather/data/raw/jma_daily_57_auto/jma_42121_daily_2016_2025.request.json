@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"a0343\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:44:49.554547+00:00",
+  "sha256": "e003f681f9b022b67442258fad7d44f4c9cb3d411011dd2021f5194ab257f89f",
+  "station": {
+    "kind": "station",
+    "stid": "a0343",
+    "stname": "草津",
+    "prid": "42",
+    "kansoku": "111211",
+    "small": true,
+    "ended": false,
+    "x": 95,
+    "y": 143,
+    "w": 7,
+    "h": 7,
+    "title": "地点名：草津\nカナ:クサツ\n北緯：36度37.0分\n東経：138度35.5分\n標高：1223m"
+  },
+  "mapping_station_number": "42121"
+}

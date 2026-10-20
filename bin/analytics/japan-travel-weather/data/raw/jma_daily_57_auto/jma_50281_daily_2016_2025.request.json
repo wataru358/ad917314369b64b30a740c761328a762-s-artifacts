@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"s47668\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:46:58.798377+00:00",
+  "sha256": "0c0dd8260c40f899d33bd20ebfb85b1dd96ac1d35b9378266e59952805785963",
+  "station": {
+    "kind": "station",
+    "stid": "s47668",
+    "stname": "網代",
+    "prid": "50",
+    "kansoku": "111111",
+    "small": true,
+    "ended": false,
+    "x": 353,
+    "y": 159,
+    "w": 11,
+    "h": 11,
+    "title": "地点名：網代\nカナ:アジロ\n北緯：35度02.7分\n東経：139度05.5分\n標高：66.9m"
+  },
+  "mapping_station_number": "50281"
+}

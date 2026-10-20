@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"a1443\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:44:27.203352+00:00",
+  "sha256": "95267c76de93c4d7f71fec48f206e62d35d9b627cc6ef04c0db079eb0380003d",
+  "station": {
+    "kind": "station",
+    "stid": "a1443",
+    "stname": "辻堂",
+    "prid": "46",
+    "kansoku": "111201",
+    "small": true,
+    "ended": false,
+    "x": 167,
+    "y": 167,
+    "w": 7,
+    "h": 7,
+    "title": "地点名：辻堂\nカナ:ツジドウ\n北緯：35度19.2分\n東経：139度27.0分\n標高：5m"
+  },
+  "mapping_station_number": "46141"
+}

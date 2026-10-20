@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"s47590\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:43:18.184387+00:00",
+  "sha256": "de6302a2e975b5d32707d7893547845153f717359c47ef90fa656192226ffca5",
+  "station": {
+    "kind": "station",
+    "stid": "s47590",
+    "stname": "仙台",
+    "prid": "34",
+    "kansoku": "111111",
+    "small": true,
+    "ended": false,
+    "x": 154,
+    "y": 205,
+    "w": 11,
+    "h": 11,
+    "title": "地点名：仙台\nカナ:センダイ\n北緯：38度15.7分\n東経：140度53.8分\n標高：38.9m"
+  },
+  "mapping_station_number": "34392"
+}

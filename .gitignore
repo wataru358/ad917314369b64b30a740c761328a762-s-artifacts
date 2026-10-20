@@ -1,0 +1,39 @@
+# Local environments and dependencies
+.venv/
+venv/
+node_modules/
+
+# Python caches and build output
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+
+# Local settings, secrets, and logs
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+Thumbs.db
+
+# Download original reports/workbooks from the cited official sources locally.
+# Keep third-party report content, Office metadata, and macros out of Git.
+/bin/analytics/japan-travel-weather/data/accommodation/*.xlsx
+/bin/analytics/japan-travel-weather/data/tourism/hokkaido/*.xlsx
+/bin/analytics/japan-travel-weather/data/tourism/hokkaido/*.xlsm
+/bin/analytics/japan-travel-weather/data/tourism/hokkaido/*.pdf
+/bin/analytics/japan-travel-weather/data/tourism/kyoto/*.pdf
+
+# Credentials and local agent configuration
+.aws/
+.ssh/
+.agents/
+.codex/
+*.pem
+*.key
+*.p12
+*.pfx

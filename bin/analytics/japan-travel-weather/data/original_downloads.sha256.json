@@ -1,0 +1,54 @@
+{
+  "data/accommodation/001750679.xlsx": {
+    "sha256": "a41a62a7e9c82dae287cca708c3f1bac20800f7e0d17e679a32fa889d8011455",
+    "bytes": 2720634
+  },
+  "data/accommodation/001905499.xlsx": {
+    "sha256": "2e1adf538381144c4c7428a8ec8dd76c8460d2067a85a043d234ea69eece10fe",
+    "bytes": 2527345
+  },
+  "data/accommodation/002010340.xlsx": {
+    "sha256": "f248106e23d058ad9f49efd85c80ebb58a41330c1c9556f9c5453cc79ebdef50",
+    "bytes": 2554483
+  },
+  "data/tourism/hokkaido/hokkaido_tourism_fy2022_report.pdf": {
+    "sha256": "b3b6c192968c4c183bd51cf3f1831dff7fdf47f606b7b37596c464b70ef2c6ba",
+    "bytes": 184593
+  },
+  "data/tourism/hokkaido/hokkaido_tourism_fy2022_tables.xlsx": {
+    "sha256": "1ac923cd383667de9a80f650bdce656abcdf3de704949d94fc4058467b461f37",
+    "bytes": 541206
+  },
+  "data/tourism/hokkaido/hokkaido_tourism_fy2023_report.pdf": {
+    "sha256": "59e703e92dd5e268c42d66fe65e4adb278e72ca78a423219ed39207ff5b25725",
+    "bytes": 399788
+  },
+  "data/tourism/hokkaido/hokkaido_tourism_fy2023_tables.xlsx": {
+    "sha256": "9e0f0b8c2b388d1f5cf74f5ba94f52a809cbc3ba5b76b1d2843926ddf9903369",
+    "bytes": 535828
+  },
+  "data/tourism/hokkaido/hokkaido_tourism_fy2024_report.pdf": {
+    "sha256": "49078f3429b2dbb18f453ea2201897cab870eb710ec447b7f6ab9101f3927da2",
+    "bytes": 444163
+  },
+  "data/tourism/hokkaido/hokkaido_tourism_fy2024_tables.xlsm": {
+    "sha256": "0469e26151842fba9077808c765a638d8c08309da13fd55703c53ff0196a835d",
+    "bytes": 540212
+  },
+  "data/tourism/hokkaido/hokkaido_tourism_fy2025_report.pdf": {
+    "sha256": "bf7d57685b6fc15a27574bbeb971f8760b7876bc9864af649345345f4eea6d46",
+    "bytes": 803579
+  },
+  "data/tourism/hokkaido/hokkaido_tourism_fy2025_tables.xlsm": {
+    "sha256": "efcfc3ddcbe23c48e9c9ff7c205f826d0f1e31817d51ccb4ffa879e67912e510",
+    "bytes": 575230
+  },
+  "data/tourism/kyoto/R6honsatsu.pdf": {
+    "sha256": "e051055c0b3c5efd904095de7bebdd77b169a10ac1ff9b406341c39ef6570ebc",
+    "bytes": 2470111
+  },
+  "data/tourism/kyoto/honsatsu.pdf": {
+    "sha256": "f95827922557d2748181ea31df60f2afca8a681a126e63f8f013d71992a7e567",
+    "bytes": 2570060
+  }
+}

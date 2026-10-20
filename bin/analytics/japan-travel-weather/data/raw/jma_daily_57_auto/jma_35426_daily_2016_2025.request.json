@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"s47588\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:43:26.676409+00:00",
+  "sha256": "5e091fad152277562b4ca7de9683c33a39687cfa7ebaf859829391046fe4ec58",
+  "station": {
+    "kind": "station",
+    "stid": "s47588",
+    "stname": "山形",
+    "prid": "35",
+    "kansoku": "111111",
+    "small": true,
+    "ended": false,
+    "x": 204,
+    "y": 256,
+    "w": 11,
+    "h": 11,
+    "title": "地点名：山形\nカナ:ヤマガタ\n北緯：38度15.3分\n東経：140度20.7分\n標高：152.5m"
+  },
+  "mapping_station_number": "35426"
+}

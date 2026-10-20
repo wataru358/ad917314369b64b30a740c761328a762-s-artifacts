@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"a0378\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:45:14.436759+00:00",
+  "sha256": "b2c94c7c14f85a1ac80318547eb4ed795e801152642cd0d6587db0361d512f03",
+  "station": {
+    "kind": "station",
+    "stid": "a0378",
+    "stname": "成田",
+    "prid": "45",
+    "kansoku": "111000",
+    "small": true,
+    "ended": false,
+    "x": 174,
+    "y": 106,
+    "w": 7,
+    "h": 7,
+    "title": "地点名：成田\nカナ:ナリタ\n北緯：35度45.8分\n東経：140度23.1分\n標高：41m"
+  },
+  "mapping_station_number": "45121"
+}

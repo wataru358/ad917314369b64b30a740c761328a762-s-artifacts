@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"s47759\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:47:28.092376+00:00",
+  "sha256": "b4bc44e18c95b2ed7139bad8f67cf47441f07cc5ca5cd1e55988b5760bec942b",
+  "station": {
+    "kind": "station",
+    "stid": "s47759",
+    "stname": "京都",
+    "prid": "61",
+    "kansoku": "111111",
+    "small": true,
+    "ended": false,
+    "x": 201,
+    "y": 217,
+    "w": 11,
+    "h": 11,
+    "title": "地点名：京都\nカナ:キヨウト\n北緯：35度00.8分\n東経：135度43.9分\n標高：40.8m"
+  },
+  "mapping_station_number": "61286"
+}

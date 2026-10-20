@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"s47636\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:46:50.743612+00:00",
+  "sha256": "a6dff75f6066f4ee9a21d9f468b9bc3a6f9bc2e3ee88c02b7aa3aa65e119696d",
+  "station": {
+    "kind": "station",
+    "stid": "s47636",
+    "stname": "名古屋",
+    "prid": "51",
+    "kansoku": "111111",
+    "small": true,
+    "ended": false,
+    "x": 108,
+    "y": 103,
+    "w": 11,
+    "h": 11,
+    "title": "地点名：名古屋\nカナ:ナゴヤ\n北緯：35度10.0分\n東経：136度57.9分\n標高：51.1m"
+  },
+  "mapping_station_number": "51106"
+}

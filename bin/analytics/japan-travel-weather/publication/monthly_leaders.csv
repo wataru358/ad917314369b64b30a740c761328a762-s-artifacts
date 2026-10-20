@@ -1,0 +1,13 @@
+destination_id,start_month,candidate_trips,valid_trips,excluded_trips,valid_trips_pct,matching_trips,matching_trips_pct,destination_name,prefecture,prefecture_code,years_count,demand_ratio_mean,demand_ratio_min,demand_ratio_max,destination_en,prefecture_en,station_id,station_name,weather_rank,ranking_basis
+miyakojima,1,310,306,4,98.7,168,54.9,宮古島,沖縄県,47,3,0.7457112897185865,0.6826506289952355,0.7801006801604111,Miyakojima,Okinawa,93041,宮古島,1,weather_only_rounded_to_0.1_pct
+ishigaki,2,283,272,11,96.1,166,61.0,石垣島,沖縄県,47,3,0.9686229266273986,0.9551062864685271,0.9894659230674715,Ishigaki,Okinawa,94081,石垣島,1,weather_only_rounded_to_0.1_pct
+kurashiki,3,310,310,0,100.0,185,59.7,倉敷,岡山県,33,3,1.0657665838198014,1.0144620360240726,1.1225916215225695,Kurashiki,Okayama,66446,倉敷,1,weather_only_rounded_to_0.1_pct
+chichibu,4,300,300,0,100.0,220,73.3,秩父,埼玉県,11,3,1.031390421588647,1.0052873691025532,1.065749842151546,Chichibu,Saitama,43156,秩父,1,weather_only_rounded_to_0.1_pct
+sapporo,5,310,310,0,100.0,219,70.6,札幌,北海道,01,3,0.8981453890588744,0.8626087355514481,0.9474490554781576,Sapporo,Hokkaido,14163,札幌,1,weather_only_rounded_to_0.1_pct
+aomori,6,300,292,8,97.3,183,62.7,青森,青森県,02,3,1.0671845844698218,1.0075866795868686,1.1266242188957816,Aomori,Aomori,31312,青森,1,weather_only_rounded_to_0.1_pct
+kushiro,7,310,300,10,96.8,191,63.7,釧路,北海道,01,3,1.2378344392252092,1.1845919405590926,1.299658148630977,Kushiro,Hokkaido,19432,釧路,1,weather_only_rounded_to_0.1_pct
+kushiro,8,310,308,2,99.4,124,40.3,釧路,北海道,01,3,1.3133359092835153,1.270098864541151,1.3523489997067986,Kushiro,Hokkaido,19432,釧路,1,weather_only_rounded_to_0.1_pct
+kushiro,9,300,292,8,97.3,180,61.6,釧路,北海道,01,3,1.1188096677240382,1.0602021362785958,1.1713211128939773,Kushiro,Hokkaido,19432,釧路,1,weather_only_rounded_to_0.1_pct
+kurashiki,10,310,306,4,98.7,226,73.9,倉敷,岡山県,33,3,1.0903953160586752,1.0248232475221586,1.1263068520994997,Kurashiki,Okayama,66446,倉敷,1,weather_only_rounded_to_0.1_pct
+kurashiki,11,300,296,4,98.7,264,89.2,倉敷,岡山県,33,3,1.1524727092369849,1.122650370312075,1.1751566906248432,Kurashiki,Okayama,66446,倉敷,1,weather_only_rounded_to_0.1_pct
+kochi,12,307,307,0,100.0,192,62.5,高知,高知県,39,3,0.8342425039015037,0.8287462107926956,0.8424966093508989,Kochi,Kochi,74182,高知,1,weather_only_rounded_to_0.1_pct

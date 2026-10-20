@@ -1,0 +1,44 @@
+{
+  "status": "passed",
+  "checked_at_utc": "2026-10-19T16:21:36.516614+00:00",
+  "checks": 2873,
+  "relative_tolerance": 1e-12,
+  "absolute_tolerance": 1e-12,
+  "inputs": {
+    "data/processed/kyoto_tourism_monthly_2023_2025.csv": "f585fb208153a7fbe6a069eed8e0e4182804dcde155ea355f097ffadbd1acce7",
+    "data/processed/accommodation_demand_yearly_2023_2025.csv": "9ac5e527b8b2f715d3f528e2988a841f4c0f345ee3537b965f006517fe78d61e",
+    "data/processed/weather_accommodation_56_regions.csv": "f6102d324179e28734417d027f84b684eef623d0597a792b196e04f98c8df40f",
+    "data/tourism/kyoto/honsatsu.pdf": "f95827922557d2748181ea31df60f2afca8a681a126e63f8f013d71992a7e567",
+    "data/tourism/kyoto/R6honsatsu.pdf": "e051055c0b3c5efd904095de7bebdd77b169a10ac1ff9b406341c39ef6570ebc"
+  },
+  "outputs": {
+    "kyoto_tourism_ratios_yearly.csv": {
+      "rows": 108,
+      "sha256": "9f39b967d892b6d8304fa14dba719b3db149cf3f777ac05a7309e6f3c992a8f7"
+    },
+    "kyoto_seasonality_comparison.csv": {
+      "rows": 36,
+      "sha256": "363abee51e1f2423e06a2b34812543d040f5993db3ed094adf7837a11a39cd65"
+    },
+    "kyoto_seasonality_summary.csv": {
+      "rows": 3,
+      "sha256": "130a1a79e5ba1b15853a8537bf3c56591dffb38b31c33681a6d2d70581afb230"
+    },
+    "kyoto_seasonality_yearly_peaks.csv": {
+      "rows": 9,
+      "sha256": "5a7c89a38d703ea27613a413f5491c198fa5b15654f85252aa8b88a425344fe3"
+    },
+    "kyoto_seasonality_monthly_overview.csv": {
+      "rows": 12,
+      "sha256": "28a6c9da682a469cf5e38f5f36c374d0aec87c141b05770d2afcab342393214c"
+    },
+    "kyoto_seasonality_comparison_2024_2025.csv": {
+      "rows": 36,
+      "sha256": "cfa85c6db598e3fc9930066801e191bfb57a75c6e150edea44f68ec564535f03"
+    }
+  },
+  "scripts": {
+    "compare_kyoto_seasonality.py": "5ac7cba7ef9a5a0e89bce4857f293d880e2371ecd5135d093b752dbb4cd9aa20",
+    "verify_kyoto_seasonality.py": "6378b60a0c76cb93ac013654c15727262c14406a47466f05ecb1f138864d6960"
+  }
+}

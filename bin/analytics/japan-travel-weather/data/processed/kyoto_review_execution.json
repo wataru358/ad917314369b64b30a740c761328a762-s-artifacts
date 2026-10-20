@@ -1,0 +1,40 @@
+{
+  "run_at_utc": "2026-10-19T16:21:36.531856+00:00",
+  "commands": [
+    {
+      "command": "uv run python load_kyoto_tourism.py",
+      "returncode": 0
+    },
+    {
+      "command": "uv run python compare_kyoto_seasonality.py",
+      "returncode": 0
+    },
+    {
+      "command": "uv run python verify_kyoto_seasonality.py",
+      "returncode": 0
+    }
+  ],
+  "existing_outputs_unchanged": true,
+  "protected_files": {
+    "data/processed/accommodation_demand_monthly_2023_2025.csv": "f4ee5a2fe6ecebea1c15fe5cd934496f624aea32f23e0237cae8eb435d441086",
+    "data/processed/accommodation_demand_yearly_2023_2025.csv": "9ac5e527b8b2f715d3f528e2988a841f4c0f345ee3537b965f006517fe78d61e",
+    "data/processed/accommodation_monthly_2023_2025.parquet": "8c7cb1546dd4a692a6a7adfa839b011a7bc408e4cdd28492202775e1090cdd1f",
+    "data/processed/hokkaido_seasonality_3metrics_comparison.csv": "090c2b87b3cd221a1e3bfd9e3232384da4ebb503a97179389eba9ac6a27bef30",
+    "data/processed/hokkaido_seasonality_3metrics_summary.csv": "a25024c8042e83f4cfb5cd5710663a02874e92eddb9f67363443f53ec82cd1a3",
+    "data/processed/hokkaido_seasonality_3metrics_yearly.csv": "95d4c836af91f458e3651fd7e13ca01a3a7dde3ea6caf94fb9f0ae4982cef423",
+    "data/processed/hokkaido_seasonality_comparison.csv": "fa0c4e190fbf969b8ad0187b1668a3c4651e972c4770de74ba7f68a9e37f4462",
+    "data/processed/hokkaido_seasonality_summary.csv": "0519515b98572560dc5dea6e200efccc658c32a977881b063599f931c3d07f4e",
+    "data/processed/hokkaido_tourism_monthly_2023_2025.csv": "321cafb19dda9dc8f03447e293aa90dcce44b3a15e70887f4c0cd0b04d35d628",
+    "data/processed/hokkaido_tourism_monthly_2023_2025.parquet": "1027aa9f535f896bec57953a34b48f8d6b216a9ed3a3ae20c5e445d517de919a",
+    "data/processed/hokkaido_tourism_ratios_yearly.csv": "8966ad7b8c9af236dcca884fa6ac88bc33c46975d4c5b6ed153211fa549d373e",
+    "data/processed/score_weight_comparison.csv": "8ca0d84c674e40aa5f2a6f5291d6ef5ee49f6ecaedaa879052086d7c5fdc9b00",
+    "data/processed/score_weight_sensitivity.csv": "9e033ec7159e1df896b707146b6becff7d4bd57fd6c400b0c7cdc11bb86243ad",
+    "data/processed/score_weight_top10.csv": "c9954cd81b97ceb8052e7aa3f4842e65b7e8665e2e024d14608edf632395ce91",
+    "data/processed/weather_accommodation_56_regions.csv": "f6102d324179e28734417d027f84b684eef623d0597a792b196e04f98c8df40f",
+    "data/processed/weather_quality_56_regions.csv": "820946691f56ee1e4ad64f22c147074a68b1d068b9306ae514ac4aac1309923f",
+    "data/processed/weather_quality_all.csv": "820946691f56ee1e4ad64f22c147074a68b1d068b9306ae514ac4aac1309923f",
+    "data/processed/weather_trip_summary.csv": "60039a537ab196b6102d7d56b574a7264ebfd961429d0d5008e1ccf618c85d2b",
+    "data/processed/weather_trip_summary_56_regions.csv": "3fbc8f6c3a83c3fe7615355a6a2031944d8d34bb1c2168f36acbcd0ca25de6a9",
+    "data/processed/weather_trip_summary_all.csv": "f11d3ad9006615b4c25022374c0f9f6130624a013168885f5765fca2ccd4b04d"
+  }
+}

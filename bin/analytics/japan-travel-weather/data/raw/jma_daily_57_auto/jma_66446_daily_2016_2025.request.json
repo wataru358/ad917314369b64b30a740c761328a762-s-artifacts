@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"a0669\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:49:36.901716+00:00",
+  "sha256": "3f6e64ea16717ce869ba87dd01497d1b316b00d143f690f68fe46ac24af7ce9a",
+  "station": {
+    "kind": "station",
+    "stid": "a0669",
+    "stname": "倉敷",
+    "prid": "66",
+    "kansoku": "111201",
+    "small": true,
+    "ended": false,
+    "x": 151,
+    "y": 224,
+    "w": 7,
+    "h": 7,
+    "title": "地点名：倉敷\nカナ:クラシキ\n北緯：34度35.4分\n東経：133度46.1分\n標高：3m"
+  },
+  "mapping_station_number": "66446"
+}

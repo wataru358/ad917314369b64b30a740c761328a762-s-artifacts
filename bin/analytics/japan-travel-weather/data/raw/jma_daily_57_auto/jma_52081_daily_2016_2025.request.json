@@ -1,0 +1,38 @@
+{
+  "url": "https://www.data.jma.go.jp/risk/obsdl/show/table",
+  "payload": {
+    "stationNumList": "[\"a1306\"]",
+    "aggrgPeriod": "1",
+    "elementNumList": "[[\"202\", \"\"], [\"101\", \"\"]]",
+    "interAnnualType": "1",
+    "ymdList": "[\"2016\", \"2025\", \"1\", \"12\", \"1\", \"31\"]",
+    "option": "{\"list\": [\"obs\"], \"nyear\": 0}",
+    "downloadFlag": "true",
+    "rmkFlag": "1",
+    "disconnectFlag": "1",
+    "youbiFlag": "0",
+    "fukenFlag": "0",
+    "kijiFlag": "0",
+    "csvFlag": "1",
+    "jikantaiFlag": "0",
+    "jikantaiList": "[]",
+    "ymdLiteral": "1"
+  },
+  "downloaded_at_utc": "2026-10-05T17:46:32.138964+00:00",
+  "sha256": "a74ffa0f7573b29dd7cdf3a992544166221eafc992069ce81ef0fd360bfa1fd4",
+  "station": {
+    "kind": "station",
+    "stid": "a1306",
+    "stname": "白川",
+    "prid": "52",
+    "kansoku": "111211",
+    "small": true,
+    "ended": false,
+    "x": 176,
+    "y": 54,
+    "w": 7,
+    "h": 7,
+    "title": "地点名：白川\nカナ:シラカワ\n北緯：36度16.4分\n東経：136度53.8分\n標高：478m"
+  },
+  "mapping_station_number": "52081"
+}
