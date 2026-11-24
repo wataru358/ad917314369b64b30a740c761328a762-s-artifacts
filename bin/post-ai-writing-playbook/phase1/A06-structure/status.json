@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "A06",
-      "title": "見出しと冒頭・末尾",
-      "description": "見出しと冒頭・末尾",
+      "title": "Headings, Openings, and Endings",
+      "description": "Headings, Openings, and Endings",
       "priority": 13,
       "status": "not_started",
       "passes": false,
@@ -21,17 +21,17 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "見出し校正・凍結・評価の順序があり、見出しなし・辞書認識なしと集中度が再計算できる。",
+          "criterion": "The sequence of heading calibration, freezing, and evaluation is recorded, and heading absence, dictionary nonmatches, and concentration can be recalculated.",
           "met": false
         },
         {
           "id": "C02",
-          "criterion": "まとめ存在、条件付き節長、S位置が各々の分母で読める。",
+          "criterion": "The presence of a summary, conditional section length, and S position each have an explicit denominator.",
           "met": false
         },
         {
           "id": "C03",
-          "criterion": "冒頭末尾候補が検証前に固定され、全候補の検証結果と群漏れが照合される。",
+          "criterion": "Opening and ending candidates are frozen before validation. All candidate results and checks for split leakage are verified.",
           "met": false
         }
       ],

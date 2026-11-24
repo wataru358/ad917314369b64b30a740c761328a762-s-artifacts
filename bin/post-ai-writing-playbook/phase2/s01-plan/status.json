@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "P2-S01",
-      "title": "比較と収録の実行計画を固定する",
-      "description": "比較と収録の実行計画を固定する",
+      "title": "Lock the comparison and corpus intake plan",
+      "description": "Lock the comparison and corpus intake plan",
       "priority": 22,
       "status": "not_started",
       "passes": false,
@@ -21,17 +21,17 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "R01とD03のreceipt、入力パス、ハッシュ、必要列、結合キーを照合し、全入力と例外を列挙する。",
+          "criterion": "Check the R01 and D03 receipts, input paths, hashes, required columns, and join keys. List all inputs and exceptions.",
           "met": false
         },
         {
           "id": "C02",
-          "criterion": "主対象、全60年月セル、重み、D/H、盲検、比較、検証、資料の順序と定義版を固定する。",
+          "criterion": "Lock the primary cohort, all 60 year-month cells, weights, D/H, blinding, the order of comparisons, verification and reporting, and the definition version.",
           "met": false
         },
         {
           "id": "C03",
-          "criterion": "抽出・言語pilotの選択、閲覧順、標本不足、全量との違いを記録する。",
+          "criterion": "Record extraction and language pilot selection, access order, sample shortfalls, and differences from the full corpus.",
           "met": false
         }
       ],

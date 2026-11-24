@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "T01",
-      "title": "本文言語判定と英語集合",
-      "description": "本文言語判定と英語集合",
+      "title": "Body language classification and English cohort",
+      "description": "Body language classification and English cohort",
       "priority": 5,
       "status": "not_started",
       "passes": false,
@@ -20,17 +20,17 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "候補と同数の一意な言語・採否行があり、UTC境界と全状態の件数が合う。",
+          "criterion": "There is exactly one language and inclusion row per candidate. UTC boundaries and counts for all states reconcile.",
           "met": false
         },
         {
           "id": "C02",
-          "criterion": "盲検校正・検証・診断を分け、凍結順序、標本不足、手動補正の証拠を保存した。",
+          "criterion": "Blinded calibration, validation, and diagnostics are separate. The freeze order, sample shortfalls, and evidence for manual overrides are saved.",
           "met": false
         },
         {
           "id": "C03",
-          "criterion": "採用対象に非英語・判定不能・期間外が流入せず、短文・同文は残る。",
+          "criterion": "The cohort excludes non-English, indeterminate, and out-of-period articles and retains short and identical articles.",
           "met": false
         }
       ],

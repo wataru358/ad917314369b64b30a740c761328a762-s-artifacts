@@ -1,8 +1,8 @@
-# Phase 1 の出典
+# Phase 1 provenance
 
-出典のパスは元リポジトリ基準の来歴である。実行時は同梱規則と新しいrunの成果物を使う。SHA-256はパッケージ作成時に読んだ元ファイルのバイト列に対応する。同梱設定の原本にある過去の対象数や実行IDは来歴であり、新runの固定件数ではない。
+Source paths are relative to the original repository and establish provenance. Use the bundled rules and the current run’s artifacts during execution. The SHA-256 hashes correspond to the original file bytes read when building the package. Historical cohort counts and run IDs in the original bundled settings document provenance. Derive counts from the new run.
 
-| 元ファイル | 元SHA-256 | 用途 |
+| Original file | Original SHA-256 | Purpose |
 | --- | --- | --- |
 | `bin/analytics/post-ai-writing/a01-settings.json` | `e892ea00a23fef71cbed36aebf4b7586e092bcc36268bb1124a8a115c8a5778c` | references/a01-settings.json |
 | `bin/analytics/post-ai-writing/a02-settings.json` | `ee32b3d6a292fdee6e47d01585505c1c46ed870d8b4d01e8545e9a1e579cfaa2` | references/a02-settings.json |
@@ -45,7 +45,7 @@
 | `bin/analytics/post-ai-writing/data/analysis/dev-writing-handoffs/20261030T075140Z-99fc69fcc076/A10-session-20261104T174542Z/accepted-methods.json` | `ddc22b60dcae61b423fa1635ac603eb48ff7d043d24b3d0343c1e46a74594b19` | references/a10-methods.json (method fields) |
 | `bin/analytics/post-ai-writing/data/analysis/dev-writing-handoffs/20261030T075140Z-99fc69fcc076/A11-session-20261105T073145Z/S02-synthesis/strengthened-contract.json` | `77b800797fab4dd87ecd78970cb8e509d51078cb0a609f3e831cfd18aa766449` | A11 coding and acceptance in analysis-methods.md |
 | `bin/analytics/post-ai-writing/data/analysis/dev-writing-v1/20261030T075140Z-99fc69fcc076/A08/aggregation-v1/frozen-config.json` | `7ce76ff6d90af80e87d99c6eea0f9f8766d9a257ebc934631cc83a78e7374a99` | references/a08-aggregation.json (method fields) |
-| `bin/analytics/post-ai-writing/data/analysis/dev-writing-v1/20261030T075140Z-99fc69fcc076/A08/full-counts-v1/rules-v2.md` | `f86a1aa5d425bcd30af63224f1ab15e5c034a1c4dd64ffe77c10387aa729df22` | references/a08-code-rules.md (全量追記と再生DAGへの接続変更) |
+| `bin/analytics/post-ai-writing/data/analysis/dev-writing-v1/20261030T075140Z-99fc69fcc076/A08/full-counts-v1/rules-v2.md` | `f86a1aa5d425bcd30af63224f1ab15e5c034a1c4dd64ffe77c10387aa729df22` | references/a08-code-rules.md (expanded for full-cohort processing and adapted to the replay DAG) |
 | `bin/analytics/post-ai-writing/data/analysis/dev-writing-v1/20261030T075140Z-99fc69fcc076/A09/ai-topic-v1/config.json` | `e1da040f652cfd305ca5524121e1beff8f67c2bd63ccd83a838449f49ff82c11` | references/a09-ai-topic.json (lexical rules) |
 | `bin/analytics/post-ai-writing/data/analysis/dev-writing-v1/20261030T075140Z-99fc69fcc076/A09/preparation-v1/methods.md` | `53cc1088aecc7cc9ffcb02a74ebf6a5b03ed5de0515106c5610576260557e66c` | Phase 1 task or method specification |
 | `bin/analytics/post-ai-writing/data/analysis/dev-writing-v1/20261030T075140Z-99fc69fcc076/A10/preparation-v1/methods.md` | `8567932184c64c4b1f89cc4fcb4a46d62fd674711d0b9356598d6bd9c9824354` | Phase 1 task or method specification |
@@ -71,4 +71,4 @@
 | `bin/analytics/post-ai-writing/t02_features.py` | `f135cbbead51fc2489bbb94579c78d17357d0a7f94d4d552f043909f549dd756` | references/t02_features.py |
 | `bin/analytics/post-ai-writing/data/analysis/dev-writing-handoffs/20261030T075140Z-99fc69fcc076/A11-session-20261105T073145Z/S03-calibration-fix-v2/candidate-dictionary.json` | `6d4c067ca8a1b894832b9a78ce8282a5ed2dce4b6e94dffdea4a888ee0d640f9` | references/a11-candidate-dictionary.json |
 | `bin/analytics/post-ai-writing/data/analysis/dev-writing-handoffs/20261030T075140Z-99fc69fcc076/A11-session-20261105T073145Z/S03-calibration-fix-v2/rubric-draft.md` | `9eea0656f76891a7b22a2c944af769e31133ab804aeb9098150155053e714e27` | references/a11-rubric.md |
-| `bin/analytics/post-ai-writing/data/analysis/dev-writing-handoffs/20261030T075140Z-99fc69fcc076/A11-session-20261105T073145Z/S03-alignment-pilot/align_pilot.py` | `7f8e3035a79e4321e5fce9c8310c19d7334972649990c82a996dd2394b7fafb1` | A11 DOM/S位置の移植仕様 |
+| `bin/analytics/post-ai-writing/data/analysis/dev-writing-handoffs/20261030T075140Z-99fc69fcc076/A11-session-20261105T073145Z/S03-alignment-pilot/align_pilot.py` | `7f8e3035a79e4321e5fce9c8310c19d7334972649990c82a996dd2394b7fafb1` | Porting specification for A11 DOM/S positions |

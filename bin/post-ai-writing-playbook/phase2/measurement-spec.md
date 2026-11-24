@@ -1,164 +1,164 @@
-# Phase 2の固定測定仕様
+# Phase 2 fixed measurement specification
 
-版は `p2-measurement-v1`。2026年11月7日の固定測定仕様を別の作業環境で実行できるように移植した。基本6指標、語彙3項目、追加3観点、補助比較P2-C01を扱う。数値設定は [settings.json](settings.json) を参照する。設定と仕様が食い違う場合は、比較値を出す前に差を記録して解決する。
+Version `p2-measurement-v1` ports the fixed specification from November 7, 2026 to a new working environment. It covers six core metrics, three vocabulary items, three additional measures, and the supplementary P2-C01 comparison. See [settings.json](settings.json) for numeric settings. Document and resolve any discrepancy between the settings and specification before reporting comparisons.
 
-S03では保存メタデータと合成小例を確認し、本集計とHの結果比較はS04で行う。旧結果と参照したQiita記事は元の仕様固定時点で既知だった。新runの結果を見て定義を変える場合は、v1を保持し、別版の探索に記録する。
+S03 reviews saved metadata and synthetic fixtures. S04 performs the full aggregation and compares H results. The earlier results and the Qiita articles used as references were already known when the original specification was locked. Preserve v1 and record any definition changes informed by the new run as an exploratory version.
 
-## 対象は確定集合の1〜10月にそろえる
+## Cohort and common January–October window
 
-旧集合はPhase 1のR01が索引する採否表の `adopted=true` かつ公開年2018〜2022年。著者、タグ、本文構造は同じR01が索引する保存物へ結合する。新集合はS02の `english.jsonl` のみを入口とし、S02の `records.jsonl` へIDで結合する。採否、原本文、保留、訂正履歴を固定し、本文比較のために更新しない。
+The earlier cohort consists of articles marked `adopted=true` in the decisions indexed by Phase 1 R01, with publication years 2018–2022. Join author, tag, and body structure from the same R01 index. Use only S02's `english.jsonl` for the newer cohort and join it by ID to S02's `records.jsonl`. Keep the inclusion decisions, original prose, holds, and correction history fixed throughout the prose comparison.
 
-元のrunでは旧英語採用17,963件のうち共通月に15,365件、新は8,942件を収録した。旧全cohortの公開日不明13件は対象年へ推測配分しなかった。旧1〜10月の著者単一数値ID不明は6件で、すべて複数著者だった。既知著者は旧9,981人、新6,012人、両経路の対応は56人。タグ空欄は旧993件、新2,243件。新の月別件数は1月から912、914、907、867、885、867、890、910、876、914件だった。再収録runではこの件数を照合用の履歴として扱い、実測件数で置き換える。
+The original run included 15,365 of the 17,963 earlier accepted English articles in the common months and 8,942 newer articles. The 13 earlier articles with unknown publication dates were left unassigned. Six earlier January–October articles lacked a single identifiable numeric author ID, all because they had multiple authors. There were 9,981 known earlier authors, 6,012 known newer authors, and 56 matches across routes. Tags were missing for 993 earlier and 2,243 newer articles. Newer monthly counts from January onward were 912, 914, 907, 867, 885, 867, 890, 910, 876, and 914. For a new intake, use these counts as historical checks and report observed counts for the run.
 
-公開時刻はUTCへ変換する。APIの計画と個別応答の公開日時もUTCの時刻で照合し、不一致を記録する。公開月が不明・無効なら`date_unassignable`とし、時期比較の分母に入れず台帳に残す。CC保存時刻やローカル保存日時から公開日を補わない。旧10月を除いた旧runの月窓は流用しない。
+Convert publication times to UTC. Compare publication timestamps from the API plan and individual responses in UTC and record any discrepancies. Mark unknown or invalid publication months `date_unassignable`. Retain them in the ledger and exclude them from period comparison denominators. Leave publication dates unknown when only CC capture or local archive timestamps are available. Use the full January–October window, which includes October omitted in the earlier run.
 
-旧`article_id`は旧コーパス内の行識別で、新APIのDEV記事IDと同一の名前空間ではない。主キーは`route:source_article_id`。数値IDの一致で記事を結合しない。著者キーだけは両経路とも`dev:user:<numeric_id>`へ正規化し、同じ著者を全対象年で結合する。handleだけの対応や組織IDとの置換は禁止する。単一著者を特定できない記事は主集計へ残し、ブートストラップ用は`unknown:route:id`の独立した仮キーを付ける。既知著者のみの感度比較を併記する。これは不明著者間の依存を復元するものではない。
+The earlier `article_id` identifies a row in the earlier corpus. Newer DEV article IDs belong to a separate namespace. Use `route:source_article_id` as the primary key and keep equal numeric article IDs from different routes separate. Normalize author keys in both routes to `dev:user:<numeric_id>` and link the same author across study years. Use numeric individual IDs and exclude handles and organization IDs from author matching. Retain articles without a single identifiable author in the primary aggregation and assign separate `unknown:route:id` pseudo-keys for bootstrap sampling. Report a known-author-only sensitivity analysis alongside the primary results. Dependencies among unknown authors remain unidentified.
 
-元runの旧ローカル保存日は2026-10-21〜28、新API取得日は2026-11-06〜07 UTC。旧編集日時欠測0件と新 `edited_at` 欠測7,644件も元runの記録。各runでCC capture時刻、ローカル保存日、API取得日を別項目として記録する。欠測を未編集へ変換せず、公開時点の本文ともみなさない。旧CC captureの詳しい時刻・編集間隔の分布は工程4の収録診断として出力する。追加取得はしない。CCとAPIの選択・生存・編集状態の差は、著者や話題をそろえても残る。
+In the original run, earlier files were saved locally October 21–28, 2026 and newer API data were retrieved November 6–7, 2026 UTC. Edit times were missing for zero earlier articles and `edited_at` was missing for 7,644 newer articles. Record CC capture times, local archive dates, and API retrieval dates in separate fields for each run. Preserve missing edit times as missing and treat retrieved text as the saved version. Include detailed CC capture times and the distribution of edit intervals in S04's intake diagnostics. Use the existing archived inputs. Differences in selection, survival, and editing between CC and the API remain after matching authors or topics.
 
-### 記事内、月内、年内の重みを区別する
+### Article, month, and year weights
 
-記事内で各指標を1値にする。有効記事の月平均を求め、各年は10か月の平均、旧期間は5年の平均とする。記事iの主重みは旧`1/(5*10*n_ym)`、新`1/(10*n_2026m)`で、nは当該指標が有効な年・月の記事数。指標ごとの有効N・NA理由・月支持を出す。1セルでも有効0件ならその年・主比較はNAとし、残る月へ重みを寄せない。
+Calculate one value per article for every metric. Average valid articles within each month, average the ten months within a year, and average the five years in the earlier period. Article i receives a primary weight of `1/(5*10*n_ym)` for the earlier period or `1/(10*n_2026m)` for the newer period, where n is the number of valid articles for that metric in its year-month. Report valid N, NA reasons, and monthly support for each metric. A cell with zero valid articles makes its annual estimate and the primary comparison NA. Keep the original weights for the other months.
 
-主比較は2018〜2022年対2026年。補助は2019〜2022年対2026年、記事単純平均、著者平均、P2-C01。著者平均は各著者の年・月内記事平均を作り、月内で著者等重み、月・年は主比較と同じ。主と著者平均で推定対象が違うことを示す。反復測定を独立記事と扱わない。
+The primary comparison is 2018–2022 versus 2026. Supplementary comparisons use 2019–2022 versus 2026, a simple article average, an author average, and P2-C01. For the author average, take each author's mean within a year-month, weight authors equally within the cell, and use the primary month and year weights. Explain the different estimands for the article and author averages. Account for repeated measurements from the same author.
 
-## 本文、語、文の仕様は保存済み構造へ対応させる
+## Prose, words, and sentences from saved structure
 
-抽出`article-body-v2.0`のPを通常段落、Lをリスト、Uをその他の保存散文、S=P+L+Uとする。基本指標の構造分母はPまたはP+Lに限定し、Uは件数・語数を診断に残す。見出し、引用、コード、表、リンクカード、プロフィールなど抽出規則で除いた部分は分母に入れない。広告・短文・診断文がPやLに残っていれば主測定へ含める。工程2の英語採用を変更しない。
+Under `article-body-v2.0`, P is ordinary paragraph prose, L is list prose, U is other saved prose, and S=P+L+U. Core structural denominators use P or P+L. Retain U counts and word counts as diagnostics. Exclude headings, quotations, code, tables, link cards, profiles, and other material removed by the extraction rules. Include ads, short texts, and diagnostic prose when they remain in P or L. Keep the S02 English inclusion decisions fixed.
 
-新APIは工程2の保存済み`records.jsonl`にあるP/L/Uと元HTMLへの対応を再利用する。旧はR01の索引から同一runの `articles.jsonl` の保存unit、owner、文、tokenを用いる。新の文分割・太字投影など、まだ存在しないPhase2用派生物は工程4で別出力に作る。新しい採点・言語再判定は行わない。本文の再抽出は通常経路にせず、保存SとDOMを結ぶための構造復元が必要な場合に限り、旧adapterと元のハッシュを固定して別出力へ作り、保存Sとの完全一致を検証する。不一致は`projection_mismatch`であり原データを直して合わせない。
+For the newer API data, reuse P/L/U from the S02 `records.jsonl` and its mapping to source HTML. For the earlier data, use saved units, owners, sentences, and tokens from the same-run `articles.jsonl` indexed by R01. S04 writes new Phase 2 derivatives such as sentence segmentation and bold projection for the newer corpus to separate outputs. Carry forward the language scores and decisions. Reconstruct structure only when needed to link saved S to the DOM. In that case, pin the earlier adapter and source hash, write the reconstruction separately, and verify exact agreement with the saved S. Log a discrepancy as `projection_mismatch` and preserve the original data as evidence.
 
-語、文、カンマはR01の索引で特定したT02の固定 `segmentation.py` とfixtureを規範とし、ハッシュをmanifestへ保存する。実装とfixtureが規範と異なる場合は差を記録して解決し、その間は同じ定義として集計しない。語数Wはkind=`word`だけ。ASCII英字と内部のapostrophe・hyphenを認め、curly apostropheは値だけASCIIへ変換する。短縮形とハイフン語は1語。`Node.js`と`e.g.`は各2語。数字・識別子・URL・email・Unicode語は別kindでWに入らず、その件数も出す。句読点を語と数えない。語彙の一致では小文字化し、語幹化・単複統合はしない。
+Use the fixed T02 `segmentation.py` and fixtures indexed by R01 as the reference for words, sentences, and commas. Save their hashes in the manifest. Record and resolve discrepancies between implementation, fixtures, and the reference before aggregating under a common definition. W counts only kind=`word`. The rules accept ASCII letters and internal apostrophes and hyphens. Convert curly apostrophes to ASCII only in the token value. Contractions and hyphenated terms count as one word. `Node.js` and `e.g.` each count as two. Numbers, identifiers, URLs, email, and Unicode words have separate kinds and counts outside W. Exclude punctuation from the word count. Match vocabulary in lowercase without stemming or merging singular and plural forms.
 
-同じkindとsource pathを持つunitを出現順に空白1個で連結したowner内で文を切る。source pathが違うownerを連結しない。`.!?`と引用末尾を使い、略語・小数・URLを保護する。`br`は文境界にせず、終端記号のない末尾断片も1文。正のWを持つPの文だけを文長の対象にする。元文字列のUnicode code point位置、unitとownerの対応、fragmentとzero-word文数を保存する。空白・正規化後の位置を元HTMLバイト位置と混同しない。
+For sentence segmentation, form an owner by joining units of the same kind and source path in their original order with a single space. Keep owners with different source paths separate. Use `.!?` and closing quotation marks, protecting abbreviations, decimal numbers, and URLs. A `br` is internal to a sentence, and a trailing fragment without terminal punctuation counts as one sentence. Sentence length uses only P sentences with positive W. Save Unicode code point offsets in the source text, unit-to-owner mappings, and counts of fragments and zero-word sentences. Keep offsets in normalized text distinct from raw HTML byte offsets.
 
-### 基本6指標を記事単位で求める
+### Six core article metrics
 
-nは正のWを持つP文数、w_jはその文の語数、W_PとW_LはPとLの語数、W_B=W_P+W_L。BはP/Lに属する太字連続区間の数である。
+Let n be the number of P sentences with positive W, w_j the number of words in a sentence, W_P and W_L the P and L word counts, and W_B=W_P+W_L. B is the count of continuous bold spans in P/L.
 
-| ID | 主値と単位 | 分母と計算不能 | 補助出力 |
+| ID | Primary value and units | Denominator and NA | Supplementary outputs |
 |---|---|---|---|
-| P2-M01 | `sum(w_j)/n`、語/文 | n=0は`no_positive_word_sentence` | n、W_P、文長中央値・四分位、fragment数 |
-| P2-M02 | `sqrt(sum((w_j-mean)^2)/n)/mean`、無次元CV | n<2は`fewer_than_two_sentences`。平均0ならNA | 母SD、n。記事内の記述量なのでnで割る |
-| P2-M03 | 対象n文のASCIIカンマ数C/n、個/文 | n=0はNA。数字に挟まれたカンマは除く | `1000*C/sum(w_j)`、文ごとのC。カンマ間距離は同文内の連続カンマ間に全体があるwordの個数、隣接カンマは0、2カンマ未満の文は距離NA |
-| P2-M04 | W_P、語/記事 | 構造正常でPなしは0。構造不明はNA | W_L、W_U、W_S、重み付き中央値・p10・p90、`log1p(W_P)`の感度比較 |
-| P2-M05 | W_L/W_B、割合0〜1 | W_B=0は`no_P_or_L_words` | W_P、W_L、記事内リスト項目数 |
-| P2-M06 | 1000*B/W_B、箇所/1000語 | W_B=0または太字の構造対応不能はNA | B、W_B、太字語率。B=0は正当な0 |
+| P2-M01 | `sum(w_j)/n`, words per sentence | n=0 yields `no_positive_word_sentence` | n, W_P, sentence-length median and quartiles, fragment count |
+| P2-M02 | `sqrt(sum((w_j-mean)^2)/n)/mean`, unitless CV | n<2 yields `fewer_than_two_sentences`. A zero mean yields NA. | Population SD and n. Divide by n for the within-article descriptive statistic. |
+| P2-M03 | C/n, ASCII commas per eligible sentence | n=0 yields NA. Exclude commas between digits. | `1000*C/sum(w_j)` and C per sentence. Measure consecutive comma pairs within a sentence by counting word tokens entirely between them. Adjacent commas yield zero. With fewer than two commas, spacing is NA. |
+| P2-M04 | W_P, words per article | Intact structure without P yields 0. Unknown structure yields NA. | W_L, W_U, W_S, weighted median, p10 and p90, and `log1p(W_P)` sensitivity |
+| P2-M05 | W_L/W_B, proportion 0–1 | W_B=0 yields `no_P_or_L_words` | W_P, W_L, and list item count per article |
+| P2-M06 | 1000*B/W_B, spans per 1,000 words | W_B=0 or an unmappable bold structure yields NA. | B, W_B, and bold word rate. B=0 is a valid zero. |
 
-太字は`strong`と`b`。同一owner内で重複・入れ子・接する文字区間を和集合にする。空白だけ離れた区間は別箇所。wordに1文字以上重なる区間だけを数える。見出し・コード・U内は除く。ownerをまたいで結合せず、Lの入れ子も最内テキストを1回だけ数える。保存DOMとの投影失敗は太字0にしない。
+Bold comes from `strong` and `b`. Within an owner, take the union of overlapping, nested, or touching character spans. Spans separated by whitespace remain separate. Count a span only if it overlaps at least one character of a word token. Exclude headings, code, and U. Keep owners separate and count only the innermost text once in nested L. Record projection failures against the saved DOM as failures.
 
-各指標に`metric_id,version,article_key,value,numerator,denominator,state,reason,route,year,month,author_key,source_sha256,unit_spans`を出す。正常値、正当な0、欠測、投影失敗を区別する。表示エラー・広告・署名らしさは測定品質フラグを別列へ置く。主から削除しない。後述の固定標本で新しく品質を判断する場合だけ、別の探索的感度結果へ使う。
+For every metric output `metric_id,version,article_key,value,numerator,denominator,state,reason,route,year,month,author_key,source_sha256,unit_spans`. Distinguish valid values, valid zeros, missing measurements, and projection failures. Place potential display errors, ads, and signatures in separate measurement quality fields. Retain them in primary analyses. Use new quality assessments from the fixed sample below only in separate exploratory sensitivities.
 
-旧指標はID順も分母も違う。旧M02が平均文長、旧M03がCV、旧M01がW_P。旧M04の語分母カンマ、旧M05のL/S、旧M06のB/SをPhase2主値として使わない。旧結果表のコピーは禁止し、保存要素と一致した中間値だけ再利用する。
+Earlier metrics had different IDs and denominators. Earlier M02 was mean sentence length, M03 was CV, and M01 was W_P. Phase 2 uses the denominators above instead of the earlier word denominator for M04 commas, L/S for M05, and B/S for M06. Reuse only intermediate values checked against the saved elements.
 
-## 語彙の発見と確認を著者で分ける
+## Author-level vocabulary discovery and confirmation
 
-結果を見る前に、非空のP+L小文字word列が全文一致する記事を通じて既知数値著者を連結し、連結成分ごとに最小の著者キーを代表keyとする。単独著者も1成分。`SHA256('p2-s03-v1:42:author:'+key)`を16進整数にし、mod 2が0を発見D、1を確認Hとする。全時期で同じ割当。完全一致本文がD/Hをまたがないこと、著者漏れ0、最大成分の大きさと分割バランスを保存する。近似一致のD/H漏れはS04の診断に残し、確認の独立性の限界を明示する。ID一覧を結果を見る前に封印する。著者不明記事は主6指標に残すが、V01〜V03とX01・X03の確認からは除き、別の探索的出力にする。分割後のセル支持は工程4の事前点検で確認し、結果が弱いことを理由に分割し直さない。
+Before viewing results, link known numeric authors through articles with identical nonempty lowercase P+L word sequences. Represent each connected component by its smallest author key. An isolated author forms a one-author component. Convert `SHA256('p2-s03-v1:42:author:'+key)` from hex to an integer and assign discovery D for parity 0 and confirmation H for parity 1. Keep the assignment fixed across periods. Verify zero author leakage and that exact text matches stay in one partition, and save the maximum component size and split balance. Report near-duplicate leakage in S04 diagnostics and explain the limitation for independent confirmation. Seal ID lists before viewing results. Retain unknown-author articles in the six core metrics, and report them separately as exploratory for V01–V03, X01, and X03. Before revealing results in S04, check cell support after the split. Keep the split fixed even if results are weak.
 
-VとX01の本文はP+L。owner、unit、文、word以外のtokenで切り、句読点も境界とする。連続word間の原文字列が空白だけのときにn-gramを作る。単語と2〜5-gramを分ける。機能語を削除せず、大小文字とapostrophe正規化以外は原語形を維持する。引用を復活させず、残存引用らしさは検証フラグにする。
+V and X01 use P+L. Split at owner, unit, sentence, and nonword token boundaries, including punctuation. Form n-grams only when successive words have nothing but whitespace between them in the original text. Report single words separately from 2–5-grams. Keep function words and retain the original forms except for case and apostrophe normalization. Keep excluded quotations out and flag suspected residual quotations during validation.
 
-各語gの記事回数c_i、対象語数W_i、使用指標h_i=1(c_i>0)を保存する。語頻度Fは年・月ごとに`1000*sum(c_i)/sum(W_i)`を出してから月等重み、旧年等重み。使用記事率RはW>0の記事内のh_i平均を同じ重みでまとめる。使用著者率Aは年・月の既知著者について、そのセルの少なくとも1記事で使えば1とし、月・年等重みでまとめる。異なる著者数は全対象期間のunion、最大著者占有率Qは期間の全出現c合計のうち最大著者が占める割合。R・A・Fは同一の推定対象ではないので併記する。H側も年・月に分母0なら当該指標NA。
+For each term g, save article count c_i for occurrences, eligible word count W_i, and usage indicator h_i=1(c_i>0). Calculate frequency F as `1000*sum(c_i)/sum(W_i)` in each year-month, then give months and earlier years equal weight. Article prevalence R is the mean of h_i among articles with W>0 with the same month and year weighting. Author prevalence A marks a known author in a year-month as a user if the term appears in at least one of their articles in the cell and averages the cells with equal month and year weights. Count distinct authors by taking the union across the full eligible period. The maximum author share Q is the fraction of all c occurrences in a period that come from the most prolific author for the term. Report R, A, and F as separate estimands. A zero denominator in any H year-month makes the corresponding estimate NA.
 
-| ID | 発見Dで候補を固定する条件 | Hで確認するもの |
+| ID | Candidate selection in D | Confirmation in H |
 |---|---|---|
-| P2-V01 | 同じ1期間pが`c_p>=20 AND 使用著者数_p>=10 AND Q_p<=0.20`を満たすこと。旧か新の少なくとも一方で成立する。平滑化順位`abs(log2((F_new+0.01)/(F_old+0.01)))`の上位200、同順位はUTF-8辞書順 | 全200候補のF/R/A、差、倍率、区間、増減方向。0.01は順位専用 |
-| P2-V02 | 旧R<=0.01、新R>=0.02、新の使用著者20人以上、新Q<=0.10、新F>=0.05/1000語。新R-旧R降順で上位100 | 同じ全条件をHにも適用した再現状況と区間。条件落ちも消さない |
-| P2-V03 | 下記の5系列を結果にかかわらず固定。Dの順位で増減候補を減らさない | Hで5系列すべてのF/R/A、差、倍率、区間。既知の関心語であることを明記 |
+| P2-V01 | At least one period p, earlier or newer, satisfies `c_p>=20 AND author_count_p>=10 AND Q_p<=0.20` within that same period. Select the top 200 by `abs(log2((F_new+0.01)/(F_old+0.01)))`, breaking ties by UTF-8 lexicographic order. | Report F/R/A, differences, ratios, intervals, and directions for all 200 candidates. Use 0.01 only for ranking. |
+| P2-V02 | Earlier R<=0.01, newer R>=0.02, at least 20 newer authors using the term, newer Q<=0.10, and newer F>=0.05 per 1,000 words. Select the top 100 by descending newer R minus earlier R. | Apply the same criteria in H and report replication status and intervals, keeping candidates that miss criteria. |
+| P2-V03 | Keep the five fixed series below regardless of results or D rankings. | Report F/R/A, differences, ratios, and intervals for all five known terms of interest. |
 
-倍率は旧F>0だけで新F/旧F。旧0はnullと`zero_baseline`、両時期の生件数と分母・差を示す。主な順位は増減双方を残す。分類は技術名・製品名、一般説明表現、その他・不明を多重ラベルで記録し、分類を理由に候補を削除しない。分類はDの文脈だけで、候補ごと最大20用例をhash順に確認し、辞書と根拠をH開示前に封印する。分類不能は不明のまま。
+Calculate newer F divided by earlier F only when earlier F>0. A zero baseline yields null and `zero_baseline`, plus raw counts, denominators, and the difference. Retain increases and decreases in the main rankings. Use multiple classification labels for technical or product names, general explanatory expressions, and other or unknown. Keep all candidates regardless of classification. Review at most 20 examples per candidate in hash order using only D context, and seal the dictionary and evidence before revealing H. Retain unknown classifications.
 
-V03は文内word token列上で小文字の次の検索をする。連続句は語間に空白以外があれば切る。文型のgap部分では句読点をまたげるが、owner・文・非word tokenをまたがない。重なる一致も起点ごとに1回数える。
+For V03, search the lowercased word tokens within a sentence using the patterns below. Contiguous phrases may only have whitespace between their words. Gaps in sentence patterns may cross punctuation but stay within the same owner and sentence, with no other nonword tokens. Count overlapping matches once per starting position.
 
-- `delve,delves,delved,delving`を1系列として合算する。各語形も別出力する。
-- `let's`の直後に少なくとも1 wordが同じ文にある起点。`let us`は含めない。
-- 連続する`it's worth noting`。
-- `not just`の後に1〜20 word、次に`but`、任意の`also`、その後に少なくとも1 word。同じ起点の複数butは最短の一致を採る。否定、引用、通常用法も機械一致として残す。
-- 連続する`the key takeaway`。複数形`takeaways`は別の探索とする。
+- Combine `delve,delves,delved,delving` in one series and report each form separately.
+- Count `let's` immediately followed by at least one word in the same sentence. Exclude `let us`.
+- Match the contiguous phrase `it's worth noting`.
+- Match `not just` followed by 1–20 words, then `but`, optional `also`, and at least one further word. Use the shortest match when multiple `but` positions share a starting point. Keep automatic matches in negations, quotations, and ordinary usage.
+- Match the contiguous phrase `the key takeaway`. Keep plural `takeaways` in separate exploratory output.
 
-### 長さ、話題、同文投稿の影響を固定する
+### Sensitivities to length, topic, and duplicate posts
 
-長さ感度はW_B>=200の記事だけを対象に200語の連続窓を取る。主窓の開始は`SHA256('p2-s03-v1:42:window:'+article_key)` mod (W_B-199)、0基準。位置感度は最初の200語、末尾200語。窓境界でn-gramや文型を切り、unit等の境界は保持する。短文を主語彙から除かず、窓対象外の件数を時期・年・月別に出す。200語は結果を見ずに固定した長さで、一般的な最適長の主張ではない。
+For length sensitivity, take contiguous 200-word windows from articles with W_B>=200. The primary window uses zero-based start `SHA256('p2-s03-v1:42:window:'+article_key)` mod (W_B-199). Position sensitivity uses the first and last 200 words. Break n-grams and patterns at window boundaries and retain unit and other preexisting boundaries. Keep shorter articles in the main vocabulary analysis and report counts ineligible for the window by period, year, and month. The 200-word design was fixed before viewing results.
 
-話題感度はR01の索引にある固定タグ対応表をコピーしAPIタグへ同じ規則を適用する。複数話題はmapの順で最初のもの、未対応タグのみは`other`、タグ空欄は`missing`を1つ付ける。AIタグ除外は小文字タグ完全一致`ai,machinelearning,deeplearning,llm,llms,chatgpt,genai,artificialintelligence`のいずれか。本文検索で追加しない。タグ欠測を非AIの証拠としない。話題構成をそろえる感度は、旧各年と新の全6年で各月10記事以上の話題セルだけに限定する。参照重みは旧5年の各話題シェアの等年平均を月ごとに作り、支持セル内で正規化する。除外質量と対象数を保存し、共通支持がない月はNA。主比較の月窓を変更しない。
+For topic sensitivity, copy the fixed tag mapping indexed by R01 and apply it to the API tags. Resolve multiple topics by map order, assign `other` when no tag matches, and assign `missing` for absent tags. The AI-tag exclusion uses exact matches on lowercased tags `ai,machinelearning,deeplearning,llm,llms,chatgpt,genai,artificialintelligence`. Use the saved tags without adding full-text hits and retain missing tags as missing. Topic standardization keeps topic cells with at least ten articles in each month across all six study years. Within each month, average each topic's share with equal weights over the five earlier years and normalize the reference weights over supported cells. Save excluded mass and counts and mark months without common support NA. Retain the primary comparison window.
 
-同文投稿は主では残す。完全一致群はP+Lの小文字word列全体のSHA256で作る。近似群はW_B>=100の各記事のword 5-gram集合Jaccard>=0.90の辺で結んだ連結成分。短文は完全一致群だけ。群サイズg_iは当該D/H分割内の全対象年・月をまとめた群の総記事数とし、r_i=1/g_iを付ける。年・月セル内の記事値は`sum(r_i*x_i)/sum(r_i)`、その後の月・年は等重みとする。語頻度は`1000*sum(r_i*c_i)/sum(r_i*W_i)`、使用記事率も同じ記事重みを使う。全期間で群の最終重みが1になる推定量ではなく、各セルで大量同文群の影響を弱めた推定量である。完全一致と近似群は別々の感度比較にする。候補辞書・閾値は主Dで封印したものを保つ。使用著者率A・異なる著者数・最大著者占有率Qは生の診断値を併記し、記事重みから架空の著者数を作らない。主6指標ではD/Hを分けない全対象集合で同じ群重みを作る。語彙・X01・X03は両時期を一緒に、D/H別に群化する。確認へ発見候補を漏らす目的で重複群を学習しない。同じ記事の複数保存は上流の1観測を使い、別IDの転載を取得重複と呼ばない。
+Keep duplicate posts in the primary analysis. Group exact duplicates by SHA256 of the full lowercase P+L word sequence. For articles with W_B>=100, form near-duplicate connected components with edges at Jaccard>=0.90 between their sets of word 5-grams. Short articles enter exact groups only. Within each D/H partition, let g_i be the total group size pooled over study years and months and assign r_i=1/g_i. Within each year-month cell calculate `sum(r_i*x_i)/sum(r_i)`, then weight months and years equally. Term frequency uses `1000*sum(r_i*c_i)/sum(r_i*W_i)` and article prevalence uses the same article weights. The weights dampen large duplicate groups within each cell. A group's final weight over the full period can differ from one. Run exact and near-duplicate weightings as separate sensitivity comparisons using the candidate dictionaries and thresholds sealed in primary D. Report author prevalence A, distinct author counts, and maximum author share Q as raw diagnostics. For the core six metrics, build the same group weights on the full unsplit cohort. Group vocabulary, X01, and X03 across both periods within each D/H partition. Keep discovery candidate information isolated from confirmation during duplicate grouping. Use the single upstream observation when the same article has multiple captures. Treat reposts with separate IDs as distinct observations.
 
-## 追加3観点は自動一致と内容判定を分ける
+## Three additional measures for automated matches and content assessments
 
-### P2-X01は著者をまたぐ5語句の一致を測る
+### P2-X01 matches five-word phrases across authors
 
-P+Lの連続5-gramのうち、Dの同じ1期間pで`使用著者数_p>=10 AND Q_p<=0.10`が成立するものを候補辞書とする。pは旧か新の少なくとも一方、Qはその同じ期間の出現数に占める最大著者の割合。10〜90%の使用記事率条件は追加しない。DだけでV01と同じ分類と最大20用例を確認し、技術名・API名を含む、残存引用、署名・宣伝の定型句を別フラグで封印する。主は一般説明表現で、技術名、引用、署名、宣伝の4フラグがすべて明示的にfalseの辞書。unknownをfalseと同一視しない。自動の全辞書を補助にし、手動分類の影響を見せる。結果はHでのみ確認する。
+Build the candidate dictionary from contiguous P+L 5-grams that satisfy `author_count_p>=10 AND Q_p<=0.10` in at least one D period p, earlier or newer. Q is the largest author's share of occurrences in that same period. Apply these criteria without a 10–90% article prevalence filter. Using D only, apply the V01 classifications and review up to 20 examples. Seal separate flags for technical or API names, residual quotations, signatures, and promotional boilerplate. The primary dictionary includes general explanatory expressions with all four flags explicitly false. Preserve unknowns. Report the complete automated dictionary as a supplement to show the effect of manual classification. Test results only on H.
 
-記事値は、H同期間の自分以外の数値著者2人以上が使用する辞書5-gramで覆われるword位置のunion数/W_B。W_B<5は`insufficient_5gram_words`、辞書が空は`empty_discovery_dictionary`。分子の重なりは1回だけ。記事・著者ごとの分母を保存し、月・年等重みで記事値をまとめる。既知著者数3未満のセルはNA。全文と200語窓、話題・同文感度を出す。個性やAI使用の直接尺度とは呼ばない。
+For the article value, divide the number of distinct word positions covered by dictionary 5-grams used by at least two other numeric authors in the same H period by W_B. W_B<5 yields `insufficient_5gram_words`, and an empty dictionary yields `empty_discovery_dictionary`. Count each position once. Save article and author denominators. Aggregate article values with equal month and year weights. Cells with fewer than three known authors yield NA. Report full-text, 200-word-window, topic, and duplicate sensitivities. Interpret this measure as cross-author phrase overlap.
 
-### P2-X02は本人の経験記述と一般解説を別ラベルにする
+### P2-X02 labels firsthand experience and general explanation separately
 
-対象はP+Lの文とfragment。E=本人の行為・試行・失敗・観察が具体的な対象か結果と結び付く記述、G=一般的な手順・推奨・仕組みの記述。文ごとにE/Gを独立した0/1/判断不能にし、両方1を認める。`I think X is useful`だけはE=0、`I ran X and saw a timeout`はE=1、`Run X, then inspect the log`はG=1、`I tried X; you should set Y`はE=1かつG=1。第三者の実験、架空の例、単なるweへの呼びかけはE=0。真の体験かは判断しない。
+Use P+L sentences and fragments. E denotes firsthand actions, trials, failures, or observations tied to a concrete object or outcome. G denotes general instructions, recommendations, or descriptions of how something works. Assign E and G independently as 0, 1, or indeterminate per sentence, allowing both to be 1. `I think X is useful` alone is E=0. `I ran X and saw a timeout` is E=1. `Run X, then inspect the log` is G=1. `I tried X; you should set Y` is E=1 and G=1. Third-party experiments, fictional examples, and generic appeals using we are E=0. Assess the written content and leave the truth of the experience unjudged.
 
-旧A07の操作・観測は第三者や手順内完了を含むのでEへ転用しない。旧内容ラベルはこの新定義の確認用正解にしない。全量へのLLM自動付与は今回の固定計画に含めない。固定標本の内容判定を行い、標本の推定対象を明示する。
+Earlier A07 action and observation labels cover third-party activities and procedure steps. Use the new E definition and assess its validity independently of earlier content labels. This version limits independent AI labeling to fixed samples and specifies the population represented by those samples.
 
-校正用Dは旧各年・月2人、新各月10人の計200著者セル、確認用Hは旧各年・月12人、新各月30人の計900著者セル。旧各セル6人の当初案は、著者がセル間で重ならない小さな合成例で有効反復4,438/5,000となり、必要な4,750を下回った。12人の合成例は5,000/5,000で、標本サイズの仕様を12人へ修正した。実データの値や効果の強さを見て変更したものではない。実標本の支持不足や依存構造によってなお区間NAになり得る。各セルの既知著者を`SHA256('p2-s03-v1:42:x02:'+year_month+':'+author)`順に選び、著者内1記事をarticle_keyの同salt hash順で選ぶ。同一著者の異なる月は同じD/Hを維持する。足りないセルは不足数を残し他セルで補充しない。確認標本はX02のラベル未使用であることを確認する。既存の言語判定で本文を見たことは隠さず、未閲覧本文とは呼ばない。
+Calibration D uses two authors per earlier year-month and ten per newer month for 200 author-cell slots. Confirmation H uses 12 per earlier year-month and 30 per newer month for 900 author-cell slots. The original proposal of six authors per earlier cell yielded 4,438 valid replicates out of 5,000 in a small synthetic example without author overlap across cells, below the 4,750 minimum. Twelve authors yielded 5,000 out of 5,000 on the synthetic example, so the specification adopted 12 before viewing real values or effect sizes. Insufficient sample support or dependency in the real data can still make intervals NA. Order known authors within each cell by `SHA256('p2-s03-v1:42:x02:'+year_month+':'+author)`, and choose one article per author by article_key hash using the same salt. Each author keeps the same D/H assignment across months. Report shortages without filling them from other cells. Verify that the confirmation sample has unused X02 labels. Disclose any earlier language review of its text.
 
-Dの200件で文ごとのラベル例・境界を確認し、新しい判断を足すならv2と新しい未使用H標本が必要。Hを開く前に基準を封印し、Hの900枠は時期、識別子、語彙結果を隠して、独立した2系統のAI担当が同じ基準で判断する。別contextで各系統を封印し、双方の完了後に突き合わせる。異なるラベルはunknownを維持する。判定担当と保存すべき証拠は [comparisons.md](comparisons.md) を参照する。E/Gそれぞれ記事内有無の一致率>=0.80かつCohen kappa>=0.60を検証条件とする。kappaの分母が0、計算不能、基準未達なら確認的な内容結論を出さず探索として残す。合議ラベルだけで精度を主張しない。語彙検出器を作るなら別版と未使用確認標本が必要。
+Use the 200 D slots to review sentence label examples and boundaries. New judgments require a v2 and a new unused H sample. Seal the criteria before opening H. For H's 900 slots, conceal period, identifiers, and lexical results and have two independent AI streams apply the same criteria. Use separate contexts, seal each stream separately, and compare them after both finish. Keep disagreements unknown. See [comparisons.md](comparisons.md) for reviewer details and required evidence. For article-level presence of E and G, require agreement>=0.80 and Cohen's kappa>=0.60 for each label. A zero kappa denominator, unavailable calculation, or missed threshold leaves the content result exploratory. Evaluating accuracy requires evidence beyond a consensus label. A vocabulary detector would require a separate version and an unused confirmation sample.
 
-記事出力はE/Gの有無、陽性文数、判断可能文数、陽性文のword union/W_B、両方陽性、判断不能文数と証拠span。判断不能文がある記事の有無は、既知陽性なら1、全て確定陰性なら0、それ以外NA。W_B=0は有無・語率とも`no_P_or_L_words`のNA。W_B>0では、ラベルごとに確定陽性文が覆うword位置集合をT、判断不能文のword位置集合をUとする。語率の下限は`|T|/W_B`、上限は`|T union U|/W_B`。判断不能文が1つでもあれば点語率はNAとし、なければ`|T|/W_B`。位置をunionにして重複を1回だけ数える。E/G両方陽性の位置はE・Gそれぞれへ1回入り、両方を含む合計語率を出す場合は両集合のunionであり足し算しない。セル内は抽出著者等重み、年・月は等重み。主6指標の全記事平均と同じ母集団推定として結合しない。EとGそれぞれの使用著者セル率・語率の差を報告する。
+For each article output presence of E and G, counts of positive and assessable sentences, the union of word positions in positive sentences divided by W_B, an indicator for both labels, indeterminate sentence counts, and evidence spans. For presence, use 1 if at least one sentence is known positive, 0 if all sentences are definitively negative, and NA otherwise. W_B=0 yields `no_P_or_L_words` for both presence and word rate. When W_B>0, let T be the word positions covered by definitively positive sentences for the label and U those covered by indeterminate sentences. Word rate bounds are `|T|/W_B` and `|T union U|/W_B`. The point word rate is NA if any sentence is indeterminate and `|T|/W_B` otherwise. Count each position once within each union. A position positive for both E and G appears once in each label, while a combined E-or-G rate uses the union of the two sets. Weight sampled authors equally within a cell and weight months and years equally. Report this sampled-population estimate separately from the six core all-article averages. Report the difference in author-cell prevalence and word rate separately for E and G.
 
-### P2-X03は冒頭と末尾の固定表現を測る
+### P2-X03 measures fixed opening and closing expressions
 
-P+Lの順序を保ち最初50 wordを冒頭、最後50 wordを末尾とする。見出しは本文Wに混ぜず、そのwindowの最初のunit直前の見出しを補助ラベルにする。見出しの継承は次の同等以上レベルまで、なければnull。W_B=0はNA、W_B<100では重なりを明示し、冒頭・末尾単独率だけを出して組の主値はNA。
+Keep the P+L order and use the first 50 words for the opening and last 50 for the close. Exclude headings from the prose word count and use the heading immediately preceding the first unit of the window as a supplementary label. Inherit headings until the next same- or higher-level heading. Use null if there is no heading. W_B=0 yields NA. When W_B<100, disclose the overlap and report each window's rate individually. The primary paired value is NA for overlapping windows.
 
-固定表現辞書は次の小文字word列の完全一致。語間は空白だけ、同一文内。冒頭は`in this post,in this article,in this tutorial,let's explore,let's dive`、末尾は`in conclusion,to sum up,in summary,thanks for reading,thank you for reading,let me know,leave a comment,follow me`。系列ごと1/0、位置、回数、出典spanを出す。本文にない見出しだけの一致は本文陽性にしない。見出しは`introduction,overview,conclusion,summary,final thoughts`の完全一致を別出力する。
+Use exact matches on the fixed lowercase word sequences, with whitespace only between words and within one sentence. Opening expressions are `in this post,in this article,in this tutorial,let's explore,let's dive`. Closing expressions are `in conclusion,to sum up,in summary,thanks for reading,thank you for reading,let me know,leave a comment,follow me`. Output a 1/0, positions, counts, and source spans by series. A heading-only match leaves the prose indicator negative. Report exact heading matches for `introduction,overview,conclusion,summary,final thoughts` separately.
 
-主記事値は末尾のいずれかの一致有無。補助は冒頭、系列別、冒頭と末尾の両方あり。両方ありは冒頭系列集合と末尾系列集合の組をsignatureにし、H内で本人以外の数値著者2人以上に同じsignatureがある記事率も出す。共通月・年等重み。短文組NAの分母を隠さない。Dから追加するn-gramはV01の条件を使う探索だけにし、この固定辞書の確認結果へ後付けしない。署名・宣伝は保存抽出で除かれたものを復活させず、残存宣伝は主一致に含めて別フラグを出す。X03はこの列挙表現に限る尺度で、意味上のすべての導入・結びを検出したとは主張しない。
+The primary article value is any match in the close. Supplements cover the opening, individual series, and articles with both an opening and a closing match. For articles with both, form a signature from the pair of matching series sets and report the rate at which at least two other numeric authors in H share that signature. Give the common months and years equal weights. Disclose the denominator and NA counts for short articles. Any added D n-grams remain exploratory under V01 criteria and separate from confirmation using the fixed dictionary. Preserve extraction exclusions for signatures and promotions. Include residual promotion in primary matching and flag it separately. Interpret X03 as coverage of the listed phrases.
 
-### 新判定の未使用確認計画を残す
+### Unused confirmation samples for new assessments
 
-工程4ではX02標本と独立に、自動定義の実装確認用にDから各経路50記事をhash順で校正用に、Hから各経路100記事を確認用に固定する。X02で使用したarticle_keyを除き、選択saltは`p2-s03-v1:42:validation`。保存言語ラベルの再評価は行わない。文章分割、太字、V03、X01の分類、X03位置、表示エラー・広告・署名フラグを独立した2系統のAI担当が確認する。各判定はpositive/negative/unknownと証拠spanを保存する。確認用で規則を調整しない。
+At S04, independently of the X02 sample, select 50 D articles per acquisition route for calibration and 100 H articles per route for confirmation of the automated implementation, ordered by hash. Exclude article_key values used in X02 and use salt `p2-s03-v1:42:validation`. Carry forward existing language labels. Have two independent AI streams review sentence segmentation, bold, V03, X01 classifications, X03 positions, and flags for display errors, advertising, and signatures. Record positive/negative/unknown and evidence spans for each judgment. Lock the rules before viewing the confirmation sample.
 
-表示エラーは障害やアクセス拒否だけを伝え記事内容を欠く文、広告は購入・申込・自社サービス利用を主目的とする文、署名は本人紹介・外部誘導の反復末尾を候補として記録する。複数ラベル可。本文だけで判断できなければunknown。これらの全量自動除外はしない。確認用に陽性または陰性が20件未満なら感度・特異度は不十分とし、追加の診断例を精度分母へ足さない。新しい品質フラグの感度比較は固定標本内の探索に限る。
+A display error reports a failure or access denial without article content. Advertising mainly directs users to purchase, register, or use the author's own service. A signature is a recurring ending with self-introduction or external links. Allow multiple labels and use unknown when the prose is insufficient. Keep the full corpus intact. If the confirmation sample contains fewer than 20 positives or negatives, mark evidence for sensitivity and specificity insufficient and keep additional diagnostic examples outside the accuracy denominator. Limit new quality-flag sensitivities to exploratory analysis of the fixed sample.
 
-基本分割・投影は手数えの分子・分母と照合し、差1件でも理由を調べて未解決項目はNAまたは未検証とする。文型・位置判定は正負20件以上を満たすときprecisionとrecallがそれぞれ0.90以上を確認条件とする。合成小例のPASSは実データでの妥当性を保証しない。工程5が独立計算と保存物監査を担当する。合議参照を使ったprecision・recallは測定判定の照合であり、無誤りの外部正解とは扱わない。
+For core segmentation and projection, compare numerators and denominators to manual counts. Investigate every discrepancy and mark unresolved items NA or unverified. For patterns and positions, require both precision and recall>=0.90 given at least 20 positives and 20 negatives. Validate against real data as well as synthetic fixture results. S05 handles independent recomputation and audits of stored outputs. Precision and recall against consensus measure agreement with the assessment reference, which can contain error.
 
-## 差と不確かさは同じ分母から計算する
+## Differences and uncertainty on matching denominators
 
-主6指標は元尺度の年平均、旧年平均、2026平均、差new-old、倍率、重み付き分布を出す。M04だけは右裾への感度としてlog1p値も併記する。割合差はpercentage pointでも表示する。M05の0.1は10%であり0.1%ではない。中央値は値を昇順にし累積重みが0.5以上となる最初の値。p10/p90も同じ規則。0分母を0に置換しない。
+For the six core metrics, report annual means, earlier-period mean, 2026 mean, difference new-old, ratio, and weighted distributions on the original scale. For M04 alone also report log1p sensitivity to the right tail. Show proportion differences in percentage points as well. For M05, 0.1 represents 10%. To find the median, sort values ascending and take the first whose cumulative weight reaches 0.5. Use the same rule for p10 and p90. A zero denominator yields NA.
 
-不確かさは全6年の著者キーunionをソートし、NumPy PCG64、seed42で著者をK個復元抽出するクラスターブートストラップ5,000反復。著者キーはUTF-8辞書順にソートし、`rng.integers(0,K,size=K,dtype=np.int64)`の添字で抽出する。抽出回数をその著者の全対象記事へ掛け、各反復で月・年を再集計する。D/Hの分析はその分割内の著者unionだけで行う。著者不明の仮キーは主6指標だけに用いる。2.5%・97.5%分位は線形補間で示す。有効反復4,750未満、または原標本の月支持不足なら区間NA。有効数・失敗理由を残し反復を都合よく追加しない。X02では選択済み標本の著者だけを再抽出し、標本選択・判定誤り全体の不確かさを尽くさないと明記する。
+Use 5,000 author-cluster bootstrap replicates with NumPy PCG64 and seed 42. Sort the union of keys across six years in UTF-8 lexicographic order and sample K keys with replacement using indices from `rng.integers(0,K,size=K,dtype=np.int64)`. Apply each author's draw count to all that author's eligible articles and reaggregate months and years each replicate. In D/H analyses use only the author union of the relevant partition. Use unknown-author pseudo-keys for the six core metrics only. Compute 2.5% and 97.5% quantiles with linear interpolation. Report NA intervals when fewer than 4,750 replicates are valid or the original sample lacks monthly support. Record the valid count and reasons for failures and retain the fixed number of replicates. X02 resamples only selected authors and the resulting uncertainty covers sampling of those authors, with limitations from the initial selection process and labeling errors.
 
-確認的な方向判定用の両側p値の近似は中心化した反復差を使い、`p=(1+count(abs(delta_b-delta_hat)>=abs(delta_hat)))/(B_valid+1)`とする。これは中心化ブートストラップによる近似検定であり、厳密検定とは呼ばない。基本6指標は6個の近似p値へHolm補正し、補正値<=0.05かつ95%区間が0をまたがないとき方向を支持すると記す。指標の独立性は仮定しない。V01・V02はHで固定した全候補unionの語ごとのF差にBHを1回適用し、探索後確認・FDR目安と表記する。V03は5系列にHolmを別適用する。X01、X03主末尾率、X02 E率とG率の4主値へHolmを別適用する。その他の系列・感度・C01は区間と差を示し、確証的有意差へ数えない。
+Approximate two-sided p-values for confirmatory direction with centered bootstrap differences, `p=(1+count(abs(delta_b-delta_hat)>=abs(delta_hat)))/(B_valid+1)`. Apply Holm correction to the six core approximate p-values and report support for a direction when the adjusted value is <=0.05 and the 95% interval excludes zero. This procedure makes no independence assumption about the metrics. For V01 and V02 on H, apply BH once to the per-term F differences over the fixed candidate union and describe it as post-discovery confirmation with an FDR benchmark. Apply a separate Holm correction to the five V03 series. Apply another Holm correction to four primary values covering X01, the X03 closing rate, and X02 E and G presence rates. Report intervals and differences descriptively for other series, sensitivities, and C01.
 
-「変化なし」は区間に0を含むだけでは結論しない。不確実、方向支持、算出不能を分ける。実務的に意味のある共通閾値は設定せず、元尺度で説明する。多数の語、辞書選択、未知の話題や取得差があるため、補正済み指標でも因果的な主張をしない。
+An interval containing zero indicates uncertainty. Distinguish uncertain findings, support for a direction, and unavailable results. Discuss practical size on the original scales without a shared threshold. Account for the number of terms, dictionary selection, unobserved topics, and acquisition differences when interpreting adjusted results as descriptive evidence.
 
-## P2-C01は2019〜2022年の4点外挿を補助にする
+## P2-C01 supplementary extrapolation from 2019–2022
 
-対象は基本6指標の同じ採否・同じ共通月・月等重みの元尺度。主C01では変換しない。2019、2020、2021、2022年の平均m_yを各年等重みの最小二乗直線へ当てる。t_y=y-2020.5、`b=sum(t_y*m_y)/sum(t_y^2)`、`a=mean(m_y)`。`ref_2026=a+5.5*b`、`delta=m_2026-ref_2026`。
+Use the six core metrics with the same inclusion decisions and common months, equal month weights, and original scales for primary C01. Fit an equal-year-weight least-squares line to the annual means m_y for 2019, 2020, 2021, and 2022. Let t_y=y-2020.5, `b=sum(t_y*m_y)/sum(t_y^2)`, and `a=mean(m_y)`. Calculate `ref_2026=a+5.5*b` and `delta=m_2026-ref_2026`.
 
-s_preは2019〜2022年1〜10月の有効記事値x_iを全件プールした通常の標本SD、`sqrt(sum((x_i-mean_pool)^2)/(N-1))`。月・年の等重みをこの分母へ流用しない。`D_trend=delta/s_pre`。年平均4点のSD、回帰残差SD、2群pooled SDへ置き換えない。2018年を主回帰へ加えない。M02の記事内母SDとC01の記事間標本SDも別物である。
+Use s_pre as the usual unweighted sample SD of all valid article values x_i pooled across January–October 2019–2022, `sqrt(sum((x_i-mean_pool)^2)/(N-1))`. Calculate `D_trend=delta/s_pre`. Keep this denominator distinct from the SD of the four annual means, regression residual SD, pooled two-group SD, or M02's within-article population SD. The primary regression uses 2019–2022 only.
 
-全4年と2026年の全10月に有効支持が必要。N<2、s_pre=0、非有限値、必要年・月欠損は理由付きNA。割合の参照値が0〜1外、非負指標の参照値が負なら数値を切り詰めず`reference_out_of_domain=true`、数値自体は保存し外挿不適合として扱う。元尺度の直線が妥当だという主張へ使わない。
+All ten months in each earlier year and in 2026 require valid support. N<2, s_pre=0, nonfinite values, or missing required years or months yield NA with a reason. Retain the raw extrapolated value when it falls outside 0–1 for a proportion or below zero for a nonnegative metric, flag `reference_out_of_domain=true`, and mark the extrapolation inappropriate.
 
-ブートストラップは前節の全対象年の著者unionを再抽出し、各反復でm_y、回帰、2026参照値、プールSD、Dまで再計算する。反復で2018年は主C01の式に使わないが、共通の抽出回数を使ってよい。原標本と同じNA規則、有効数4,750未満は区間NA。Dの区間をdeltaの区間/s_preだけで近似しない。
+For the bootstrap, resample the author union across the study years as above and recompute m_y, regression, the 2026 reference, pooled SD, and D each replicate. The 2018 data can share the draw counts, but they stay outside primary C01 formulas. Use the original sample's NA rules and mark intervals NA if fewer than 4,750 replicates are valid. Calculate the interval for D from replicate D values with the recomputed denominators.
 
-出力は各年のm_y、各月有効N、a、b、4点残差、2026実測、参照、delta、N_pre、mean_pool、s_pre、D_trend、各95%区間、有効反復数、NAと範囲外フラグ、仕様hash。0.2・0.5・0.8はD絶対値の参考線だけで、有意性・実務的重要性の閾値にしない。AIの因果効果、AI使用率、通常の2群Cohen's dとは呼ばない。
+Report every annual m_y, valid monthly N, a, b, the four residuals, observed 2026 value, reference, delta, N_pre, mean_pool, s_pre, D_trend, all 95% intervals, valid replicate count, NA and out-of-domain flags, and the specification hash. Use 0.2, 0.5, and 0.8 as visual guides for the absolute D value only. Interpret D as a descriptive standardized extrapolation difference, distinct from AI effects, AI use prevalence, and conventional two-group Cohen's d.
 
-感度比較を次のように固定する。
+Use the following fixed sensitivities.
 
-- 2018〜2022年の5点等年回帰。分母も2018〜2022年の記事プールSDへ変更し、その値を明記する。
-- 2019〜2022年から各1年を外す4通り。中心年は残る年の平均へ変え、分母も残る年の記事プールSD。主Dと分母が違うことを表示する。
-- 傾き0。参照は2019〜2022年の等年平均、分母は主s_pre。
-- 月・年等重みの分布から求めるSDの感度。重み和1で`sum(w_i*(x_i-m_weighted)^2)/(1-sum(w_i^2))`の平方根。通常の主s_preと並べる。
-- M04だけlog1p尺度で年平均、回帰、SD、Dを一貫して計算する。元尺度の主値と併記する。
+- Fit an equal-year-weight regression across all five 2018–2022 means. Use and report the SD pooled over 2018–2022 articles.
+- Drop each of 2019–2022 in turn. Center at the mean of the remaining years and use the SD pooled over their articles. Report the alternate denominator alongside the primary D denominator.
+- Set the slope to zero, using the 2019–2022 equal-year mean as reference and primary s_pre as denominator.
+- Use a sensitivity SD based on equal month and year weights. With weights summing to one, take the square root of `sum(w_i*(x_i-m_weighted)^2)/(1-sum(w_i^2))`. Report this next to primary s_pre.
+- For M04 only, consistently compute annual means, regressions, SDs, and D on the log1p scale. Report these alongside the original-scale results.
 
-事前点検は2018〜2020年で2021年を予測、2018〜2021年で2022年を予測する2通り。各訓練年を等重み、月は同じ10月、分母は訓練記事の標本SD。予測誤差と傾き0の誤差、年別実測の折れ曲がりを出す。両方で直線の絶対予測誤差が傾き0以下のときだけ`not_worse_in_two_backtests`、他は`extrapolation_not_supported`、支持不足は`inconclusive`。このラベルで主仕様・窓・指標を変更せず全てのC01を補助欄に残す。良好でも年次観測4点、2022年から4年先の外挿であり、著者再抽出は年単位の構造変化を表現しない。
+Run two backtests, predicting 2021 from 2018–2020 and 2022 from 2018–2021. Weight training years equally, use the same ten months, and use the sample SD of training articles. Report prediction errors for the fitted and zero-slope lines and show changes in direction of the observed annual means. Use `not_worse_in_two_backtests` only when the fitted line has absolute prediction error no larger than the zero-slope line in both tests. Use `extrapolation_not_supported` otherwise and `inconclusive` for insufficient support. Keep all C01 values supplemental without changing the primary specification, window, or metrics based on this label. Even with favorable backtests, the fit has four annual observations and extends four years past 2022. Author resampling captures variation across authors while leaving year-level structural changes outside its scope.
 
-## 数値条件は検出力の保証ではなく固定した運用条件である
+## Fixed numeric operating criteria
 
-語彙の20出現・10著者と占有率上限は、単発投稿や特定著者だけの候補を抑えるための選択で、実データで最適化した値ではない。V02は新20著者・占有率10%にして、広がりの条件をV01より厳しくした。候補上限200/100と確認標本数は用例確認と二重判定を実施できる作業量の条件。文型の20語gap、50語の端、200語窓、近似Jaccard0.90は範囲を一意にするための設計値で、最良の境界や十分な検出力の根拠とは呼ばない。5,000反復・95%有効条件は計算と失敗率の運用条件で、年次4点外挿の妥当性を増すものではない。検証の0.80/0.60、0.90条件は新判定を確認扱いする最低基準であり、言語採否や主対象を変えない。弱い結果を理由に閾値を緩めない。
+The vocabulary thresholds of 20 occurrences, 10 authors, and maximum author share screen out isolated posts or author-dominated terms. These were fixed without optimization on the observed data. V02 strengthens the coverage requirements to 20 newer authors and a 10% maximum share. Candidate caps of 200 and 100 and confirmation sample sizes reflect the workload for reading examples and assessing twice. The 20-word pattern gap, 50-word ends, 200-word windows, and 0.90 near-duplicate Jaccard cutoff define reproducible scopes. The 5,000 replicates and 95% validity requirement govern computational effort and failure rates. Extrapolation validity depends on the evidence from the four annual observations. The 0.80/0.60 and 0.90 validation cutoffs are minimum confirmatory requirements for new assessments. Keep the cutoffs, language decisions, and primary cohort fixed when results are weak.
 
-感度比較は主から1条件ずつ変更する。追加でV01〜V03とX01について200語hash窓と話題標準化を同時に適用する。窓・話題セルの支持と除外量は結果開示前に保存し、支持0はNA。全条件の無差別な組合せ探索は行わない。基本6指標はW_Bの0〜199、200〜499、500〜999、1000以上で層別した値も補助出力し、短文を主から除かない。
+Each sensitivity changes one primary condition at a time. For V01–V03 and X01, additionally combine the hash-selected 200-word window with topic standardization. Save window and topic support and exclusions before revealing results. Zero support yields NA. Use the specified sensitivities. For the six core metrics, also report results in W_B strata of 0–199, 200–499, 500–999, and 1,000 or more. Retain short articles in the primary analysis.
 
-## 工程4は固定した入力を使って実行する
+## S04 execution on fixed inputs
 
-S04はS03が封印した設定と全入力ハッシュを検証する。自分のrunの出力先を作成し、入力、コード、設定、環境のmanifestを保存する。著者D/H分割、標本ID、D開示前の初期辞書を封印する。合成小例と保存構造の実物照合を通過してから本集計する。再実行コマンド、resumeに使うチェックポイント、元入力に書き込んでいない証拠を保存する。
+S04 verifies the settings and all input hashes sealed by S03. Create the run output directory and save the input, code, settings, and environment manifest. Seal the author D/H split, sample IDs, and initial dictionary before revealing D. Complete synthetic fixture and saved-structure checks before full aggregation. Save rerun commands, resumption checkpoints, and evidence that original inputs were accessed read-only.
 
-必要月、投影、判定精度の支持不足は、理由付きのNA、未検証、探索として出力する。仕様内の実装修正には修正履歴と再検証を添える。定義変更時は別版で未使用確認標本を確保し、v1との対応を明示する。
+Report insufficient support for required months, projection, or assessment accuracy as NA, unverified, or exploratory, with reasons. Record and reverify implementation corrections within the specification. When definitions change, reserve an unused confirmation sample for the new version and describe correspondence with v1.

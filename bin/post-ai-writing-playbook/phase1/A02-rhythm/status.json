@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "A02",
-      "title": "文のリズムと句読法",
-      "description": "文のリズムと句読法",
+      "title": "Sentence Rhythm and Punctuation",
+      "description": "Sentence Rhythm and Punctuation",
       "priority": 9,
       "status": "not_started",
       "passes": false,
@@ -20,17 +20,17 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "M02〜M04は固定Pから計算され、語なし・一文・低nが区別できる。",
+          "criterion": "M02–M04 are calculated from the fixed P data, with distinct cases for zero words, a single sentence, and low n.",
           "met": false
         },
         {
           "id": "C02",
-          "criterion": "カンマ間隔の文ベースと旧記事近似が別列で、数字内カンマが除かれる。",
+          "criterion": "Sentence-based comma intervals and the legacy article-level approximation are in separate columns. Commas within numbers are excluded.",
           "met": false
         },
         {
           "id": "C03",
-          "criterion": "著者区間と図を入力から独立に照合できる。",
+          "criterion": "The author-cluster intervals and figure can be independently verified from the inputs.",
           "met": false
         }
       ],

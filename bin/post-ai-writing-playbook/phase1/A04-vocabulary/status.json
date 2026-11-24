@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "A04",
-      "title": "語彙の発見と検証",
-      "description": "語彙の発見と検証",
+      "title": "Vocabulary Discovery and Validation",
+      "description": "Vocabulary Discovery and Validation",
       "priority": 11,
       "status": "not_started",
       "passes": false,
@@ -20,17 +20,17 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "発見側と検証側の既知著者および完全一致の非空Pハッシュは交差0。",
+          "criterion": "Known authors and exact nonempty P hashes have zero overlap between the discovery and validation splits.",
           "met": false
         },
         {
           "id": "C02",
-          "criterion": "候補hashは検証結果を開く前に固定され、全採否と未再現を保持する。",
+          "criterion": "The candidate hash is frozen before validation results are opened, and every selection decision and failure to replicate is retained.",
           "met": false
         },
         {
           "id": "C03",
-          "criterion": "元単位・文・非語境界、0語P分母、レア判定、監視語、MATTR窓不足を別実装で照合できる。",
+          "criterion": "An independent implementation can check original units, sentence and nonword boundaries, the denominator for zero-word P, rarity decisions, watch terms, and insufficient MATTR windows.",
           "met": false
         }
       ],

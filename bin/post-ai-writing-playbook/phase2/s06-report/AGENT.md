@@ -1,30 +1,30 @@
-# P2-S06　比較結果と追加4資料をまとめる
+# P2-S06 Compile the comparisons and four supplementary materials
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and [branch rules](../AGENT.md) before starting this task.
 
-## 目的
+## Objective
 
-数字・図・用例・主張を元の比較に結び、読み手が対象と限界を確認できる資料にする。
+Link numbers, figures, examples, and claims to the underlying comparisons so readers can verify the scope and limitations.
 
-## 入力
+## Inputs
 
-- S05の18判断、固定感度、evidence-index、独立確認
-- S04の比較、候補、年・月表、格納した記事値、X02判定
-- S03の対象と保存タグ
+- S05's 18 decisions, fixed sensitivities, evidence-index, and independent checks
+- S04 comparisons, candidates, yearly and monthly tables, stored article values, and X02 assessments
+- S03 cohort and saved tags
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream files using the upstream output_dir and manifest returned by workflow.py. Use paths resolved from the current run instead of absolute paths from earlier conversations.
 
-## 手順
+## Steps
 
-1. S05にある許容文を18行の主張台帳に写し、数値と根拠を結び付ける。11の問いの入口を作る。対象、分布、年別、感度、X02のE/G組合せを本文・図・表からたどれるようにする。
-2. 固定候補全行とF/R/Aの条件別比較、年別・月別表、必要のある用例と出典を残す。分類の根拠は封印したD文脈を使う。引用は必要最小限とし、AI著作の判定例にしない。
-3. 比較の9条件、M05/M06の使用率と使用内の量、一般説明表現の年別、保存タグ構成の4資料を保存値から作る。全件表と要約を分け、各表の検算、元行、再実行コマンドを索引へ登録する。
-4. 対象世代、分母、point/percentage point、NA理由、残る取得・測定・構成差を見える場所へ置く。図の値・年軸と説明、検索とリンクを独立に照合する。
-5. 11月23日の追加が明示された場合はタグ別書式と固定24記事のHTML有無照合を別の派生ファイルへ保存する。原データ、本compute、候補、正式判断は保持する。
+1. Copy S05's permissible wording to an 18-row claim ledger and link the values and evidence. Provide entry points for the 11 questions. Let readers find the cohort, distribution, yearly results, sensitivities, and X02 E/G combinations through the text, figures, and tables.
+2. Preserve all fixed candidate rows, F/R/A comparisons by condition, yearly and monthly tables, and necessary examples with sources. Base the classifications on sealed D contexts. Quote only what is needed and avoid presenting examples as AI authorship judgments.
+3. Build four resources from saved values for the nine comparison conditions, M05/M06 prevalence and amount among users, yearly general explanatory expressions, and saved tag composition. Keep full tables and summaries separately. Index each table's checks, source rows, and rerun commands.
+4. Make the cohort periods, denominators, points versus percentage points, reasons for NA, and remaining differences in acquisition, measurement, and composition easy to find. Independently check chart values, year axes, descriptions, search, and links.
+5. If the November 23 supplement is explicitly requested, save formatting by tag and the fixed 24-article HTML presence check in separate derived files. Preserve original data, main calculations, candidates, and formal decisions.
 
-## 必要な出力
+## Required outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs under the output_dir returned by start.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -36,24 +36,24 @@
 - `yearly-vocabulary.tsv`
 - `tag-periods.tsv`
 
-## 完了条件
+## Completion criteria
 
-- C01　18判断と全固定候補を保持する。分母と出典のある本文・表・図・用例を索引でき、保存比較へ戻れる。
-- C02　11月16日の追加4資料を固定条件で作り、行数・対象・欠測・単位・保存値を独立に確認する。
-- C03　記事使用率と陽性内量の積、年別の未観測期間、タグ欠測とAIタグ定義が表示から確認できる。
-- C04　HTMLの表示、検索、リンクを実物で確認し、確認できない範囲、任意の11月23日作業の有無を記録する。
+- C01 Retain the 18 decisions and all fixed candidates. Index prose, tables, figures, and examples with denominators and sources, and link them to the saved comparisons.
+- C02 Build the four November 16 resources under the fixed conditions. Independently verify row counts, cohorts, missingness, units, and saved values.
+- C03 Show the product of article prevalence and the mean among positive articles, the years without observations, tag missingness, and the definition of AI tags.
+- C04 Verify HTML rendering, search, and links on the actual output. Record any areas that could not be verified and whether the optional November 23 work was performed.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before completion, have a separate reviewer independently check the saved outputs and definitions. Verify the receipt criteria, artifacts, and hashes, then apply the receipt with workflow.py finish from the root. Completion requires the full work after the pilot.
 
-## 参照する固定規則
+## Fixed reference rules
 
 - [supplements.md](../supplements.md)
 - [comparisons.md](../comparisons.md)
 - [phase2-handoff.md](../phase2-handoff.md)
 
-## 混同しないこと
+## Interpretation
 
-- 全件を技術記事として分類した比較ではない。タグ欠測から話題やAI著作を決めない。
-- 対象は固定観測集合。追加資料は購入・公開・最終稿や測定精度の証明に当たらない。
+- The comparison uses a fixed observed corpus. Treat topic and AI authorship as unknown when the only evidence is a missing tag, and avoid treating the whole corpus as classified technical articles.
+- The supplementary materials describe the fixed observed corpus. Purchasing, publication, final manuscript approval, and measurement accuracy are outside their scope.
 
-引継ぎは [phase2-handoff.md](phase2-handoff.md)。状態は[status.json](status.json)。
+See [phase2-handoff.md](phase2-handoff.md) for the handoff and [status.json](status.json) for status.

@@ -1,11 +1,11 @@
-# T03 の引継ぎ
+# T03 Handoff
 
-初期状態は未着手。過去の研究の完了を引き継いだものではない。
+The initial state is pending. Prior research provides provenance for this run.
 
-最初の操作は、この末端のAGENT.mdとstatus.jsonを読み、ルートで `python3 workflow.py start T03 --owner <担当ID>` を実行すること。依存が未完了なら先行作業へ戻る。
+First read AGENT.md and status.json for this task, then run `python3 workflow.py start T03 --owner <owner-id>` from the root. If a dependency is incomplete, return to the prerequisite task.
 
-A01〜A08へ対象表・日付・coverageと同一採用ID集合を渡す。
+Pass the cohort table, dates, coverage, and identical included ID set to A01–A08.
 
-## 再開記録
+## Resume Log
 
-実行した担当がここへ追記する。担当ID、run_id、attempt、出力先、固定入力とhash、checkpoint、完了した操作、未完了、阻害、次の一コマンドを残す。同じattemptへ戻るときは進捗を消さず追記する。
+The operator adds the owner ID, run_id, attempt, output directory, frozen inputs and hashes, checkpoint, completed operations, outstanding work, blockers, and the next command. Append updates when resuming the same attempt so earlier progress stays recorded.

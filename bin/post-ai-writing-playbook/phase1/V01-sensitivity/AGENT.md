@@ -1,30 +1,30 @@
-# V01　条件を変えた再分析
+# V01 Sensitivity analyses
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and [Phase 1 rules](../AGENT.md) before starting this task.
 
-## 目的
+## Purpose
 
-事前に決めた感度条件を一つずつ適用し、結論の適用範囲を確かめる。
+Apply the prespecified sensitivity conditions one at a time to determine where the conclusions hold.
 
-## 入力
+## Inputs
 
-- A01〜A12の合格済み出力
-- T00〜T03の凍結入力と特徴量
-- A04重複成分
+- Accepted outputs from A01–A12
+- Frozen inputs and features from T00–T03
+- A04 duplicate-text components
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream files from the upstream output_dir and manifest returned by workflow.py. Use paths from the current run.
 
-## 手順
+## Steps
 
-1. 同梱の条件表から具体的な変種IDを固定し、各条件を一つずつ変える。
-2. 部位、文境界、語形、言語、品質、話題、組成、著者、期間、日時、重複の比較を記録する。
-3. 支持ゼロ・不足・必要入力の欠落を数え、実装上のfailureや残作業を別状態にする。
-4. 旧結果と現比較の対象違い、A11/A12の探索と反例を独立に確認する。
-5. 表・図・大偏差の元記事抜き取りを独立実行する。
+1. Freeze concrete variant IDs from the bundled condition list. Change one condition at a time.
+2. Record comparisons for body regions, sentence boundaries, word forms, language, quality, topics, composition, authors, periods, dates, and duplicates.
+3. Count zero support, insufficient support, and missing required inputs. Track implementation failures and pending work with separate states.
+4. Independently check differences in scope between historical and current comparisons, A11/A12 exploratory analyses, and counterexamples.
+5. Independently verify tables and figures and spot-check source articles for large deviations.
 
-## 必要な出力
+## Required Outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs in the output_dir returned by the start command.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -34,23 +34,23 @@
 - `exploration-confirmation.json`
 - `sensitivity.svg`
 
-## 完了条件
+## Completion Criteria
 
-- C01　予定の変種×六主指標の全セルが計算値または理由付き状態を持つ。必須未処理はない。
-- C02　原比較との差・n・欠測・支持を別計算で照合し、定義上のゼロと反転を区別する。
-- C03　A04境界・重複の未測定、A11・A12探索、図の反例と制約を保存する。
+- C01 Every planned variant-by-primary-metric cell has a calculated value or a state with a reason. All required work has been processed.
+- C02 Independent calculations verify differences from the original comparison, sample sizes, missingness, and support, and distinguish zeros by definition from reversals.
+- C03 Unmeasured A04 boundaries and duplication, A11/A12 exploratory results, and figure counterexamples and constraints are saved.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before completion, have a different person independently verify the saved artifacts and definitions. Check the criteria, artifacts, and hashes in the receipt, then run workflow.py finish from the root. Completion requires the full task to pass after the pilot.
 
-## 参照する固定規則
+## Frozen Rules
 
 - [measurement-spec.md](../measurement-spec.md)
 - [analysis-methods.md](../analysis-methods.md)
 - [v01-variants.json](../references/v01-variants.json)
 
-## 混同しないこと
+## Pitfalls
 
-- 計算不能を影響なしとみなさない。
-- 0をまたぐかだけで頑健と決めない。
+- Record unevaluable cases explicitly.
+- Assess robustness using more than whether an interval crosses zero.
 
-引継ぎは [phase1-handoff.md](phase1-handoff.md)。状態は[status.json](status.json)。
+See [phase1-handoff.md](phase1-handoff.md) for the handoff and [status.json](status.json) for the current state.

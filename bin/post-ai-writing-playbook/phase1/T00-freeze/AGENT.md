@@ -1,28 +1,28 @@
-# T00　入力と実行条件を固定
+# T00 Freeze the inputs and execution conditions
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and [Phase 1 rules](../AGENT.md) before starting this task.
 
-## 目的
+## Purpose
 
-候補集合、元HTML、抽出規則、実行環境を固定し、全候補の抽出台帳を作る。
+Freeze the candidate set, source HTML, extraction rules, and execution environment, then create an extraction ledger for all candidates.
 
-## 入力
+## Inputs
 
-- D02 acquisitions.jsonl、manifest、summary、verification、成功行のHTML
+- D02 acquisitions.jsonl, manifest, summary, verification, and HTML for successful rows
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream files from the upstream output_dir and manifest returned by workflow.py. Use paths from the current run.
 
-## 手順
+## Steps
 
-1. D02の合格済み試行へ読み取り専用で接続し、候補ID・URL・日付・HTML参照と出典を台帳に写す。
-2. 同梱の抽出器をextract.pyとして凍結し、Python、lxml、libxmlとロケール・UTC設定、依存導入手順を記録する。
-3. D02固定5候補で小規模抽出し、body selectorと元HTML対応を独立確認する。
-4. 同じコードで全候補を抽出する。成功、取得失敗、本文欠落・曖昧、復号・解析失敗を記録し、空Sは成功内に残す。
-5. 入力とシャードのSHA-256、一意性、ID集合、境界ケースを別実装で判定する。
+1. Connect to the accepted D02 attempt in read-only mode. Copy candidate IDs, URLs, dates, HTML references, and sources into the ledger.
+2. Freeze the bundled extractor as extract.py. Record Python, lxml, libxml, locale and UTC settings, and dependency installation instructions.
+3. Run a small extraction on the five fixed D02 candidates. Independently check the body selector and its correspondence to the source HTML.
+4. Apply the same code to every candidate. Record success, acquisition failure, missing or ambiguous body, and decoding or parsing failure. Keep empty S among the successful extractions.
+5. Use an independent implementation to check input and shard SHA-256 hashes, uniqueness, the ID set, and edge cases.
 
-## 必要な出力
+## Required Outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs in the output_dir returned by the start command.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -33,24 +33,24 @@
 - `environment.json`
 - `pilot.json`
 
-## 完了条件
+## Completion Criteria
 
-- C01　候補IDは一意で、全取得状態とHTMLハッシュがD02と一致する。
-- C02　5候補probeと合成負例で取得失敗・抽出失敗・空Sを区別できる。
-- C03　全候補の抽出状態があり、不明の捨て行がない。コード・環境・設定のSHA-256を再照合できる。
+- C01 Candidate IDs are unique, and all acquisition states and HTML hashes match D02.
+- C02 The five-candidate probe and synthetic negative cases distinguish acquisition failures, extraction failures, and empty S.
+- C03 Every candidate has an extraction state, and all exclusions are accounted for. SHA-256 hashes for the code, environment, and configuration can be verified again.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before completion, have a different person independently verify the saved artifacts and definitions. Check the criteria, artifacts, and hashes in the receipt, then run workflow.py finish from the root. Completion requires the full task to pass after the pilot.
 
-## 参照する固定規則
+## Frozen Rules
 
 - [measurement-spec.md](../measurement-spec.md)
 - [analysis-methods.md](../analysis-methods.md)
 - [article_extraction.py](../references/article_extraction.py)
 
-## 混同しないこと
+## Pitfalls
 
-- 固定件数や旧run IDを採否に使わない。
-- 候補失敗を欠行にしない。
-- 5件で止めた試行は完了にしない。
+- Use the current run's criteria for inclusion independently of historic counts and run IDs.
+- Keep a row for every failed candidate.
+- Leave attempts that stop after five candidates in progress.
 
-引継ぎは [phase1-handoff.md](phase1-handoff.md)。状態は[status.json](status.json)。
+See [phase1-handoff.md](phase1-handoff.md) for the handoff and [status.json](status.json) for the current state.

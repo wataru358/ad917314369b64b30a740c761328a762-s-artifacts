@@ -1,1 +1,1 @@
-このプロジェクトの規則は [AGENT.md](AGENT.md) にあります。実行を依頼されたら [START.md](START.md) から開始してください。作成・修正・レビューだけの依頼では研究を起動しません。
+See [AGENT.md](AGENT.md) for the project rules. If asked to run the study, begin with [START.md](START.md). Requests limited to creating, editing, or reviewing the playbook do not start a research run.

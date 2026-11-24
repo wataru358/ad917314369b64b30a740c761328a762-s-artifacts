@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "T00",
-      "title": "入力と実行条件を固定",
-      "description": "入力と実行条件を固定",
+      "title": "Freeze the inputs and execution conditions",
+      "description": "Freeze the inputs and execution conditions",
       "priority": 4,
       "status": "not_started",
       "passes": false,
@@ -20,17 +20,17 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "候補IDは一意で、全取得状態とHTMLハッシュがD02と一致する。",
+          "criterion": "Candidate IDs are unique, and all acquisition states and HTML hashes match D02.",
           "met": false
         },
         {
           "id": "C02",
-          "criterion": "5候補probeと合成負例で取得失敗・抽出失敗・空Sを区別できる。",
+          "criterion": "The five-candidate probe and synthetic negative cases distinguish acquisition failures, extraction failures, and empty S.",
           "met": false
         },
         {
           "id": "C03",
-          "criterion": "全候補の抽出状態があり、不明の捨て行がない。コード・環境・設定のSHA-256を再照合できる。",
+          "criterion": "Every candidate has an extraction state, and all exclusions are accounted for. SHA-256 hashes for the code, environment, and configuration can be verified again.",
           "met": false
         }
       ],

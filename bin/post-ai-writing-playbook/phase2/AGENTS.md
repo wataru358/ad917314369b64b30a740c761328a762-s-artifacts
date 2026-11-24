@@ -1,1 +1,1 @@
-この枝では [AGENT.md](AGENT.md) を読み、親の実行規則を引き継いでください。
+Read [AGENT.md](AGENT.md) and follow the parent execution rules for this branch.

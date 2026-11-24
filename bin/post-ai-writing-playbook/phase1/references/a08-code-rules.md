@@ -1,33 +1,33 @@
-# A08準備版v2：保存DOMのコードと周辺散文を測る
+# A08 preparation v2 — Measuring code and nearby prose in the archived DOM
 
-初版規則とschema、pilot台帳は初回処理前に固定した。実資料でhighlightクラスを未認識としていた欠落が分かったため、v1成果物を保持し、v2規則を再測定前に固定する。記事の選択・分母・年別非閲覧は維持する。元runの初期診断は固定12記事。再実行時は診断を通した後に、同じ規則で全採用記事を計数し集計する。近接した散文を意味上の説明と認定せず、実行・正しさ・質も判断しない。
+The initial rules, schema, and pilot ledger were frozen before the first pass. Real examples revealed that the rules missed highlight classes, so retain the v1 artifacts and freeze the v2 rules before remeasurement. Keep article selection and denominators fixed and keep years hidden. The original diagnostic sample contained 12 fixed articles. In the replay, complete diagnostics first and use the same rules to count and aggregate every included article. Treat nearby prose as proximity only. Code execution, correctness, quality, and whether the prose explains the code are outside the measure.
 
-## コードを一度ずつ数える
+## Count each code element once
 
-掃除後payload.body_htmlをUTF-8明示のlxml HTML parserで読む。原HTMLの抽出器を呼ばず、保存済みDOMだけから別の派生表を作る。最外preを一つのblockとして数え、その内側の全codeは個別計上しない。pre外の最外codeをinlineとし、inline内のcodeも重複させない。preだけのブロックも対象。空要素も一件。code外のkbd/sampや見た目だけのコードはコード量へ加えない。
+Read the cleaned payload.body_html using an lxml HTML parser configured for UTF-8. Build a separate derived table from the saved DOM alone. Count each outermost pre as one block and include nested code elements only in that block. Outside pre, count each outermost code element as inline, including nested code only in that element. Include pre elements without code descendants and count empty elements as present. Exclude kbd and samp outside code and text that only looks like code.
 
-文字列は要素自身のitertextを順に連結し、自身のtailを除く。HTML entityはparser復号後、Unicodeコードポイントで数える。正規化・strip・行末追加はしない。brは文字を挿入しないため実改行だけを行境界にする。文字数=len(text)、非空白文字数=sum(not c.isspace())、非空行数=sum(bool(line.strip()) for line in text.splitlines())。空文字はempty、空白だけはwhitespace_only、その他はnonempty。いずれも存在ありで数値0を保持する。
+Concatenate the element's itertext in order and exclude its own tail. Count Unicode code points after the parser decodes HTML entities. Preserve the string without normalization, stripping, or added line endings. A br element inserts no character, so only actual line breaks divide lines. Character count is len(text), nonwhitespace character count is sum(not c.isspace()), and nonempty line count is sum(bool(line.strip()) for line in text.splitlines()). Use empty for an empty string, whitespace_only for whitespace alone, and nonempty otherwise. All three count as present and preserve numeric zeros.
 
-preとその子孫codeのclass属性を位置とともに保存する。language-X/lang-Xと、preのclassにhighlightがある場合の残りのclassトークンを明示された構文強調ラベルとして保存する。たとえばhighlight shellのshell、highlight plaintextのplaintextは保存HTMLの明示ラベルであり、本文から推定した言語ではない。ラベルは原表記のまま保持し、plaintextを特定プログラミング言語に変換しない。候補なしはlanguage_state=unknown、候補が一種類ならexplicit、複数ならexplicit_conflict。classなし/言語用classなしを分け、推定や代表言語の補完をしない。空文字・不明言語・コード0・入力欠測を混同しない。
+Save class attributes and positions for pre and its descendant code elements. Record language-X, lang-X, and, when the pre class contains highlight, its other class tokens as explicit syntax-highlighting labels. For example, shell in highlight shell and plaintext in highlight plaintext are labels in the archived HTML. Keep their source spelling, including plaintext. Set language_state to unknown for no candidates, explicit for one kind, or explicit_conflict for multiple kinds. Distinguish absent class attributes from present classes without a language label. Use only explicit labels and leave other language information unknown. Track empty text, unknown language, zero code elements, and missing input separately.
 
-## 二つの比は別の単位で扱う
+## Use each ratio's own units
 
-block_chars_per_S_word=blockの文字数合計/W_S。W_Sは封印済みfeaturesのASCII英語語数で、owners.word_countとtokens(kind=word)を照合する。inlineは分子に含めず別列。コード文字数を英単語数と同じ単位としない。W_S=0は値null・状態NA・理由S0で、コード0/W_S>0は0。
+Define block_chars_per_S_word as total block character count divided by W_S. W_S is the sealed ASCII English word count from the features. Verify owners.word_count against tokens(kind=word). Keep inline counts in a separate column outside this numerator. The ratio is in code characters per English word. W_S=0 yields a null value, state NA, and reason S0. Zero code characters with positive W_S yields 0.
 
-code_nonwhite_share=(block+inlineの非空白文字数)/(掃除後DOMの全可視テキストの非空白文字数)。分子はpreおよびその外のcodeの互いに重ならない和。見出し・リスト・引用・表にあるinlineも含める。分母はroot.itertextの連結からUnicode空白を除いた文字数。掃除済みDOM内の見出し・引用・表・コードも含め、除去済みUI・属性・altは含めない。script/style/template/noscriptまたはhidden/aria-hidden=trueが保存DOMに残る場合はvisible_scope_errorとして構造比をNAにする。CSSによる可視性は測らない。DOM分母0はempty_visible_DOMでNA。DOM入力なし/構文対応失敗はmissing_body_html/projection_errorでNAとし0へ変換しない。pilotでは対応失敗を黙って進めず検証失敗にする。
+Define code_nonwhite_share as the nonwhitespace character count of block and inline code divided by the nonwhitespace character count of all visible text in the cleaned DOM. The numerator is the disjoint sum of pre and code outside pre, including inline elements in headings, lists, quotations, and tables. Concatenate root.itertext and exclude Unicode whitespace for the denominator. Include headings, quotations, tables, and code in the cleaned DOM. Exclude removed UI, attributes, and alt text. If script, style, template, noscript, hidden, or aria-hidden=true remains in the saved DOM, report visible_scope_error and a structural ratio of NA. CSS visibility is outside this measure. A zero DOM denominator yields NA with reason empty_visible_DOM. A missing DOM input or failed structural projection yields NA with reason missing_body_html or projection_error. Treat failed alignment in the pilot as a failed verification.
 
-## 保存散文とDOM順を対応させる
+## Align the saved prose with DOM order
 
-既存の除外要素・ブロック・unsupported widget規則を読み取り専用で参照し、DOMの散文投影と保存prose_unitsのkind/text/順序を完全照合する。原文の再抽出・語数の再生成は行わない。単位にはclean XPathとsource XPath、unit_index、owner_id、P/L/U、保存tokensから得るW_unit、DOM開始/終了順を残す。同じ所有p/liが分かれた単位は結合せず別の位置として扱う。W_unit合計=W_S、owner別合計=owners.word_countを確認する。
+Use the existing rules for excluded elements, blocks, and unsupported widgets as read-only references. Match the DOM prose projection against the saved prose_units exactly by kind, text, and order. Use already extracted text and stored word counts. For each unit, retain cleaned and source XPath, unit_index, owner_id, P/L/U, W_unit from saved tokens, and DOM start and end order. Keep split units at different positions even if they share the same owning p or li. Check that W_unit totals equal W_S and that per-owner totals equal owners.word_count.
 
-全h1〜h6（空見出しも含む）を新しい節の境界とし、レベルを問わず境界を越えない。先頭はsection 0、各見出しで+1。T02の見出しのlocal_path、level、textと照合する。A06が合格した後に、A11で双方の見出し順と先行S語を照合する。
+Treat every h1–h6, including empty headings, as a new section boundary. Stay within the boundary at every level. Start at section 0 and increment at every heading. Reconcile local_path, level, and text with T02. Once A06 passes, check that both heading orders and preceding S word counts match in A11.
 
-各blockの前後で、同じ節に完全に収まる保存散文単位のうちDOM順で最寄りの一単位を選ぶ。inlineには前後対応を作らない。連続blockを越えて同じ散文に対応してよく、途中コード件数・同一unit/ownerの利用回数を残す。前後のW_unitを説明語数という意味評価にはしない。重複合計を記事の総説明語数とせず、記事のW_Sを分母として維持する。
+For each block, choose the nearest saved prose unit before it and after it in DOM order, considering only units entirely within the same section. Match nearby prose only for blocks. The same prose may match across consecutive blocks. Record the intervening code count and how many times each unit or owner is used. W_unit measures nearby prose word count. Keep W_S as the article denominator and report proximity counts without interpreting sums with repeated prose as total explanatory length.
 
-対応なしはheading_boundary、no_prose_to_document_edge、overlapping_saved_unitを区別する。保存単位がblock/見出しをまたぐ場合、全単位を片側へ置かずoverlapping_saved_unitとする。見出しで遮られた側と文書端まで散文がない側を分ける。数値0語の散文単位が存在する場合はmatchedでW_unit=0。対応なしはW_unit=nullであり0でない。
+Use heading_boundary, no_prose_to_document_edge, and overlapping_saved_unit as separate no-match reasons. Assign overlapping_saved_unit when a saved unit spans the block or heading itself. Distinguish a side blocked by a heading from a side with no prose through the document edge. A matched prose unit with zero words is matched with W_unit=0. Use W_unit=null when there is no match.
 
-タグなしコード候補はT02点検の原位置と保存P/L/Uへの混入を調べ、A08主計数には加えない。真のタグなし候補とタグ付き誤警告を分けてV01へ渡す。上流値は直さない。
+For potentially untagged code in the T02 review, check the original position and any inclusion in saved P/L/U. Exclude these candidates from primary A08 counts. Pass genuine untagged candidates and incorrect flags for tagged code to V01 separately. Preserve the original upstream values.
 
-## 実資料と対照例の役割を分ける
+## Real articles and controls
 
-pilotは既存T02構造点検6記事を先に置き、保存特徴量でcode0/S0/inline/blockの最初のhash順位を追加し、同順位で12記事まで補う。台帳固定後に測定する。最大24を超えず、処理後に記事を入れ替えない。コードなし、pre/code入れ子、inline、言語クラスなし、見出し境界、連続コード、S0、タグなし候補を原位置で点検する。空code等の実例がなければ未充足と記し、別の合成対照例を置く。対照例を実記事の達成数に含めない。
+Start the pilot with the six existing T02 structure-check articles. Using saved features, add the first result in hash order for code0, S0, inline, and block, then fill to 12 in the same order. Freeze the ledger before measurement. Use at most 24 and keep the selection fixed after processing. Check the original position for no code, nested pre/code, inline code, no language class, heading boundaries, consecutive code, S0, and untagged candidates. Record gaps when a case such as empty code lacks a real example, and supply a separate synthetic control. Keep controls separate from real article completion counts.

@@ -1,11 +1,11 @@
-# A01 の引継ぎ
+# A01 Handoff
 
-初期状態は未着手。過去の研究の完了を引き継いだものではない。
+This task starts with status `not_started`. Record completion for this run only.
 
-最初の操作は、この末端のAGENT.mdとstatus.jsonを読み、ルートで `python3 workflow.py start A01 --owner <担当ID>` を実行すること。依存が未完了なら先行作業へ戻る。
+First read this task's `AGENT.md` and `status.json`. From the project root, run `python3 workflow.py start A01 --owner <owner-id>`. If any dependencies are incomplete, return to those tasks first.
 
-V01・R01にM01の対象、原尺度と年重み、長文点検を渡す。
+Pass the M01 cohort, original measurement scale, year weights, and long-article audit to V01 and R01.
 
-## 再開記録
+## Progress Log
 
-実行した担当がここへ追記する。担当ID、run_id、attempt、出力先、固定入力とhash、checkpoint、完了した操作、未完了、阻害、次の一コマンドを残す。同じattemptへ戻るときは進捗を消さず追記する。
+The task owner appends their owner ID, `run_id`, `attempt`, output location, frozen inputs and their hashes, checkpoint, completed work, pending work, blockers, and the next command. Append to the existing log when resuming the same attempt.

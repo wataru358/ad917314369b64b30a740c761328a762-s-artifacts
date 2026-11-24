@@ -1,24 +1,24 @@
-# Phase 2の引継ぎ
+# Phase 2 handoff
 
-新規runではR01とD03の検証済み出力をそろえ、P2-S01から開始する。途中のrunでは状態CLIから同じattemptを再開する。比較実行まで到達したrunはS04の固定対象、コード、辞書、標本、計算出力のハッシュを読戻す。S05、S06はその保存値を使う。
+For a new run, obtain verified R01 and D03 outputs and start with P2-S01. Use the status CLI to resume the same attempt for an in-progress run. For a run that reached comparisons, check the hashes of S04's fixed cohort, code, dictionaries, samples, and outputs. S05 and S06 use those saved values.
 
-| 工程 | 次に使うもの |
+| Task | Handoff to the next task |
 | --- | --- |
-| P2-S01 | 収録・盲検・測定・検証の実行計画と入口の照合 |
-| P2-S02 | 2026年の全件採否、採用ID、抽出済み構造と出典 |
-| P2-S03 | UTC共通月の固定対象、著者D/H、標本、固定仕様とテスト |
-| P2-S04 | 固定測定、語彙、X02判定、不確かさ、感度別の比較行 |
-| P2-S05 | 18項目の判断、分母、支持、測定限界、独立確認 |
-| P2-S06 | 元の比較までたどれる表と図、主張台帳、追加4比較 |
+| P2-S01 | Execution plan for intake, blinding, measurement, and verification, plus verified inputs |
+| P2-S02 | Inclusion decisions for every 2026 item, accepted IDs, extracted structure, and sources |
+| P2-S03 | Fixed cohort for common UTC months, author D/H split, samples, fixed specification, and tests |
+| P2-S04 | Fixed measurements, vocabulary, X02 labels, uncertainty, and comparisons by sensitivity |
+| P2-S05 | Decisions for 18 items, denominators, support, measurement limitations, and independent checks |
+| P2-S06 | Tables and figures traceable to source comparisons, a claim ledger, and four supplementary comparisons |
 
-## 元の研究から読む数値
+## Historical results
 
-元の確定runは旧15,365件、新8,942件の計24,307件。既知著者の確認集合Hは旧7,621件、新4,348件だった。V01の200行、V02の100行、V03の5行で305行。V01とV02には49語の重複があり、BHの検定対象は251仮説だった。新runの同じ定義で、候補数、重複数、対象数、指標ごとの有効分母を記録する。
+The original fixed run contained 15,365 earlier articles and 8,942 newer articles for a total of 24,307. The known-author confirmation H corpus had 7,621 earlier and 4,348 newer articles. V01 had 200 rows, V02 100, and V03 five, for a total of 305. V01 and V02 shared 49 terms, resulting in 251 hypotheses for BH adjustment. Under the same definitions, record the new run's candidate count, overlap, eligible count, and valid denominator per metric.
 
-元のS05は限定採用2、保留14、判断不能2。限定採用はX02固定H標本の、経験記述Eと一般解説Gの記事内有無だけ。EとGは併存できる。独立AI判定の一致、算術の照合、内容測定の妥当性は別の証拠である。元の研究で確認できなかった点も [比較と検証の手順](comparisons.md) に記録した。新runの判断は新runの証拠から行う。
+The original S05 had two limited acceptances, 14 holds, and two indeterminate decisions. Limited acceptance applied only to article-level presence of firsthand experience E and general explanation G in the fixed X02 H sample. E and G can coexist. Independent AI agreement, arithmetic verification, and content measurement validity each require their own evidence. See the [comparison and verification procedure](comparisons.md) for unresolved findings from the original study. Base the new run's decisions on its own evidence.
 
-## 報告に残す限界
+## Reporting limits
 
-旧のCommon Crawl保存ページと新のAPI本文では、時期に加えて取得・生存・編集状態も違う。タグや著者で構成を変えた比較でも、AIの因果効果、AI使用率、DEV全体の比率は推定できない。2023〜2025年は共通条件の観測外。タグ欠測は欠測として残す。記事の抽出や内容判定の精度も、得られた参照の範囲で報告する。
+Earlier Common Crawl captures and newer API prose differ in acquisition, survival, and edit state as well as period. Author- or topic-based comparisons remain descriptive and leave causal AI effects, AI use prevalence, and DEV-wide rates unidentified. The common conditions cover no observations from 2023 through 2025. Retain missing tags. Qualify extraction and content assessment accuracy by the available references.
 
-11月16日の4資料は検証済みの保存値を使うS06の追加集計。11月23日のタグ別書式集計と固定24記事の原文照合は、依頼がある場合に別の派生出力へ作る。追加資料が既存の定義、採否、候補、元データを書き換えることはない。[追加集計の手順](supplements.md)
+For S06, the four November 16 materials use verified saved values. When requested, create separate derived outputs for the November 23 formatting-by-tag analysis and the fixed 24-article source check. Keep established definitions, inclusion decisions, candidates, and source data intact. See the [supplementary analysis guide](supplements.md).

@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "D01",
-      "title": "Common CrawlのDEV候補を固定する",
-      "description": "Common CrawlのDEV候補を固定する",
+      "title": "Freeze the Common Crawl DEV candidates",
+      "description": "Freeze the Common Crawl DEV candidates",
       "priority": 1,
       "status": "not_started",
       "passes": false,
@@ -18,7 +18,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "The leaf is complete and has evidence for all criteria and independent verification.",
           "met": false
         }
       ],
@@ -27,8 +27,8 @@
     },
     {
       "id": "D02",
-      "title": "Common CrawlのWARCと生HTMLを保存する",
-      "description": "Common CrawlのWARCと生HTMLを保存する",
+      "title": "Save Common Crawl WARC records and raw HTML",
+      "description": "Save Common Crawl WARC records and raw HTML",
       "priority": 2,
       "status": "not_started",
       "passes": false,
@@ -38,7 +38,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "The leaf is complete and has evidence for all criteria and independent verification.",
           "met": false
         }
       ],
@@ -47,8 +47,8 @@
     },
     {
       "id": "D03",
-      "title": "DEV APIの2026年1〜10月の固定標本を取得する",
-      "description": "DEV APIの2026年1〜10月の固定標本を取得する",
+      "title": "Retrieve a fixed DEV API sample for January through October 2026",
+      "description": "Retrieve a fixed DEV API sample for January through October 2026",
       "priority": 3,
       "status": "not_started",
       "passes": false,
@@ -56,7 +56,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "The leaf is complete and has evidence for all criteria and independent verification.",
           "met": false
         }
       ],

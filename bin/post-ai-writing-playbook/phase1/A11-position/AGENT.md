@@ -1,31 +1,31 @@
-# A11　具体的な材料までの位置
+# A11 Position of the First Concrete Material
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and the [branch rules](../AGENT.md) before starting this task.
 
-## 目的
+## Purpose
 
-全記事の機械的位置と、固定評価標本の題名に対応する材料位置を測る。
+Measure mechanically detected positions across all articles and locate the first title-relevant material in the fixed evaluation sample.
 
-## 入力
+## Inputs
 
-- T02 S語とDOMの対応
+- T02 mapping between S words and the DOM
 - A06 headings.csv
-- A07固定評価と校正
+- A07 fixed evaluation and calibration samples
 - A08 code-events.csv
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream input files from the `output_dir` and manifest that `workflow.py` returns for each dependency. Use those locations for inputs in this run.
 
-## 手順
+## Steps
 
-1. 校正標本から候補辞書・タイトル対応rubricを固定する。A06/A08のDOM位置とS語をつないで全記事の機械初出を保存する。
-2. A07評価標本を年伏せで全文読解し、題名に対応する最初の材料と根拠のS/DOM範囲を記録する。
-3. 固定32件を独立したトップレベルセッションで再評価し、初回を伏せ、差分を裁定する。
-4. 固定層の各年ペアで有無30・位置20の支持条件を適用し、内容の不成立も残す。
-5. 独立の原文再読、位置再計算、誤位置・S=0の負例、図値を検証する。
+1. Freeze the candidate dictionary and the title-relevance rubric using the calibration sample. Link A06/A08 DOM positions to S words and save the first mechanically detected occurrence for all articles.
+2. Read A07 evaluation articles in full with the year hidden, and record the first material that addresses the title and the S and DOM spans that support it.
+3. Reevaluate 32 prespecified articles in an independent top-level session, withholding the initial ratings, and adjudicate disagreements.
+4. For each year pair in the fixed strata, require support of 30 for presence and 20 for position. Retain unsupported content comparisons.
+5. Independently reread source text, recalculate positions, test negative cases for incorrect positions and S=0, and verify plotted values.
 
-## 必要な出力
+## Required Outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs in the `output_dir` returned by `start`.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -38,25 +38,25 @@
 - `position-correspondence.csv`
 - `position.svg`
 
-## 完了条件
+## Completion Criteria
 
-- C01　全採用記事でSカーソルの一致、四機械候補の位置、0/なし/入力欠落/割合NAが区別できる。
-- C02　A07固定標本全件に題名の約束、根拠範囲、S外錨または不成立理由があり、別セッション再評価・裁定を保存する。
-- C03　機械と内容の対応、層別のnと支持、反例、実際の図の照合がそろう。
+- C01 S cursor alignment agrees across all adopted articles. Positions are available for the four automated candidates, and zero, absence, missing input, and an undefined proportion are distinguishable.
+- C02 Every article in the fixed A07 sample has a recorded title promise, an evidence span, and an out-of-S anchor or reason an assessment could not be made, as applicable. Separate-session reevaluation and adjudication are retained.
+- C03 The correspondence between automated and content measures, sample sizes and support by stratum, counterexamples, and checks against the plotted values are recorded.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before marking this task complete, have another reviewer independently check the saved outputs and definitions. Verify the receipt criteria, artifacts, and hashes, then record completion with `workflow.py finish` from the project root. Completion requires the full run.
 
-## 参照する固定規則
+## Frozen Rules
 
 - [measurement-spec.md](../measurement-spec.md)
 - [analysis-methods.md](../analysis-methods.md)
 - [a11-candidate-dictionary.json](../references/a11-candidate-dictionary.json)
 - [a11-rubric.md](../references/a11-rubric.md)
 
-## 混同しないこと
+## Interpretation
 
-- 歴史runの38,980件は機械、128件は内容。その範囲を混ぜない。
-- 短い位置は読書時間や質の根拠ではない。
-- 同じ会話の別ワーカーを別セッションと呼ばない。
+- The historical run used 38,980 articles for automated measures and 128 for content review. Attribute findings to the applicable cohort.
+- Interpret earlier positions as positional measures. Reading time and quality require their own evidence.
+- Use a separate top-level session for reevaluation, with a different worker in the same conversation treated as part of the original session.
 
-引継ぎは [phase1-handoff.md](phase1-handoff.md)。状態は[status.json](status.json)。
+See [phase1-handoff.md](phase1-handoff.md) for the handoff and [status.json](status.json) for the current status.

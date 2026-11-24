@@ -1,1 +1,1 @@
-この作業では [AGENT.md](AGENT.md) を読み、ルートと枝の規則を守ってください。
+Read [AGENT.md](AGENT.md) and follow the root and branch rules for this task.

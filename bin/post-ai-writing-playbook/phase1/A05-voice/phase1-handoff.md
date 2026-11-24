@@ -1,11 +1,11 @@
-# A05 の引継ぎ
+# A05 Handoff
 
-初期状態は未着手。過去の研究の完了を引き継いだものではない。
+This task starts with status `not_started`. Record completion for this run only.
 
-最初の操作は、この末端のAGENT.mdとstatus.jsonを読み、ルートで `python3 workflow.py start A05 --owner <担当ID>` を実行すること。依存が未完了なら先行作業へ戻る。
+First read this task's `AGENT.md` and `status.json`. From the project root, run `python3 workflow.py start A05 --owner <owner-id>`. If any dependencies are incomplete, return to those tasks first.
 
-A07へ同一記事の語形と分母、A12へ単数一人称・短縮形密度を渡す。
+Pass word-form counts and denominators for the same articles to A07, and first-person singular and contraction densities to A12.
 
-## 再開記録
+## Progress Log
 
-実行した担当がここへ追記する。担当ID、run_id、attempt、出力先、固定入力とhash、checkpoint、完了した操作、未完了、阻害、次の一コマンドを残す。同じattemptへ戻るときは進捗を消さず追記する。
+The task owner appends their owner ID, `run_id`, `attempt`, output location, frozen inputs and their hashes, checkpoint, completed work, pending work, blockers, and the next command. Append to the existing log when resuming the same attempt.

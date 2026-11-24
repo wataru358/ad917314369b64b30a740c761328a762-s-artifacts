@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "P2-S02",
-      "title": "新集合の全文採否を固定する",
-      "description": "新集合の全文採否を固定する",
+      "title": "Lock full-text inclusion decisions for the new corpus",
+      "description": "Lock full-text inclusion decisions for the new corpus",
       "priority": 23,
       "status": "not_started",
       "passes": false,
@@ -20,22 +20,22 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "全plan IDが計画順にrecordsとdecisionsへ1回ずつ現れ、状態別件数が総数と一致する。",
+          "criterion": "Every plan ID appears once in records and once in decisions, in plan order. Counts by status sum to the total.",
           "met": false
         },
         {
           "id": "C02",
-          "criterion": "英語集合が台帳のaccept_englishと一致する。保留、本文なし、取得不能は台帳に残る。",
+          "criterion": "The English corpus matches the ledger's accept_english entries. Retain held items, missing prose, and unavailable responses in the ledger.",
           "met": false
         },
         {
           "id": "C03",
-          "criterion": "本文と根拠を原応答へ戻せる。ラベルの封印後に対応スコアを開示した証拠と、原判断を保つ訂正記録が読める。",
+          "criterion": "Trace text and evidence to the raw responses. Preserve proof that the corresponding scores were disclosed after the labels were sealed and retain the original decisions in the correction history.",
           "met": false
         },
         {
           "id": "C04",
-          "criterion": "校正、診断、未使用確認、全件の範囲を区別し、独立確認が実物の抽出位置・結合・採否・来歴を照合する。",
+          "criterion": "Distinguish calibration, diagnostics, unused confirmation samples, and full-corpus review. Independently check actual extraction locations, joins, inclusion decisions, and provenance.",
           "met": false
         }
       ],

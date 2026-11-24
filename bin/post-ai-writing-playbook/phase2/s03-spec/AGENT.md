@@ -1,30 +1,30 @@
-# P2-S03　対象、測定仕様と著者分割を固定する
+# P2-S03 Lock the cohort, measurement specification, and author split
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and [branch rules](../AGENT.md) before starting this task.
 
-## 目的
+## Objective
 
-S04で使う共通月、固定仕様、著者分割と確認標本を結果開示前に確定する。
+Finalize the common months, fixed specification, author split, and confirmation samples for S04 before disclosing results.
 
-## 入力
+## Inputs
 
-- S02の英語集合、records、manifest
-- S01が索引したR01の採否、構造、語・文実装、タグ
-- 固定仕様と設定
+- S02's English corpus, records, and manifest
+- R01 inclusion decisions, structure, word and sentence implementations, and tags indexed by S01
+- Fixed specification and settings
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream files using the upstream output_dir and manifest returned by workflow.py. Use paths resolved from the current run instead of absolute paths from earlier conversations.
 
-## 手順
+## Steps
 
-1. 受理済みrunからパスを解決し、設定と入力ハッシュを保存する。共通UTC月を抽出し、日付不明などを理由付きで台帳へ残す。
-2. 旧CCと新APIの記事ID領域を分ける。単一の既知数値著者だけ両経路で統合する。年月別対象、著者、タグ、edited_at、取得日時、capture時刻の欠測を照合する。
-3. 固定SとP/Lの順序から非空完全一致word列を作る。著者の連結成分の最小キーを使い固定SHA256 parityでD/Hを付ける。Hの語彙比較は開かない。
-4. X02の校正は旧2枠/年月、新10枠/月、確認は旧12、新30を選ぶ。固定saltを使い著者内1記事。別にX02標本を除いて各経路50校正、100確認を選ぶ。IDとblind ID対応を隔離する。
-5. 固定した語・文規則を取り込み、合成小例でapostrophe、Unicode・URL、fragment、P/L、太字区間、0とNA、重み、区間不足を確かめる。
+1. Resolve paths from the accepted runs and save settings and input hashes. Select the common UTC months and record exceptions such as unknown dates in the ledger with reasons.
+2. Use separate article ID namespaces for the earlier CC and newer API data. Merge only unique known numeric author IDs across routes. Check cohort counts by year and month and missing authors, tags, edited_at, retrieval times, and capture times.
+3. Build nonempty exact-match word sequences from fixed S and P/L ordering. Assign D/H by fixed SHA-256 parity of the smallest key in each connected author component. Keep H lexical comparisons sealed.
+4. For X02 calibration, select 2 earlier slots per year-month and 10 newer slots per month. For confirmation, select 12 and 30 respectively. Use the fixed salt and one article per author. Separately select 50 calibration and 100 confirmation articles per route, excluding the X02 samples. Isolate the mapping between IDs and blind IDs.
+5. Import the fixed word and sentence rules. Use small synthetic fixtures to check apostrophes, Unicode and URLs, fragments, P/L, bold spans, zeros and NA, weights, and insufficient support for intervals.
 
-## 必要な出力
+## Required outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs under the output_dir returned by start.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -35,24 +35,24 @@ S04で使う共通月、固定仕様、著者分割と確認標本を結果開�
 - `samples.jsonl`
 - `fixtures.json`
 
-## 完了条件
+## Completion criteria
 
-- C01　旧の採否、新の英語ID、60セルごとの実測数、対象外の理由を元の入力から検証できる。
-- C02　著者と非空完全同文による連結成分がD/Hをまたがない。未知著者、成分サイズ、セル支持を出し、近似群の越境をS04の診断へ渡す。
-- C03　X02と自動定義標本を分け、D/H別の枠、選択、salt、不足、本文ハッシュが固定される。
-- C04　旧Phase 1と異なる6指標の分母とNA、語彙境界、太字投影、重み、bootstrapの小例を確認する。
+- C01 Verify the earlier inclusion decisions, newer English-language IDs, observed counts for all 60 cells, and exclusion reasons against the original inputs.
+- C02 Connected components based on authors and nonempty exact text matches stay within one D/H partition. Report unknown authors, component sizes, and support by cell. Pass near-duplicate groups spanning the partitions to S04 diagnostics.
+- C03 Keep X02 and automated-definition samples separate. Lock slots, selections, salts, shortfalls, and text hashes by D/H partition.
+- C04 Check small examples covering the six metrics' denominators and NA treatment where they differ from Phase 1, lexical boundaries, bold projection, weighting, and bootstrap.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before completion, have a separate reviewer independently check the saved outputs and definitions. Verify the receipt criteria, artifacts, and hashes, then apply the receipt with workflow.py finish from the root. Completion requires the full work after the pilot.
 
-## 参照する固定規則
+## Fixed reference rules
 
 - [measurement-spec.md](../measurement-spec.md)
 - [settings.json](../settings.json)
 - [comparisons.md](../comparisons.md)
 
-## 混同しないこと
+## Interpretation
 
-- S03では仕様を固定し、Hの結果値は見ない。
-- 経路間で記事IDの数値を結合しない。handleと組織IDは個人著者の代用にしない。
+- Lock the specification in S03 and keep H results sealed.
+- Use separate numeric article ID namespaces for each route. Identify individuals by their numeric author IDs, excluding handles and organization IDs.
 
-引継ぎは [phase2-handoff.md](phase2-handoff.md)。状態は[status.json](status.json)。
+See [phase2-handoff.md](phase2-handoff.md) for the handoff and [status.json](status.json) for status.

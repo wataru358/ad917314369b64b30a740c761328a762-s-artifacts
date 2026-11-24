@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "A12",
-      "title": "文体距離と分布の偏り",
-      "description": "文体距離と分布の偏り",
+      "title": "Style Distances and Distributional Shifts",
+      "description": "Style Distances and Distributional Shifts",
       "priority": 19,
       "status": "not_started",
       "passes": false,
@@ -25,17 +25,17 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "基準期年等重みCDF、分位と同点が再現できる。",
+          "criterion": "The equally year-weighted baseline CDF, quantiles, and ties can be reproduced.",
           "met": false
         },
         {
           "id": "C02",
-          "criterion": "各組の完全ケース・共通層・固定重み、別著者のseed付きペアIDと距離を照合できる。",
+          "criterion": "Complete cases, common strata, fixed weights, and seeded different-author pair IDs and distances can be verified for each group.",
           "met": false
         },
         {
           "id": "C03",
-          "criterion": "原尺度、端値、未知種別、対象率、著者等重み、同文診断とペア依存を明記する。",
+          "criterion": "Original scales, endpoint values, unknown categories, cohort coverage, equal author weighting, exact-text diagnostics, and pair dependence are documented.",
           "met": false
         }
       ],

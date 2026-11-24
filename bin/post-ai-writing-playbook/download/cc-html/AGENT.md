@@ -1,29 +1,29 @@
-# D02　Common CrawlのWARCと生HTMLを保存する
+# D02 Save Common Crawl WARC records and raw HTML
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and [branch rules](../AGENT.md) before starting this leaf task.
 
-## 目的
+## Goal
 
-D01で固定した全候補について指定範囲のWARCを取得し、HTMLの元バイト列と成功・失敗を候補単位で残す。
+For every candidate frozen in D01, retrieve the specified WARC byte range and save the original HTML bytes and acquisition outcome.
 
-## 入力
+## Inputs
 
-- 同じrun_idで完了したD01のoutput_dir
-- D01の候補とmanifestのハッシュ
-- ルート設定のseed、通信上限、pilot.cc_records
+- The output_dir of the completed D01 attempt in the same run_id
+- D01 candidates and the manifest hash
+- Root configuration for the seed, transfer limits, and pilot.cc_records
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream files from the upstream output_dir returned by workflow.py and the manifest.
 
-## 手順
+## Steps
 
-1. D01の確定成果物を照合し、seedで全候補の処理順を決める。同じ候補IDをファイル名に使う。
-2. 先頭5件を試行し、HTTP 206と受信長、WARCとHTMLの検証・保存を確認する。
-3. 処理待ちの候補を1件ずつ取得する。通信、WARC保存、HTML保存、台帳の順に進め、止まった区切りの次から再開する。
-4. 再試行対象を上限と待機期限に従って処理する。失敗を残したまま全候補の結果を確定する。成功件数と失敗理由の内訳を報告し、生データと台帳を照合する。
+1. Verify the frozen D01 artifacts and use the seed to order all candidates. Use the same candidate IDs in filenames.
+2. Try the first five records and verify HTTP 206, the received length, and WARC and HTML validation and storage.
+3. Retrieve pending candidates one at a time. Request the data, save the WARC, save the HTML, then update the ledger. Resume at the next unfinished chunk.
+4. Process retries within their limits and wait deadlines. Finalize outcomes for all candidates, retaining failures. Report success counts and a breakdown of failures, and check the raw data against the ledger.
 
-## 必要な出力
+## Required outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save everything in the output_dir returned by start.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -31,24 +31,24 @@ D01で固定した全候補について指定範囲のWARCを取得し、HTMLの
 - `acquisitions.jsonl`
 - `attempts.jsonl`
 
-## 完了条件
+## Acceptance criteria
 
-- C01　D01の全候補に固定順の台帳行が1つずつあり、候補の補充や欠落がない。完了行はsucceededまたは理由付きfailed。
-- C02　先頭5件で範囲取得、圧縮の検証、元HTMLの保存と読戻しを確認した記録がある。
-- C03　成功時は入力位置、受信長、WARCのURL・型・内部200、HTMLとWARCのハッシュを照合できる。公開日時、クロール日時、保存日時を別項目に保持している。
-- C04　失敗理由、試行履歴、再試行上限、待機期限が台帳に残る。件数合計と保存済みファイルのハッシュを独立検証担当が確かめている。
+- C01 The ledger has exactly one row per D01 candidate in the frozen order. Final rows are marked succeeded or failed with a reason.
+- C02 The first five records have documented checks for range retrieval, compression, and saving and reading back the original HTML.
+- C03 For each success, the input location, received length, WARC URL, type, internal HTTP 200, and HTML and WARC hashes can be verified. Publication, crawl, and save timestamps are stored in separate fields.
+- C04 The ledger retains failure reasons, attempt history, retry limits, and wait deadlines. An independent reviewer checks total counts and hashes of saved files.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Have an independent reviewer verify the saved artifacts and definitions before completion. Check the receipt criteria, artifacts, and hashes, then run workflow.py finish from the root. Completion covers the full task.
 
-## 参照する固定規則
+## Reference specifications
 
-- [download-spec.md](../download-spec.md#共通の保存と再開)
-- [download-spec.md](../download-spec.md#d02の指示範囲からwarcとhtmlを保存する)
+- [download-spec.md](../download-spec.md#storage-and-resumption)
+- [download-spec.md](../download-spec.md#d02-save-warc-and-html-from-specified-byte-ranges)
 
-## 混同しないこと
+## Notes
 
-- Rangeの206と保存ページの200を別に記録する。
-- WARC-Dateは公開日ではない。元ページにある公開日時と取得時刻を残す。
-- 同じURLのライブ本文、別の保存時点、別候補で失敗を埋めない。
+- Record the range response's HTTP 206 and the archived page's HTTP 200 separately.
+- WARC-Date records the crawl timestamp. Keep the publication timestamp from the original page and the retrieval timestamp.
+- Keep failed outcomes in the original candidate set. Use the designated capture for each candidate.
 
-引継ぎは [download-handoff.md](download-handoff.md)。状態は[status.json](status.json)。
+See [download-handoff.md](download-handoff.md) for the handoff and [status.json](status.json) for status.

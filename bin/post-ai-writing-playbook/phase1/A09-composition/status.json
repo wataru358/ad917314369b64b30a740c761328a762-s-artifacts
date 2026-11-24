@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "A09",
-      "title": "話題と書き手の入れ替わり",
-      "description": "話題と書き手の入れ替わり",
+      "title": "Changes in Topic and Author Composition",
+      "description": "Changes in Topic and Author Composition",
       "priority": 16,
       "status": "not_started",
       "passes": false,
@@ -27,17 +27,17 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "指標ごとに六年の支持、共通範囲、固定重み、ESS、除外率を照合できる。",
+          "criterion": "For each metric, the six years of support, common support, fixed weights, effective sample size (ESS), and exclusion rates can be checked.",
           "met": false
         },
         {
           "id": "C02",
-          "criterion": "同一対象の無調整と固定構成、既知著者等重み、本人内の点差・選択率を区別する。",
+          "criterion": "Unadjusted and fixed-composition estimates for the same cohort, equal known-author weighting, and within-author point differences and selection rates are distinguishable.",
           "met": false
         },
         {
           "id": "C03",
-          "criterion": "分解恒等式、各探索の適用範囲、タグ/本文AI語句と未知の判定を検証できる。",
+          "criterion": "The decomposition identity, scope of each exploratory analysis, AI labels for tags and body phrases, and rules for unknown states can be verified.",
           "met": false
         }
       ],

@@ -1,11 +1,11 @@
-# P2-S02 の引継ぎ
+# P2-S02 handoff
 
-初期状態は未着手。過去の研究の完了を引き継いだものではない。
+The task starts pending. Historical research is recorded separately from the current run.
 
-最初の操作は、この末端のAGENT.mdとstatus.jsonを読み、ルートで `python3 workflow.py start P2-S02 --owner <担当ID>` を実行すること。依存が未完了なら先行作業へ戻る。
+Read this task’s AGENT.md and status.json, then run `python3 workflow.py start P2-S02 --owner <owner-id>` from the root. Complete any outstanding dependencies first.
 
-S03へ英語ID、records、未採用理由、入力ハッシュを渡す。再開時は検証済みの封印バッチを再利用する。
+Pass the English-language IDs, records, reasons for non-inclusion, and input hashes to S03. Reuse verified sealed batches when resuming.
 
-## 再開記録
+## Resumption log
 
-実行した担当がここへ追記する。担当ID、run_id、attempt、出力先、固定入力とhash、checkpoint、完了した操作、未完了、阻害、次の一コマンドを残す。同じattemptへ戻るときは進捗を消さず追記する。
+The operator appends an entry with the owner ID, run_id, attempt, output directory, fixed inputs and hashes, checkpoint, completed steps, pending work, blockers, and the next command. Append to the log when resuming the same attempt.

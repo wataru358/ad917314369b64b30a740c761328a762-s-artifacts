@@ -1,29 +1,29 @@
-# A01　記事と段落の長さ
+# A01 Article and Paragraph Length
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and the [branch rules](../AGENT.md) before starting this task.
 
-## 目的
+## Purpose
 
-PとSの長さと段落長を比較し、M01の主比較を作る。
+Compare P and S word counts and paragraph lengths, and produce the primary M01 comparison.
 
-## 入力
+## Inputs
 
-- T03 coverageと対象
-- T02記事・metadata・M01
-- T00抽出と固定標本の元HTML
+- T03 coverage and cohort
+- T02 articles, metadata, and M01
+- T00 extraction results and original HTML for the fixed sample
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream input files from the `output_dir` and manifest that `workflow.py` returns for each dependency. Use those locations for inputs in this run.
 
-## 手順
+## Steps
 
-1. P/Sの年別語数分布、帯、1〜9月補助、M01の全点・既知著者点・著者cluster区間を計算する。
-2. 所有P段落の中央値、段落および記事を等重みにした分布を作る。
-3. 固定年別上位長文候補と原HTMLを点検する。
-4. 別式で年重み、log尺度、区間反復、図を照合する。
+1. Compute annual P and S word count distributions and bands, the January–September supplementary results, and the M01 point estimates for all articles and for known authors, along with the author-cluster interval.
+2. Calculate the median length of P paragraph owners and construct distributions that weight paragraphs equally and articles equally.
+3. Audit the prespecified longest-article candidates for each year against the original HTML.
+4. Use separate formulas to check the year weights, log scale, interval replicates, and figure.
 
-## 必要な出力
+## Required Outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs in the `output_dir` returned by `start`.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -34,23 +34,23 @@ PとSの長さと段落長を比較し、M01の主比較を作る。
 - `m01-contrast.csv`
 - `length.svg`
 
-## 完了条件
+## Completion Criteria
 
-- C01　M01のlog1p年等重み点差、原語数、全記事点と著者区間を再現できる。
-- C02　記事等重み段落分布と段落等重み分布が別にある。
-- C03　長文診断の抽出規則と照合結果があり、0語とNAを区別する。
+- C01 The equally year-weighted M01 difference on the log1p scale, raw word counts, all-article point estimate, and author-cluster interval can be reproduced.
+- C02 The article-weighted and paragraph-weighted paragraph distributions are reported separately.
+- C03 The selection rule and audit results for long articles are recorded, and zero words and NA are distinguishable.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before marking this task complete, have another reviewer independently check the saved outputs and definitions. Verify the receipt criteria, artifacts, and hashes, then record completion with `workflow.py finish` from the project root. Completion requires the full run.
 
-## 参照する固定規則
+## Frozen Rules
 
 - [measurement-spec.md](../measurement-spec.md)
 - [analysis-methods.md](../analysis-methods.md)
 - [a01-settings.json](../references/a01-settings.json)
 
-## 混同しないこと
+## Interpretation
 
-- M01の原語数とlog差は交換できない。
-- 記事が長いことを段落が長いことへ置き換えない。
+- Interpret raw word counts and differences on the log scale as distinct quantities for M01.
+- Use paragraph data to draw conclusions about paragraph length.
 
-引継ぎは [phase1-handoff.md](phase1-handoff.md)。状態は[status.json](status.json)。
+See [phase1-handoff.md](phase1-handoff.md) for the handoff and [status.json](status.json) for the current status.

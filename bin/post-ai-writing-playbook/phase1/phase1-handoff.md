@@ -1,19 +1,19 @@
-# Phase 1 を再開する
+# Resume Phase 1
 
-現在のrunで `python3 workflow.py next` を実行する。進行中のleafがあれば、依存タスクの成果物と試行内の入力ハッシュを照合し、最後に合格した処理単位の次から再開する。同じrun・試行・コード・設定なら完成済みシャードを再利用する。入力・測定規則を変更する場合は理由と変更箇所を記録し、以前の証拠を保持した別試行で続ける。
+Run `python3 workflow.py next` for the current run. For a leaf task in progress, reconcile dependency artifacts with the input hashes recorded in the attempt, then resume after the last accepted processing unit. Reuse completed shards when the run, attempt, code, and configuration match. To change an input or measurement rule, record the reason and the change, then continue in a new attempt and preserve the earlier evidence.
 
-## D02 から受け取るもの
+## Inputs from D02
 
-D02の完了した試行から `acquisitions.jsonl`、`manifest.json`、`summary.json`、`verification.json` と各成功行のHTMLを読む。各行のID・path・URL・取得状態・UTC公開時刻の出典・CC収録時刻・HTMLファイルのハッシュを確認する。取得失敗行も保持する。手元の元runの件数や記事IDと一致する必要はない。
+Read `acquisitions.jsonl`, `manifest.json`, `summary.json`, `verification.json`, and HTML for successful rows from the completed D02 attempt. Verify each row's ID, path, URL, acquisition state, source for the UTC publication timestamp, CC capture time, and HTML file hash. Retain rows for failed acquisitions. Use counts and article IDs from the current run.
 
-## 次のleafへ渡すもの
+## Outputs for downstream tasks
 
-- T00は入力台帳と全候補の本文抽出、そのコードと抽出状態を渡す。
-- T01は採否と年を含む `cohort.csv` と全候補の言語証拠を渡す。
-- T02は `articles.jsonl`、`metadata.csv`、`metrics.csv`、`segmentation.py`、`fixtures.json`、`topic-map.json` を渡す。
-- T03は `coverage.csv`、日付台帳、対象集計への参照を渡す。
-- A04は著者の連結成分分割をA06とV01へ渡す。A07は盲検標本と非公開の対応台帳をA11へ渡す。A06・A08はDOM構造と位置の台帳をA11へ渡す。A09は指標別セルと `weights.csv` をA10・A12・V01へ渡す。
+- T00 passes the input ledger, body extractions for all candidates, extraction code, and extraction states.
+- T01 passes `cohort.csv` with inclusion decisions and years, along with language evidence for every candidate.
+- T02 passes `articles.jsonl`, `metadata.csv`, `metrics.csv`, `segmentation.py`, `fixtures.json`, and `topic-map.json`.
+- T03 passes references to `coverage.csv`, the date ledger, and the cohort summary.
+- A04 passes the author connected-component split to A06 and V01. A07 passes the blinded sample and private ID mapping to A11. A06 and A08 pass DOM structure and position ledgers to A11. A09 passes per-metric cells and `weights.csv` to A10, A12, and V01.
 
-R01まで完了したら、対象・尺度・不成立の根拠を含む日本語資料と `phase2-inputs.json` を確定する。後者はD02のHTML取得台帳、T00抽出器、T01採否台帳、T02の固定コードと測定表、T03のcoverage、A09の重みを、パッケージ基準相対パス、SHA-256、各入力の試行番号、スキーマ版で指す。全量のPhase 1入力として対象、適用版、試行を明記する。 `python3 workflow.py sync` と `python3 workflow.py validate` を実行する。
+After R01 completes, finalize the Japanese materials with the cohort, scales, and reasons for unavailable results, and finalize `phase2-inputs.json`. The index references the D02 HTML acquisition ledger, T00 extractor, T01 inclusion ledger, T02 frozen code and measurement tables, T03 coverage, and A09 weights. Include package-relative paths, SHA-256 hashes, input attempt numbers, and schema versions. Identify the scope, applicable versions, and attempts for the full Phase 1 inputs. Run `python3 workflow.py sync` and `python3 workflow.py validate`.
 
-再開用の記録には未完了の処理ID、最後に保存した成果物、依存ハッシュ、再開コマンド、未検証範囲を残す。支持ゼロや入力欠測が測定上の結果として確定した場合はNA行に理由を残す。依存データそのものが失われて続行できない場合は、復旧に必要なファイルと理由をstatusに記録する。
+In the resume record, keep the ID of any unfinished operation, the last saved artifact, dependency hashes, the resume command, and the unverified scope. When measurement confirms zero support or missing inputs, record the reason in the NA row. If losing a dependency prevents resumption, record the files needed for recovery and the reason in status.

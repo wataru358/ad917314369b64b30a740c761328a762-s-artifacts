@@ -1,30 +1,30 @@
-# T02　分割・特徴量・メタデータ
+# T02 Segmentation, features, and metadata
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and [Phase 1 rules](../AGENT.md) before starting this task.
 
-## 目的
+## Purpose
 
-同じ本文投影から語・文・太字・見出し・メタデータを測り、六主指標と副指標を凍結する。
+Measure words, sentences, bold spans, headings, and metadata from the same body projection, and freeze the six primary metrics and secondary metrics.
 
-## 入力
+## Inputs
 
-- T01 cohort.csv、language-review
-- T00 extraction.jsonl と frozen extract.py
-- D02保存HTML
+- T01 cohort.csv and language-review
+- T00 extraction.jsonl and frozen extract.py
+- HTML archived by D02
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream files from the upstream output_dir and manifest returned by workflow.py. Use paths from the current run.
 
-## 手順
+## Steps
 
-1. 同梱segmentation.pyと固定対照を保存し、P/L/U単位・所有ブロック・文・語をUnicodeオフセットで投影する。
-2. 5候補から採用分を試し、採用例不足は合成fixtureで補う。固定標本を年を伏せて読み、文境界、語、組織と著者の根拠を診断する。
-3. SHA確認の済んだ採用全記事で元DOM順とS語を照合し、H、太字、リスト、コード位置、六主指標、MATTR等の副指標を保存する。
-4. t02_metadata_v2.pyの規則で単一数値著者、タグ、組織、種別cueと出典を保存する。t02-strata-map.jsonをtopic-map.jsonとして凍結する。
-5. 別検証でID集合、語種、owner→sourceの半開区間、M01〜M06、太字・リンク位置、メタデータ矛盾、NA理由を再構成する。
+1. Save the bundled segmentation.py and frozen controls. Project P/L/U units, owning blocks, sentences, and words using Unicode offsets.
+2. Test the included articles from the five candidates and supplement any shortfall with synthetic fixtures. Read the fixed sample with years hidden to diagnose sentence boundaries, words, and evidence for organizations and authors.
+3. Reconcile source DOM order with S words for every included article whose SHA-256 hash has been verified. Save H, bold spans, lists, code positions, the six primary metrics, and secondary metrics such as MATTR.
+4. Use the t02_metadata_v2.py rules to save single numeric authors, tags, organizations, article-type cues, and sources. Freeze t02-strata-map.json as topic-map.json.
+5. Use independent verification to reconstruct the ID set, token types, half-open owner-to-source ranges, M01–M06, bold and link positions, metadata conflicts, and NA reasons.
 
-## 必要な出力
+## Required Outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs in the output_dir returned by the start command.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -39,16 +39,16 @@
 - `topic-map.json`
 - `calibration.json`
 
-## 完了条件
+## Completion Criteria
 
-- C01　採用記事1件につき記事とmetadataが一行、主指標が六行ある。
-- C02　S=P+L+U、文・語オフセット、太字重複除去と分母、既知著者IDが独立読取と一致する。
-- C03　合成例・固定標本・v2メタデータの根拠を検査し、0、NA、使用なし、投影失敗を区別する。
-- C04　下流側が固定コード・fixtureとデータスキーマを再利用できる。
+- C01 Each included article has one article row, one metadata row, and six primary metric rows.
+- C02 S=P+L+U, sentence and word offsets, bold deduplication and denominators, and known author IDs agree with an independent reading.
+- C03 Checks cover synthetic examples, fixed samples, and the evidence for v2 metadata. They distinguish zero, NA, no use, and projection failure.
+- C04 Downstream tasks can reuse the frozen code, fixtures, and data schema.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before completion, have a different person independently verify the saved artifacts and definitions. Check the criteria, artifacts, and hashes in the receipt, then run workflow.py finish from the root. Completion requires the full task to pass after the pilot.
 
-## 参照する固定規則
+## Frozen Rules
 
 - [measurement-spec.md](../measurement-spec.md)
 - [analysis-methods.md](../analysis-methods.md)
@@ -58,11 +58,11 @@
 - [t02-strata-map.json](../references/t02-strata-map.json)
 - [t02_metadata_v2.py](../references/t02_metadata_v2.py)
 
-## 混同しないこと
+## Pitfalls
 
-- SをPに置き換えない。
-- 組織handleは著者IDではない。
-- インラインコードをS語に再挿入しない。
-- 片方の構造投影失敗を全指標へ伝播させない。
+- Use the full S scope for S measures.
+- Treat organization handles and author IDs as distinct identifiers.
+- Keep inline code outside the S word stream.
+- Limit each structure projection failure to its affected metrics.
 
-引継ぎは [phase1-handoff.md](phase1-handoff.md)。状態は[status.json](status.json)。
+See [phase1-handoff.md](phase1-handoff.md) for the handoff and [status.json](status.json) for the current state.

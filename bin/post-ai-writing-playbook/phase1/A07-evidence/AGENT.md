@@ -1,30 +1,30 @@
-# A07　経験談と具体的な検証記述
+# A07 Personal Experience and Concrete Verification Details
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and the [branch rules](../AGENT.md) before starting this task.
 
-## 目的
+## Purpose
 
-固定盲検標本で内容記述を読み、全記事の機械代理との対応を調べる。
+Read content descriptions in a fixed blinded sample and examine how they correspond to automated proxies across all articles.
 
-## 入力
+## Inputs
 
-- T03対象
-- T02原DOM、文単位、元本文/metadata
+- T03 cohort
+- T02 original DOM, sentence units, source article text, and metadata
 - A05 voice-article.csv
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream input files from the `output_dir` and manifest that `workflow.py` returns for each dependency. Use those locations for inputs in this run.
 
-## 手順
+## Steps
 
-1. 各年を固定hashで並べ、校正4、評価16を保存する。年や著者を隠し、内容rubricと代理辞書を別々に凍結する。
-2. 各年4件を抜いて別セッション用の固定packetを残す。評価全文を読み、五カテゴリに根拠・S文ID・状態・内容種別・操作modeを付ける。
-3. 別セッション再評価の未開封入力、実行記録・裁定を保つ。
-4. 全量25代理を固定P語句・数字・リンク・DOM規則で計測し、同一標本内のA05語形と内容対応を点検する。
-5. 上限下限、各分母、記事種・年・帯、代理の不一致を集計する。別読者の根拠監査と別実装のカウント検査を行う。
+1. Order each year's articles by a fixed hash and save four for calibration and sixteen for evaluation. Hide year and author, then freeze the content rubric and proxy dictionary separately.
+2. Select four evaluation articles per year and save a fixed packet for a separate session. Read every evaluation article in full and record evidence, S sentence IDs, status, content type, and operation mode for five categories.
+3. Retain the unopened inputs, execution record, and adjudication for the separate-session reevaluation.
+4. Measure all 25 proxies corpus-wide using fixed P phrase, number, link, and DOM rules. Check how A05 word forms correspond to content within the same sample.
+5. Summarize upper and lower bounds, each denominator, article types, years, word-count bands, and proxy disagreements. Have another reader audit the evidence and check the counts with an independent implementation.
 
-## 必要な出力
+## Required Outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs in the `output_dir` returned by `start`.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -37,15 +37,15 @@
 - `correspondence.csv`
 - `evidence-summary.csv`
 
-## 完了条件
+## Completion Criteria
 
-- C01　固定校正と固定評価は不交差。規則凍結後に評価記事を全文確認し、全件に根拠付き状態と範囲がある。
-- C02　再評価は固定subsetを別セッションで行い、初回と再評価と裁定を保つ。
-- C03　全量代理、内容標本、S/P分母、判断不能範囲、支持不足を区別できる。
+- C01 The fixed calibration and evaluation samples are disjoint. Every evaluation article is read in full after the rules are frozen, and each article has an evidence-backed status and span.
+- C02 The fixed subset is reevaluated in a separate session. The initial review, reevaluation, and adjudication are retained.
+- C03 Corpus-wide proxies, sampled content, S and P denominators, indeterminate cases, and insufficient support are distinguishable.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before marking this task complete, have another reviewer independently check the saved outputs and definitions. Verify the receipt criteria, artifacts, and hashes, then record completion with `workflow.py finish` from the project root. Completion requires the full run.
 
-## 参照する固定規則
+## Frozen Rules
 
 - [measurement-spec.md](../measurement-spec.md)
 - [analysis-methods.md](../analysis-methods.md)
@@ -53,10 +53,10 @@
 - [a07-content-rules-v1.json](../references/a07-content-rules-v1.json)
 - [a07-proxy-settings-v1.json](../references/a07-proxy-settings-v1.json)
 
-## 混同しないこと
+## Interpretation
 
-- 本人が実施したか、記事がそう記したか、代理が一致したかを分ける。
-- 判断不能を無として加えない。
-- 架空の再評価やまとめラベルで穴を埋めない。
+- Distinguish whether the author did the work, whether the article reports it, and whether the proxy matches.
+- Keep indeterminate cases distinct from confirmed absence.
+- Record any missing reevaluation or unavailable detailed coding explicitly.
 
-引継ぎは [phase1-handoff.md](phase1-handoff.md)。状態は[status.json](status.json)。
+See [phase1-handoff.md](phase1-handoff.md) for the handoff and [status.json](status.json) for the current status.

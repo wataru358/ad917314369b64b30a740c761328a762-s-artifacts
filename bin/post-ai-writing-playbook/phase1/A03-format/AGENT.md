@@ -1,28 +1,28 @@
-# A03　リスト・太字・見出し
+# A03 Lists, Bold Text, and Headings
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and the [branch rules](../AGENT.md) before starting this task.
 
-## 目的
+## Purpose
 
-構造がある記事の割合、使われる量、S上の位置を比較する。
+Compare how often articles use structural elements, how extensively they use them, and where they appear in S.
 
-## 入力
+## Inputs
 
-- T03対象・coverage
-- T02記事・DOMイベント・太字・M05/M06
+- T03 cohort and coverage
+- T02 articles, DOM events, bold text, and M05/M06
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream input files from the `output_dir` and manifest that `workflow.py` returns for each dependency. Use those locations for inputs in this run.
 
-## 手順
+## Steps
 
-1. 主M05/M06と構造有無・使用量、見出し密度と候補を計算する。
-2. 元S語順位に基づく半分と20/60/20領域別の計数を保存する。
-3. 品質候補を固定選定しraw/clean DOMに照らす。
-4. 独立に位置と分母、主差・区間・図を立て直す。
+1. Calculate primary M05/M06, the presence and amount of structural elements, and heading density and candidates.
+2. Save counts for each half and each 20/60/20 region using the original S word ranks.
+3. Select quality-check candidates by the fixed rule and compare them with the raw and cleaned DOM.
+4. Independently reconstruct positions, denominators, primary contrasts, intervals, and the figure.
 
-## 必要な出力
+## Required Outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs in the `output_dir` returned by `start`.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -33,23 +33,23 @@
 - `format-audit.json`
 - `formatting.svg`
 
-## 完了条件
+## Completion Criteria
 
-- C01　M05/M06の年等重み点差・区間、および構造の有無と条件付き強度が再計算できる。
-- C02　各領域のS語・L語・太字語・太字区間のカウントが一致する。
-- C03　空領域、S=0、構造なし、投影失敗と例示の役割が区別される。
+- C01 The equally year-weighted estimates and intervals for M05/M06, structural presence, and conditional intensity can be recalculated.
+- C02 Counts of S words, L words, bold words, and bold spans agree for each region.
+- C03 Empty regions, S=0, absent structures, projection failures, and the role of illustrative examples are distinguishable.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before marking this task complete, have another reviewer independently check the saved outputs and definitions. Verify the receipt criteria, artifacts, and hashes, then record completion with `workflow.py finish` from the project root. Completion requires the full run.
 
-## 参照する固定規則
+## Frozen Rules
 
 - [measurement-spec.md](../measurement-spec.md)
 - [analysis-methods.md](../analysis-methods.md)
 - [a03-settings.json](../references/a03-settings.json)
 
-## 混同しないこと
+## Interpretation
 
-- リストがなくS語が正なら0。S語なしはNA。
-- 太字区間と太字語、DOMリストとL語有無は同じ量ではない。
+- Record zero when there is no list and the S word count is positive. Record NA when there are no S words.
+- Track bold spans and bold words separately, and distinguish DOM lists from the presence of L words.
 
-引継ぎは [phase1-handoff.md](phase1-handoff.md)。状態は[status.json](status.json)。
+See [phase1-handoff.md](phase1-handoff.md) for the handoff and [status.json](status.json) for the current status.

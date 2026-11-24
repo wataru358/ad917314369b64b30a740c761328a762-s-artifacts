@@ -1,22 +1,22 @@
-# 最初にAIへ渡すプロンプト
+# Prompt to give the AI
 
 ```text
-このフォルダーのAGENT.mdを読み、DEV英語記事のpost-ai-writing調査を新しいrunで開始してください。
-計画を述べるだけで終わらず、実行できる作業を始めてください。
+Read AGENT.md in this folder and begin a new run of the post-ai-writing study of English-language DEV articles.
+Start any work that can proceed.
 
-1. まず作業場所がこのplaybookルートか確認する。外側のリポジトリにいる場合はbin/post-ai-writing-playbookへ移動する。python3 --versionを確認し、3.11以上の実行ファイルを選ぶ。以降のpython3はその実行ファイルを使う。python3 selftest.pyとpython3 workflow.py validateを実行する。selftestは一時フォルダーの架空データだけを使い、研究は実行しない。validateのerrorがstaleで始まる場合だけsyncしてvalidateを再実行する。initialization incompleteなら、既存run_idと同じIDでinitしてvalidateを再実行する。それ以外の整合性エラーは隠さず、原因と保存物を確認する。
-2. config.jsonのrun_idがnullなら、現在の日時を含む新しいIDを決め、python3 workflow.py init --run-id <ID>で固定する。既存IDがあれば変更しない。同じIDでinitを再実行しても既存の確定状態は初期化されない。
-3. python3 workflow.py nextを読み、in_progressがあれば引継ぎとcheckpointから再開する。以前の担当が動いていればその担当に任せる。停止を確認した後だけblock/retryで新attemptへ移す。理由を記録する。
-4. readyから依存関係を満たす末端を一つ選ぶ。枝と末端のAGENT.md・引継ぎを読み、python3 workflow.py start <ID> --owner <担当ID>で所有する。返されたoutput_dirにコードと成果物を置く。
-5. 指示の規則を実装し、少数のpilotで確認後、固定した全量をチャンクごとに処理する。処理上限に達したらcheckpointから同じattemptを続ける。実装や必要な入力がない場合は作るか、解けない阻害だけ理由付きでblockにする。
-6. 別担当が独立確認し、acceptance_criteriaごとの根拠、必要な全出力、SHA-256、実際の検証結果をreceipt.jsonへ記録する。CLIが受理しただけで内容の正しさが証明されたとは扱わない。
-7. python3 workflow.py finish <ID> --evidence <ルートからのreceipt相対パス>で完了を反映する。親の進捗は自動集約される。
-8. python3 workflow.py nextへ戻り、可能な作業を続ける。全部完了するか、進められる仕事がなく阻害が残るまで進める。別担当への分担は利用できる枠内で行い、同じファイルへ同時に書かない。
-9. 中断するときは引継ぎを更新し、python3 workflow.py syncとvalidateを実行する。完了・未完了・阻害・次の一操作と、今回の結果で言える範囲を短く報告する。
+1. Confirm that you are at the playbook root. From the outer repository, change to bin/post-ai-writing-playbook. Check python3 --version and select a Python 3.11 or later interpreter. Use it for every subsequent python3 command. Run python3 selftest.py and python3 workflow.py validate. The self-test uses only fictional data in a temporary directory and does not run the study. Run sync and rerun validate only if the validation error starts with stale. If validation reports initialization incomplete, rerun init with the existing run_id and then rerun validate. For other integrity errors, examine the cause and saved evidence and report the error.
+2. If run_id in config.json is null, choose a new ID that includes the current date and time and set it with python3 workflow.py init --run-id <ID>. Keep any existing ID. Rerunning init with the same ID preserves committed state.
+3. Read the output of python3 workflow.py next. For in_progress work, resume from the handoff and checkpoint. If the previous owner is still working, let that owner continue. Use block/retry to move to a new attempt only after confirming the previous owner has stopped. Record the reason.
+4. Choose one leaf task from ready whose dependencies are satisfied. Read the branch and leaf AGENT.md files and handoffs. Claim it with python3 workflow.py start <ID> --owner <owner-ID>. Put the code and artifacts in the returned output_dir.
+5. Implement the specified rules and check them on a small pilot. Then process the full frozen set in chunks. When a processing limit is reached, continue from the checkpoint in the same attempt. Create missing implementations or inputs where possible and use block with a reason for blockers that cannot be resolved.
+6. Have another agent independently verify the work. Record evidence for each acceptance criterion, all required outputs, SHA-256 hashes, and actual verification results in receipt.json. CLI acceptance checks the receipt. Use the independent review to assess the substance.
+7. Record completion with python3 workflow.py finish <ID> --evidence <receipt-path-relative-to-root>. Parent progress is aggregated automatically.
+8. Return to python3 workflow.py next and continue available work until everything is complete or blockers prevent further progress. Delegate within the available concurrency slots and assign disjoint files to concurrent agents.
+9. Before pausing, update the handoff and run python3 workflow.py sync and validate. Briefly report completed work, pending work, blockers, the next action, and what the current results support.
 
-原データ・既存runは変更しない。過去と同じ数値を出すことを合格条件にしない。
-Phase 1とPhase 2の期間、指標、分母、正式判断を混ぜない。
-新しい収録が元の保存物と違う場合は、新しい方法再現として差を記録する。
+Preserve source data and existing runs. Base acceptance on the planned method and verification, regardless of whether historical numbers match.
+Keep the time windows, metrics, denominators, and formal judgments for Phase 1 and Phase 2 distinct.
+If the new corpus differs from the original artifacts, record the differences as part of the new method reproduction.
 ```
 
-再開時も同じプロンプトを渡せます。モデルが手元のファイル・コマンド・必要なネットワークを操作できる環境で使ってください。この文書自体が定期ジョブを登録したり、AIを常駐起動したりするものではありません。
+Use the same prompt to resume. The model needs access to the local files, commands, and any network resources required by the study. Run this prompt in an active session. This file contains the prompt and does not schedule jobs or start a background agent.

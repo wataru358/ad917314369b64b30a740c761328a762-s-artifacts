@@ -1,31 +1,31 @@
-# A12　文体距離と分布の偏り
+# A12 Style Distances and Distributional Shifts
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and the [branch rules](../AGENT.md) before starting this task.
 
-## 目的
+## Purpose
 
-六指標の分布変化と、書式・語り口別の固定基準距離を測る。
+Measure changes in the distributions of six metrics and distances from a fixed baseline for formatting and author voice.
 
-## 入力
+## Inputs
 
-- T02主指標・見出し密度とP文
-- A05人称と短縮形
-- A09話題・P帯・対象表
+- T02 primary metrics, heading density, and P sentences
+- A05 grammatical person and contractions
+- A09 topic, P word-count band, and cohort tables
 - T03 coverage
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream input files from the `output_dir` and manifest that `workflow.py` returns for each dependency. Use those locations for inputs in this run.
 
-## 手順
+## Steps
 
-1. 六指標の年別分位、使用ゼロ割合、基準閾値両端と同値を作る。
-2. 完全ケースの基準期経験CDFで固定midrankを計算し、組・定数・欠損を切り分ける。
-3. 各組各層で共通支持を測り、別著者ペアを均一に抽出して距離を集計する。
-4. 著者ペアを先に選ぶ副抽出と、保存文の完全一致共有を診断する。
-5. 別実装で基準CDF、重み、選択ペア、分母・図を照合する。
+1. Calculate annual quantiles, zero-use shares, and the shares below, above, and exactly at baseline thresholds for the six metrics.
+2. Compute fixed midranks from the baseline empirical CDF for complete cases. Account for each metric group, constant values, and missing values.
+3. Measure common support for each group and stratum, then sample different-author pairs uniformly and summarize their distances.
+4. Check a secondary sampling scheme that selects author pairs first, and diagnose exact matches among saved sentences shared between articles.
+5. Use an independent implementation to check the baseline CDF, weights, selected pairs, denominators, and figure.
 
-## 必要な出力
+## Required Outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs in the `output_dir` returned by `start`.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -37,24 +37,24 @@
 - `sentence-sharing.csv`
 - `style.svg`
 
-## 完了条件
+## Completion Criteria
 
-- C01　基準期年等重みCDF、分位と同点が再現できる。
-- C02　各組の完全ケース・共通層・固定重み、別著者のseed付きペアIDと距離を照合できる。
-- C03　原尺度、端値、未知種別、対象率、著者等重み、同文診断とペア依存を明記する。
+- C01 The equally year-weighted baseline CDF, quantiles, and ties can be reproduced.
+- C02 Complete cases, common strata, fixed weights, and seeded different-author pair IDs and distances can be verified for each group.
+- C03 Original scales, endpoint values, unknown categories, cohort coverage, equal author weighting, exact-text diagnostics, and pair dependence are documented.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before marking this task complete, have another reviewer independently check the saved outputs and definitions. Verify the receipt criteria, artifacts, and hashes, then record completion with `workflow.py finish` from the project root. Completion requires the full run.
 
-## 参照する固定規則
+## Frozen Rules
 
 - [measurement-spec.md](../measurement-spec.md)
 - [analysis-methods.md](../analysis-methods.md)
 - [a12-distance.json](../references/a12-distance.json)
 
-## 混同しないこと
+## Interpretation
 
-- 同じ記事・著者を共有するペアを独立nにしない。
-- 二つの距離を単一AIスコアにしない。
-- unknown層の結果を全記事へ広げない。
+- Account for dependence between pairs that share an article or author.
+- Report the two style distances individually as measures of formatting and voice.
+- Limit results for the unknown stratum to articles in that stratum.
 
-引継ぎは [phase1-handoff.md](phase1-handoff.md)。状態は[status.json](status.json)。
+See [phase1-handoff.md](phase1-handoff.md) for the handoff and [status.json](status.json) for the current status.

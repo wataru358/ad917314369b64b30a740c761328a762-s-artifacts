@@ -1,30 +1,30 @@
-# P2-S01　比較と収録の実行計画を固定する
+# P2-S01 Lock the comparison and corpus intake plan
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and [branch rules](../AGENT.md) before starting this task.
 
-## 目的
+## Objective
 
-二つの取得経路から、固定UTC月窓の比較に必要な入力と実行順を確定する。
+Confirm the inputs and execution order for comparing the fixed UTC month windows across both acquisition routes.
 
-## 入力
+## Inputs
 
-- R01の検証済みphase2-inputs.jsonと索引先
-- D03の検証済みplan.jsonl、responses.jsonl、保存HTMLと原応答
-- 固定測定仕様と設定
+- R01's verified phase2-inputs.json and the files it indexes
+- D03's verified plan.jsonl, responses.jsonl, archived HTML, and raw responses
+- Fixed measurement specification and settings
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream files using the upstream output_dir and manifest returned by workflow.py. Use paths resolved from the current run instead of absolute paths from earlier conversations.
 
-## 手順
+## Steps
 
-1. R01とD03の受理済みreceiptの出力先を開く。必要列、正規化したパス、本数とID対応を検証する。公開UTC、取得日時、CC capture、編集日時を別項目にする。
-2. Phase 1との対象・定義差を記録する。旧の採否を固定し、旧2018〜2022年と新2026年の共通UTC1〜10月を主対象にする。
-3. 収録、採否、測定仕様固定、D候補固定、H、独立検算、18項目判断、資料化の順序と閲覧制限をplan.jsonに記録する。正当な0と欠測を分ける。
-4. 抽出pilotは固定planの先頭50件を通常例にする。コード、表、引用、入れ子リスト、埋め込み、カード、短文、警告、空、Markdownのみ、解析失敗の各最大2件をSHA256(42:phase2-extraction:<分類>:<記事ID>)順に選ぶ。重複IDは1件にまとめて選択理由を併記する。
-5. 言語pilotは構造診断を精度標本と分ける。先頭50件を校正、既選択を除いた計画順で各月5件を確認とする。ラベルを先に封印し、スコアは後から開く。元の50/19/50は履歴とする。
+1. Open the output directories from the accepted R01 and D03 receipts. Verify required columns, normalized paths, counts, and ID mappings. Record UTC publication time, retrieval time, CC capture time, and edit time in separate fields.
+2. Document differences in cohort scope and definitions from Phase 1. Lock the earlier inclusion decisions and use the common January through October UTC window for 2018–2022 and 2026 as the primary cohort.
+3. Record the sequence and access restrictions in plan.json for corpus intake, inclusion decisions, specification lock, D candidate lock, H, independent recomputation, the 18 item decisions, and reporting. Distinguish valid zeros from missing measurements.
+4. For the extraction pilot, use the first 50 items in the fixed plan as routine examples. Select up to two items each for code, tables, quotations, nested lists, embeds, cards, short text, warnings, empty bodies, Markdown-only bodies, and parse failures, ordered by SHA256(42:phase2-extraction:<category>:<article ID>). Keep duplicate IDs in a single row with all selection reasons.
+5. For the language pilot, keep structural diagnostics separate from the accuracy sample. Use the first 50 items for calibration and the first five items per month in plan order for confirmation, excluding items already selected. Seal the labels before viewing the scores. Retain the original 50/19/50 counts as history.
 
-## 必要な出力
+## Required outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs under the output_dir returned by start.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -32,23 +32,23 @@
 - `plan.json`
 - `pilot-plan.json`
 
-## 完了条件
+## Completion criteria
 
-- C01　R01とD03のreceipt、入力パス、ハッシュ、必要列、結合キーを照合し、全入力と例外を列挙する。
-- C02　主対象、全60年月セル、重み、D/H、盲検、比較、検証、資料の順序と定義版を固定する。
-- C03　抽出・言語pilotの選択、閲覧順、標本不足、全量との違いを記録する。
+- C01 Check the R01 and D03 receipts, input paths, hashes, required columns, and join keys. List all inputs and exceptions.
+- C02 Lock the primary cohort, all 60 year-month cells, weights, D/H, blinding, the order of comparisons, verification and reporting, and the definition version.
+- C03 Record extraction and language pilot selection, access order, sample shortfalls, and differences from the full corpus.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before completion, have a separate reviewer independently check the saved outputs and definitions. Verify the receipt criteria, artifacts, and hashes, then apply the receipt with workflow.py finish from the root. Completion requires the full work after the pilot.
 
-## 参照する固定規則
+## Fixed reference rules
 
 - [measurement-spec.md](../measurement-spec.md)
 - [settings.json](../settings.json)
 - [comparisons.md](../comparisons.md)
 
-## 混同しないこと
+## Interpretation
 
-- 取得経路と時期が重なる。APIとCCの網羅性を同等とみなさない。
-- pilotは小規模の品質確認。fullの採否と比較には全入力での検証が要る。
+- The acquisition route and period overlap. Account for differences in coverage between the API and CC.
+- The pilot is a small quality check. Full-corpus inclusion decisions and comparisons require verification against every input.
 
-引継ぎは [phase2-handoff.md](phase2-handoff.md)。状態は[status.json](status.json)。
+See [phase2-handoff.md](phase2-handoff.md) for the handoff and [status.json](status.json) for status.

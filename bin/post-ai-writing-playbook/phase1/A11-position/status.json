@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "A11",
-      "title": "具体的な材料までの位置",
-      "description": "具体的な材料までの位置",
+      "title": "Position of the First Concrete Material",
+      "description": "Position of the First Concrete Material",
       "priority": 18,
       "status": "not_started",
       "passes": false,
@@ -23,17 +23,17 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "全採用記事でSカーソルの一致、四機械候補の位置、0/なし/入力欠落/割合NAが区別できる。",
+          "criterion": "S cursor alignment agrees across all adopted articles. Positions are available for the four automated candidates, and zero, absence, missing input, and an undefined proportion are distinguishable.",
           "met": false
         },
         {
           "id": "C02",
-          "criterion": "A07固定標本全件に題名の約束、根拠範囲、S外錨または不成立理由があり、別セッション再評価・裁定を保存する。",
+          "criterion": "Every article in the fixed A07 sample has a recorded title promise, an evidence span, and an out-of-S anchor or reason an assessment could not be made, as applicable. Separate-session reevaluation and adjudication are retained.",
           "met": false
         },
         {
           "id": "C03",
-          "criterion": "機械と内容の対応、層別のnと支持、反例、実際の図の照合がそろう。",
+          "criterion": "The correspondence between automated and content measures, sample sizes and support by stratum, counterexamples, and checks against the plotted values are recorded.",
           "met": false
         }
       ],

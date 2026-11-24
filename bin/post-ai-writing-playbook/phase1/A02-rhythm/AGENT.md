@@ -1,28 +1,28 @@
-# A02　文のリズムと句読法
+# A02 Sentence Rhythm and Punctuation
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and the [branch rules](../AGENT.md) before starting this task.
 
-## 目的
+## Purpose
 
-M02〜M04と副指標を、文数と句読点の分母を保持して比較する。
+Compare M02–M04 and the secondary measures while retaining the sentence-count and punctuation denominators.
 
-## 入力
+## Inputs
 
-- T03対象・coverage
-- T02 P所有ブロック・文・token・M02〜M04
+- T03 cohort and coverage
+- T02 P owner blocks, sentences, tokens, and M02–M04
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream input files from the `output_dir` and manifest that `workflow.py` returns for each dependency. Use those locations for inputs in this run.
 
-## 手順
+## Steps
 
-1. 機械文、文長と断片、隣接差、段落1文率、句読点を計数する。
-2. 主指標の年等重み差、著者区間、各年の不足を保存する。
-3. カンマ間隔、5個以上の補助、旧近似を別に計算する。
-4. 低n、極端CV、タグなしコード候補を診断し、負例と集計を別計算で検証する。
+1. Count mechanically segmented sentences, sentence lengths and fragments, differences between adjacent sentences, the share of single-sentence paragraphs, and punctuation.
+2. Save the equally year-weighted differences in the primary metrics, the author-cluster intervals, and any annual shortfalls.
+3. Calculate sentence-based comma intervals, the supplementary result for articles with at least five commas, and the legacy approximation separately.
+4. Diagnose low sentence counts, extreme CV values, and candidate untagged code. Check negative cases and aggregates with an independent calculation.
 
-## 必要な出力
+## Required Outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs in the `output_dir` returned by `start`.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -32,23 +32,23 @@ M02〜M04と副指標を、文数と句読点の分母を保持して比較す�
 - `rhythm-diagnostics.json`
 - `rhythm.svg`
 
-## 完了条件
+## Completion Criteria
 
-- C01　M02〜M04は固定Pから計算され、語なし・一文・低nが区別できる。
-- C02　カンマ間隔の文ベースと旧記事近似が別列で、数字内カンマが除かれる。
-- C03　著者区間と図を入力から独立に照合できる。
+- C01 M02–M04 are calculated from the fixed P data, with distinct cases for zero words, a single sentence, and low n.
+- C02 Sentence-based comma intervals and the legacy article-level approximation are in separate columns. Commas within numbers are excluded.
+- C03 The author-cluster intervals and figure can be independently verified from the inputs.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before marking this task complete, have another reviewer independently check the saved outputs and definitions. Verify the receipt criteria, artifacts, and hashes, then record completion with `workflow.py finish` from the project root. Completion requires the full run.
 
-## 参照する固定規則
+## Frozen Rules
 
 - [measurement-spec.md](../measurement-spec.md)
 - [analysis-methods.md](../analysis-methods.md)
 - [a02-settings.json](../references/a02-settings.json)
 
-## 混同しないこと
+## Interpretation
 
-- 1文のCVを0にしない。
-- burstinessをCVと独立した発見にしない。
+- Report sentence-length CV as NA for a single sentence.
+- Treat burstiness as a transformation of CV.
 
-引継ぎは [phase1-handoff.md](phase1-handoff.md)。状態は[status.json](status.json)。
+See [phase1-handoff.md](phase1-handoff.md) for the handoff and [status.json](status.json) for the current status.

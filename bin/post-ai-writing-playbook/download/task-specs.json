@@ -2,74 +2,74 @@
   {
     "id": "D01",
     "directory": "cc-index",
-    "title": "Common CrawlのDEV候補を固定する",
+    "title": "Freeze the Common Crawl DEV candidates",
     "dependencies": [],
-    "goal": "CC-MAIN-2025-43の公開Parquet索引から、定義に合うdev.toの候補パスと各パスの保存位置を固定する。",
-    "inputs": ["ルート設定のcrawl、seed、通信上限、pilot.cc_records", "選んだcrawlのcc-index-table.paths.gzとsubset=warcのParquet索引"],
+    "goal": "Use the public CC-MAIN-2025-43 Parquet index to freeze the dev.to candidate paths that meet the definition and select a capture location for each path.",
+    "inputs": ["Root configuration for the crawl, seed, transfer limits, and pilot.cc_records", "The cc-index-table.paths.gz file and subset=warc Parquet index for the selected crawl"],
     "outputs": ["report.md", "manifest.json", "verification.json", "summary.json", "manifest.paths.gz", "index-files.jsonl", "candidates.jsonl"],
     "acceptance_criteria": [
-      "保存した圧縮一覧のSHA-256がmanifestと一致し、展開して得た対象キーと処理済み索引台帳が一対一で対応する。",
-      "5候補の少数検証の記録があり、索引上のフィルタ、正規化したパス、保存位置を追跡できる。",
-      "候補行はpath順で一意。IDを再計算して全行で一致し、保存位置は日時と同順位の規則で確定している。",
-      "ファイル別件数と全体件数が一致する。索引の全ファイルを処理済みと確認し、対象範囲と歴史上の参考件数を区別して報告している。"
+      "The saved compressed list matches the SHA-256 in the manifest, and its eligible keys correspond one-to-one with the processed index ledger.",
+      "The five-candidate pilot records the index filters, normalized paths, and capture locations.",
+      "Candidate rows are unique and sorted by path. Recomputed IDs match every row, and capture locations follow the timestamp and tie-breaking rules.",
+      "Per-file counts agree with the totals. The report confirms processing of every index file and distinguishes the covered scope from historical reference counts."
     ],
     "steps": [
-      "一覧の取得元、圧縮上限、フィルタと候補ルートの定義を固定する。保存済み一覧のハッシュを確認して再利用する。",
-      "キー順に必要列と範囲を読む。まず5候補を索引から読戻し、重複排除と保存位置の選択を確かめる。",
-      "ファイルの件数と候補を一緒に確定し、保存した一覧にある全キーの処理が終わるまで、設定の上限ごとに続ける。",
-      "最も早い保存記録を固定した候補を出力する。全ファイルの完了、候補IDとパス、件数を独立検証担当が保存物から確認する。"
+      "Freeze the list source, compression limit, filters, and candidate route definition. Verify the saved list hash before reusing it.",
+      "Read only the required columns and ranges in key order. Read back five candidates from the index first to verify deduplication and capture selection.",
+      "Commit the file counts and candidates together. Continue within the configured limits until all keys in the saved list have been processed.",
+      "Write the candidate list with the earliest capture frozen for each path. Have an independent reviewer verify file completion, candidate IDs and paths, and counts from the saved artifacts."
     ],
-    "references": ["../download-spec.md#共通の保存と再開", "../download-spec.md#d01の候補と保存位置を固定する"],
-    "pitfalls": ["200・HTMLは索引上の取得条件。記事本文、公開年、英語の採否は後で判定する。", "索引の途中集計から全体件数を推計しない。未処理のキーを件数0に置き換えない。"],
-    "handoff": "中断時はmanifest.paths.gzのハッシュと最初の未処理キーを残す。完了後はD02へcandidates.jsonlとmanifest.jsonを渡す。"
+    "references": ["../download-spec.md#storage-and-resumption", "../download-spec.md#d01-freeze-candidates-and-capture-locations"],
+    "pitfalls": ["HTTP 200 and HTML are index acquisition filters. Assess the article body, publication year, and English-language eligibility later.", "Report partial index counts as partial. Leave counts for unprocessed keys missing."],
+    "handoff": "On interruption, record the manifest.paths.gz hash and the first unprocessed key. When complete, hand candidates.jsonl and manifest.json to D02."
   },
   {
     "id": "D02",
     "directory": "cc-html",
-    "title": "Common CrawlのWARCと生HTMLを保存する",
+    "title": "Save Common Crawl WARC records and raw HTML",
     "dependencies": ["D01"],
-    "goal": "D01で固定した全候補について指定範囲のWARCを取得し、HTMLの元バイト列と成功・失敗を候補単位で残す。",
-    "inputs": ["同じrun_idで完了したD01のoutput_dir", "D01の候補とmanifestのハッシュ", "ルート設定のseed、通信上限、pilot.cc_records"],
+    "goal": "For every candidate frozen in D01, retrieve the specified WARC byte range and save the original HTML bytes and acquisition outcome.",
+    "inputs": ["The output_dir of the completed D01 attempt in the same run_id", "D01 candidates and the manifest hash", "Root configuration for the seed, transfer limits, and pilot.cc_records"],
     "outputs": ["report.md", "manifest.json", "verification.json", "summary.json", "acquisitions.jsonl", "attempts.jsonl"],
     "acceptance_criteria": [
-      "D01の全候補に固定順の台帳行が1つずつあり、候補の補充や欠落がない。完了行はsucceededまたは理由付きfailed。",
-      "先頭5件で範囲取得、圧縮の検証、元HTMLの保存と読戻しを確認した記録がある。",
-      "成功時は入力位置、受信長、WARCのURL・型・内部200、HTMLとWARCのハッシュを照合できる。公開日時、クロール日時、保存日時を別項目に保持している。",
-      "失敗理由、試行履歴、再試行上限、待機期限が台帳に残る。件数合計と保存済みファイルのハッシュを独立検証担当が確かめている。"
+      "The ledger has exactly one row per D01 candidate in the frozen order. Final rows are marked succeeded or failed with a reason.",
+      "The first five records have documented checks for range retrieval, compression, and saving and reading back the original HTML.",
+      "For each success, the input location, received length, WARC URL, type, internal HTTP 200, and HTML and WARC hashes can be verified. Publication, crawl, and save timestamps are stored in separate fields.",
+      "The ledger retains failure reasons, attempt history, retry limits, and wait deadlines. An independent reviewer checks total counts and hashes of saved files."
     ],
     "steps": [
-      "D01の確定成果物を照合し、seedで全候補の処理順を決める。同じ候補IDをファイル名に使う。",
-      "先頭5件を試行し、HTTP 206と受信長、WARCとHTMLの検証・保存を確認する。",
-      "処理待ちの候補を1件ずつ取得する。通信、WARC保存、HTML保存、台帳の順に進め、止まった区切りの次から再開する。",
-      "再試行対象を上限と待機期限に従って処理する。失敗を残したまま全候補の結果を確定する。成功件数と失敗理由の内訳を報告し、生データと台帳を照合する。"
+      "Verify the frozen D01 artifacts and use the seed to order all candidates. Use the same candidate IDs in filenames.",
+      "Try the first five records and verify HTTP 206, the received length, and WARC and HTML validation and storage.",
+      "Retrieve pending candidates one at a time. Request the data, save the WARC, save the HTML, then update the ledger. Resume at the next unfinished chunk.",
+      "Process retries within their limits and wait deadlines. Finalize outcomes for all candidates, retaining failures. Report success counts and a breakdown of failures, and check the raw data against the ledger."
     ],
-    "references": ["../download-spec.md#共通の保存と再開", "../download-spec.md#d02の指示範囲からwarcとhtmlを保存する"],
-    "pitfalls": ["Rangeの206と保存ページの200を別に記録する。", "WARC-Dateは公開日ではない。元ページにある公開日時と取得時刻を残す。", "同じURLのライブ本文、別の保存時点、別候補で失敗を埋めない。"],
-    "handoff": "再開時はnot_beforeと未処理のordinalを確認する。成功した取得証拠と失敗を含む全行をPhase 1のT00へ渡す。"
+    "references": ["../download-spec.md#storage-and-resumption", "../download-spec.md#d02-save-warc-and-html-from-specified-byte-ranges"],
+    "pitfalls": ["Record the range response's HTTP 206 and the archived page's HTTP 200 separately.", "WARC-Date records the crawl timestamp. Keep the publication timestamp from the original page and the retrieval timestamp.", "Keep failed outcomes in the original candidate set. Use the designated capture for each candidate."],
+    "handoff": "Before resuming, check not_before and the unprocessed ordinal. Hand the evidence of successful acquisitions and all rows, including failures, to Phase 1 T00."
   },
   {
     "id": "D03",
     "directory": "dev-api-2026",
-    "title": "DEV APIの2026年1〜10月の固定標本を取得する",
+    "title": "Retrieve a fixed DEV API sample for January through October 2026",
     "dependencies": [],
-    "goal": "UTCの月別に各1,000件、計10,000件の候補IDを固定し、公開APIの原JSONと取得結果を保存する。",
-    "inputs": ["DEV APIの一覧と個別応答", "2026-01-01を含み2026-11-01を含まないUTC期間", "ルート設定のseed、月別件数、通信上限"],
+    "goal": "Freeze 1,000 candidate IDs per UTC month for a total of 10,000 and save the raw JSON and acquisition outcomes from the public API.",
+    "inputs": ["DEV API listing and detail responses", "UTC interval from 2026-01-01 inclusive to 2026-11-01 exclusive", "Root configuration for the seed, monthly count, and transfer limits"],
     "outputs": ["report.md", "manifest.json", "verification.json", "summary.json", "pages.jsonl", "plan.jsonl", "responses.jsonl", "requests.jsonl"],
     "acceptance_criteria": [
-      "5件の接続確認結果があり、一覧ページ番号と最古行から対象期間の下限到達を確認できる。保存済みの一覧ページは1から連続し、オフセットページングの限界を明記している。",
-      "計画はseedのハッシュ順から再計算でき、UTC1〜10月が各1,000件、合計10,000の一意なID。タグと言語属性で絞っていない。",
-      "計画の先頭5件の保存・読戻しの記録がある。全計画IDにsaved、empty、not_found、failedの各結果が対応する。未処理IDと差し替えIDがない。",
-      "200の正常な個別応答は、空本文を含めて保存し、応答IDとハッシュを照合できる。失敗は理由付きで、月別内訳と原JSONに資格情報がないことを独立検証担当が確かめている。"
+      "The connection probe records five results. The listing page number and oldest row establish that the scan reached the lower date bound. Saved listing pages are consecutive from page 1, and the report describes the limitations of offset pagination.",
+      "The plan can be reproduced from the seeded hash order and contains 1,000 unique IDs per UTC month from January through October, for 10,000 in total. Selection uses the full eligible set regardless of tags or language attributes.",
+      "The first five planned responses have been saved and read back. Every planned ID has a saved, empty, not_found, or failed outcome. All original planned IDs are accounted for.",
+      "Valid HTTP 200 detail responses are saved, including empty bodies, with verifiable response IDs and hashes. Failures carry reasons. An independent reviewer verifies the monthly breakdown and checks the raw JSON for credentials."
     ],
     "steps": [
-      "一覧1ページを取得して5件のAPI応答の形と保存を検証する。通信は固定のHTTPSホストで行い、利用を許可された資格情報はメモリだけで扱う。",
-      "一覧をページ番号順に確定し、UTCへ変換して期間内のIDを月別に集める。重複、食い違い、下限の根拠を保存する。",
-      "下限到達と候補の充足を検査し、seedのハッシュ順で毎月1,000 IDを選ぶ。1月から10月までの順で月を交互に取り出し、計画位置を固定する。",
-      "先頭5件の個別取得と照合を終えてから、残りを小分けで取得する。予算と待機期限を守り、保存済み原JSONを再利用する。",
-      "全IDの取得結果と、採否前の月別件数を照合する。台帳と原JSONのハッシュを確定し、検証と引継ぎを記録する。"
+      "Retrieve one listing page and verify the format and storage of five API detail responses. Use the fixed HTTPS host and keep authorized credentials in memory only.",
+      "Commit listing pages in page-number order, convert timestamps to UTC, and collect in-window IDs by month. Keep a record of duplicates, discrepancies, and evidence of reaching the lower date bound.",
+      "Verify that the scan reached the lower bound and that each month has enough candidates. Select 1,000 IDs per month in seeded hash order. Cycle through the months from January to October to assign fixed plan positions.",
+      "After retrieving and checking the first five planned detail responses, process the rest in chunks. Observe the budget and wait deadlines and reuse saved raw JSON.",
+      "Reconcile retrieval outcomes for every ID and the monthly counts before eligibility screening. Freeze the ledger and raw JSON hashes and record the verification and handoff."
     ],
-    "references": ["../download-spec.md#共通の保存と再開", "../download-spec.md#d03で2026年の各月1000件を固定する"],
-    "pitfalls": ["オフセットページの下限到達から一覧全体の網羅性は分からない。", "APIが返す本文は取得時の版。HTTP 200、本文非空、英語採否はそれぞれ別の結果。", "月の不足を別月で埋めず、失敗したIDを別IDと交換しない。"],
-    "handoff": "一覧が途中なら次ページを、計画確定後なら次の未処理IDを引き継ぐ。全量確定後はPhase 2の収録担当へplan.jsonlとresponses.jsonlを渡す。"
+    "references": ["../download-spec.md#storage-and-resumption", "../download-spec.md#d03-freeze-1000-records-per-month-in-2026"],
+    "pitfalls": ["Reaching the lower date bound through offset pages leaves overall listing coverage unknown.", "The API body reflects the article at retrieval time. Record HTTP 200, body availability, and English-language eligibility as distinct outcomes.", "Keep the original monthly quotas and IDs even when a month is short or an ID fails."],
+    "handoff": "During listing, record the next page. After freezing the plan, record the next unprocessed ID. Once complete, pass plan.jsonl and responses.jsonl to the Phase 2 corpus task."
   }
 ]

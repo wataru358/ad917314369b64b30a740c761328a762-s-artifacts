@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "D02",
-      "title": "Common CrawlのWARCと生HTMLを保存する",
-      "description": "Common CrawlのWARCと生HTMLを保存する",
+      "title": "Save Common Crawl WARC records and raw HTML",
+      "description": "Save Common Crawl WARC records and raw HTML",
       "priority": 2,
       "status": "not_started",
       "passes": false,
@@ -20,22 +20,22 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "D01の全候補に固定順の台帳行が1つずつあり、候補の補充や欠落がない。完了行はsucceededまたは理由付きfailed。",
+          "criterion": "The ledger has exactly one row per D01 candidate in the frozen order. Final rows are marked succeeded or failed with a reason.",
           "met": false
         },
         {
           "id": "C02",
-          "criterion": "先頭5件で範囲取得、圧縮の検証、元HTMLの保存と読戻しを確認した記録がある。",
+          "criterion": "The first five records have documented checks for range retrieval, compression, and saving and reading back the original HTML.",
           "met": false
         },
         {
           "id": "C03",
-          "criterion": "成功時は入力位置、受信長、WARCのURL・型・内部200、HTMLとWARCのハッシュを照合できる。公開日時、クロール日時、保存日時を別項目に保持している。",
+          "criterion": "For each success, the input location, received length, WARC URL, type, internal HTTP 200, and HTML and WARC hashes can be verified. Publication, crawl, and save timestamps are stored in separate fields.",
           "met": false
         },
         {
           "id": "C04",
-          "criterion": "失敗理由、試行履歴、再試行上限、待機期限が台帳に残る。件数合計と保存済みファイルのハッシュを独立検証担当が確かめている。",
+          "criterion": "The ledger retains failure reasons, attempt history, retry limits, and wait deadlines. An independent reviewer checks total counts and hashes of saved files.",
           "met": false
         }
       ],

@@ -1,29 +1,29 @@
-# A06　見出しと冒頭・末尾
+# A06 Headings, Openings, and Endings
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and the [branch rules](../AGENT.md) before starting this task.
 
-## 目的
+## Purpose
 
-辞書による見出し機能、パターン集中、冒頭末尾表現を比較する。
+Compare dictionary-based heading functions, concentration of heading patterns, and expressions at article openings and endings.
 
-## 入力
+## Inputs
 
-- T03対象
-- T02見出しとS/P位置
-- A04 split.csv と候補凍結証拠
+- T03 cohort
+- T02 headings and S/P positions
+- A04 split.csv and evidence that candidates were frozen
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream input files from the `output_dir` and manifest that `workflow.py` returns for each dependency. Use those locations for inputs in this run.
 
-## 手順
+## Steps
 
-1. 固定見出し辞書を発見側の盲検60候補で確認し、規則と未一致を凍結する。
-2. 見出しごとのSカーソル・節語数、機能列、年別集中度とサイズ調整を計算する。
-3. A04群の先頭/末尾50P語を使い、2〜5語列の増減各15を窓ごとに固定して別群で検証する。
-4. 原DOM順、見出し階層、同文と著者の集中、固定候補・図を独立確認する。
+1. Calibrate the fixed heading dictionary on 60 blinded discovery candidates, then freeze the rules and record unmatched headings.
+2. Calculate the S cursor and section word count for each heading, along with function sequences, annual concentration, and the size adjustment.
+3. Use the first and last 50 P words in the A04 splits. Freeze 15 increasing and 15 decreasing two- to five-word sequences for each window, then validate them in the other split.
+4. Independently verify original DOM order, heading hierarchy, concentration by identical text and author, fixed candidates, and the figure.
 
-## 必要な出力
+## Required Outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs in the `output_dir` returned by `start`.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -35,23 +35,23 @@
 - `structure-summary.csv`
 - `structure.svg`
 
-## 完了条件
+## Completion Criteria
 
-- C01　見出し校正・凍結・評価の順序があり、見出しなし・辞書認識なしと集中度が再計算できる。
-- C02　まとめ存在、条件付き節長、S位置が各々の分母で読める。
-- C03　冒頭末尾候補が検証前に固定され、全候補の検証結果と群漏れが照合される。
+- C01 The sequence of heading calibration, freezing, and evaluation is recorded, and heading absence, dictionary nonmatches, and concentration can be recalculated.
+- C02 The presence of a summary, conditional section length, and S position each have an explicit denominator.
+- C03 Opening and ending candidates are frozen before validation. All candidate results and checks for split leakage are verified.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before marking this task complete, have another reviewer independently check the saved outputs and definitions. Verify the receipt criteria, artifacts, and hashes, then record completion with `workflow.py finish` from the project root. Completion requires the full run.
 
-## 参照する固定規則
+## Frozen Rules
 
 - [measurement-spec.md](../measurement-spec.md)
 - [analysis-methods.md](../analysis-methods.md)
 - [a06-settings.json](../references/a06-settings.json)
 
-## 混同しないこと
+## Interpretation
 
-- まとめ見出しが増えたことだけで構造全体が画一化したと書かない。
-- 見出し辞書は意味上の正解ではない。
+- Assess full-article structural uniformity using evidence beyond the prevalence of summary headings.
+- Interpret dictionary labels as rule-based classifications.
 
-引継ぎは [phase1-handoff.md](phase1-handoff.md)。状態は[status.json](status.json)。
+See [phase1-handoff.md](phase1-handoff.md) for the handoff and [status.json](status.json) for the current status.

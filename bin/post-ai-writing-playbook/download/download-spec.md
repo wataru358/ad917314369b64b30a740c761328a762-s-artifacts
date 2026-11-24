@@ -1,86 +1,86 @@
-# 取得仕様
+# Acquisition specification
 
-## 共通の保存と再開
+## Storage and resumption
 
-対象期間、seed、プロファイル、小分け実行の上限はルートの `config.json` から読む。新しい実行では、この設定、対象ソース、取得コードの版、依存パッケージの版を `manifest.json` に記録する。保存済みの実行と照合できるよう、設定と入力ファイルの SHA-256 を残す。
+Read the time window, seed, profile, and chunk limits from the root `config.json`. For a new run, record the configuration, source, acquisition code version, and dependency versions in `manifest.json`. Record SHA-256 hashes for the configuration and input files so they can be verified against saved runs.
 
-各タスクは指定された `output_dir` に `report.md`、`summary.json`、`manifest.json`、`verification.json` を保存する。JSONL は1行1オブジェクトの UTF-8 とし、改行は LF を使う。ハッシュは保存バイト列の SHA-256、時刻は ISO 8601 とする。`manifest.json` に `task_id`、`run_id`、`attempt`、`scope`、凍結入力の識別子、ファイルの相対パス、バイト数、ハッシュを含める。多数のファイルは、同じ項目を持つ `raw-files.jsonl` から参照してよい。入力台帳のファイルパスは、そのタスクの `output_dir` を基準に解決する。
+Each task saves `report.md`, `summary.json`, `manifest.json`, and `verification.json` in its `output_dir`. Write JSONL as UTF-8 with one object per line and LF line endings. Hash the saved bytes with SHA-256 and use ISO 8601 timestamps. Include `task_id`, `run_id`, `attempt`, `scope`, frozen input identifiers, relative file paths, byte counts, and hashes in `manifest.json`. For large file sets, the manifest may reference `raw-files.jsonl` with the same fields. Resolve file paths in an input ledger relative to the originating task's `output_dir`.
 
-1. 台帳の作成と更新には出力先ごとの排他ロックを使う。ネットワーク処理の前にリクエストを記録し、受信した原データは一時ファイルへの書込みと原子的な移動で確定する。保存後に台帳の状態を更新する。
-2. 1回の処理は `limits` の件数、受信ボディのバイト数、経過秒数、および同時実行数の上限内で進める。確認、再試行、リダイレクト拒否で消費したリクエストも数える。大きな応答は上限の残りを越えて読み込まない。応答の受信や待機で小分け実行の期限を越える場合は、その前に状態を確定して止める。終了理由と消費した予算を台帳に記録する。
-3. 上限へ達したら状態を確定し、次の区切りで未処理分から再開する。`Retry-After` の秒数と HTTP 日付に対応し、指定期限を `not_before` に保存する。待機中は同じ取得先へリクエストせず、独立した工程を進める。
-4. 再開前に入力ハッシュと確定済みの台帳を照合する。中断した処理は試行履歴に残し、検証済みの原データがあれば再利用する。ハッシュの不一致や確定記録の欠損は報告して復旧する。期間、候補集合、seed、プロファイルを変えるときは別の実行にする。
-5. `verification.json` に検証範囲、読み戻した件数、独立検証の結果、失敗や対象外の理由を残す。後工程に渡す成果物のハッシュと照合結果をレシートに記す。`full` の試行で得た5件は途中の検証記録として保存する。
+1. Use an exclusive lock for each output directory when creating or updating its ledger. Record requests before making network calls. Commit raw responses by writing to a temporary file and moving it atomically into place. Update ledger state after the data is saved.
+2. Keep each chunk within the configured `limits` for count, received body bytes, elapsed seconds, and concurrency. Count requests made for probes, retries, and rejected redirects. Read large responses only up to the remaining byte budget. If receiving a response or waiting would overrun the chunk deadline, commit progress and stop before the deadline. Record the stop reason and budget used in the ledger.
+3. On reaching a limit, commit progress and resume at the first unprocessed item in the next chunk. Handle both seconds and HTTP dates in `Retry-After` and save the resulting deadline as `not_before`. While waiting, suspend requests to that source and work on independent tasks.
+4. Before resuming, verify the input hashes and committed ledger entries. Record interrupted work in the attempt history and reuse any verified raw data. Report and recover from hash mismatches or missing committed records. Use a separate run to change the time window, candidate set, seed, or profile.
+5. In `verification.json`, record the scope, row counts read back, independent verification results, and reasons for failures or exclusions. Put artifact hashes and verification results in the receipt for the downstream handoff. Retain the five-record pilot in a `full` attempt as an intermediate verification record.
 
-## D01の候補と保存位置を固定する
+## D01 Freeze candidates and capture locations
 
-一覧は `https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-43/cc-index-table.paths.gz`。圧縮2 MiB、展開後8 MiBを上限とする。取得した gzip を `manifest.paths.gz` に保存する。空行を除き、`cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-43/` 以下のキーだけを受け付ける。`subset=warc/` の直下にある `[A-Za-z0-9_.-]+\.parquet` だけを対象とする。`..` のパス要素や重複があれば拒否し、キーは昇順に固定する。各 Parquet は `https://data.commoncrawl.org/` にキーを連結して読む。
+The list is at `https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-43/cc-index-table.paths.gz`. Set limits of 2 MiB compressed and 8 MiB decompressed. Save the retrieved gzip as `manifest.paths.gz`. Ignore blank lines and accept only keys under `cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-43/`. Include only files directly under `subset=warc/` that match `[A-Za-z0-9_.-]+\.parquet`. Reject keys with `..` path components and duplicate keys. Freeze the list in ascending key order. Read each Parquet file by appending its key to `https://data.commoncrawl.org/`.
 
-索引の `url_host_tld = 'to'`、`url_host_registered_domain = 'dev.to'`、`url_host_name = 'dev.to'`、`fetch_status = 200`、`content_mime_detected = 'text/html'` をすべて満たす行を数える。対象行のうち、`url_path` が `/[^/]+/[^/]+/?` に完全一致するものを候補とする。次の正規表現に一致するルートは除く。
+Count index rows matching all of `url_host_tld = 'to'`, `url_host_registered_domain = 'dev.to'`, `url_host_name = 'dev.to'`, `fetch_status = 200`, and `content_mime_detected = 'text/html'`. Of those, treat a row as a candidate if `url_path` fully matches `/[^/]+/[^/]+/?`. Exclude routes matching this expression.
 
 ```text
 ^/(t|tag|tags|api|search|settings|dashboard|admin|feed|pod|videos|comments|top|readinglist|organizations|series|badges)/
 ```
 
-末尾の `/` を落とした `url_path` を候補の `path` とする。索引の `url_path` を使うため、URLのクエリとスキームは重複排除に影響しない。大小文字と文字エンコードは保存値のまま扱う。移転、転載、異なるslugは別候補として保持する。全ファイルを通じて `path` で重複を除き、`id = sha256(path.encode('utf-8')).hexdigest()` とする。
+Set each candidate's `path` to `url_path` with any trailing slash removed. Using the index's `url_path` excludes query strings and schemes from deduplication. Preserve case and encoding as stored. Treat moved articles, reposts, and different slugs as distinct candidates. Deduplicate by `path` across all files and compute `id = sha256(path.encode('utf-8')).hexdigest()`.
 
-索引から `url`、`fetch_time`、`warc_filename`、`warc_record_offset`、`warc_record_length`、`content_languages` を残す。候補に複数の保存記録があるときは、UTCに正規化した `fetch_time`、`url`、`warc_filename`、`warc_record_offset` の順に昇順で比較し、先頭の1件を固定する。同順位の区別には索引キーを使う。元の `content_languages` は参考値として保存する。保存位置を収録と同時に確定できない構成では、候補が見つかった索引ファイルだけを同じ条件で再照会する。
+Keep `url`, `fetch_time`, `warc_filename`, `warc_record_offset`, `warc_record_length`, and `content_languages` from the index. For multiple captures of one candidate, select the first in ascending order by UTC-normalized `fetch_time`, `url`, `warc_filename`, and `warc_record_offset`. Use the index key to break remaining ties. Keep the original `content_languages` as reference metadata. If capture locations cannot be determined in the first pass, query only the files containing candidates again with the same filters.
 
-必要列と範囲を絞って Parquet を読む。公式の DuckDB `httpfs` を使う場合は、元の実装で使った接続上限を目安にする。同時走査1、メモリ1 GiB、一時領域1 GiB、HTTPタイムアウト30秒。`httpfs` の内部転送量を数えられない場合は、各取得で受信上限を適用できる Range クライアントとローカルキャッシュを使う。たとえば、Parquet リーダーにシーク可能な HTTP Range ストリームを渡し、フッターと必要な行グループの列を読む。Range キャッシュにはキー、オブジェクト長、取得できた識別子、206で検証した範囲とハッシュを記録する。読み取りが1区切りに収まらない場合は、行グループの一時集計または範囲キャッシュから再開する。一覧と索引の取得に固定のバイト上限を設定していなかった当時の実装とは、この実行条件が異なる。
+Read only the required Parquet columns and ranges. If using DuckDB's official `httpfs` extension, use the original implementation settings as a guide. Run one scan at a time, with 1 GiB of memory, 1 GiB of temporary storage, and a 30-second HTTP timeout. If `httpfs` cannot report internal transfer counts, use a range client that can enforce per-fetch byte limits and a local cache. For example, give the Parquet reader a seekable HTTP range stream to read the footer and the needed columns of selected row groups. Record the object key, length, available identifiers, HTTP 206-verified ranges, and hashes in the range cache. If a read exceeds one chunk, resume from interim row-group totals or cached ranges. The historical implementation had no fixed byte limit for fetching the list and index.
 
-ファイル別の件数と候補の確定を同じトランザクションにする。最初の該当ファイルで `pilot.cc_records` 件の候補を検証する。足りなければ次のファイルへ進む。少数検証に使ったファイルと検証した候補を残す。一覧の全キーの処理が済んでから候補集合を確定する。未処理キーがあれば報告を部分集計とする。
+Commit per-file counts and candidates in one transaction. Verify `pilot.cc_records` candidates from the first qualifying file. Continue into the next file if there are too few. Record the files and candidates used for the pilot. Freeze the candidate set only after processing every key in the list. Report totals as partial while any key is unprocessed.
 
-| ファイル | 確定する項目 |
+| File | Required fields and contents |
 | --- | --- |
-| `manifest.paths.gz` | 受信した圧縮一覧のバイト列。 |
-| `index-files.jsonl` | 一覧にある全キーの `file_key`、処理状態、`html_captures`、`candidate_captures`、エラー、処理日時。未処理行の件数は `null`。 |
-| `candidates.jsonl` | `path` 昇順。`id`、`path`、`url`、`index_file`、`index_captured_at`、`warc_filename`、`offset`、`length`、`index_languages`。 |
-| `summary.json` | crawl、条件、圧縮一覧のハッシュ、全ファイル数、確定ファイル数、HTML保存件数、候補保存件数、重複排除後の候補数、`complete_index`、プロファイル。 |
+| `manifest.paths.gz` | Received bytes of the compressed list. |
+| `index-files.jsonl` | For every key in the list, record `file_key`, processing state, `html_captures`, `candidate_captures`, errors, and processing timestamp. Use `null` for counts on unprocessed rows. |
+| `candidates.jsonl` | Sort by `path` ascending. Include `id`, `path`, `url`, `index_file`, `index_captured_at`, `warc_filename`, `offset`, `length`, and `index_languages`. |
+| `summary.json` | Crawl, filters, compressed list hash, total files, committed files, HTML capture count, candidate capture count, unique candidate count, `complete_index`, and profile. |
 
-## D02の指示範囲からWARCとHTMLを保存する
+## D02 Save WARC and HTML from specified byte ranges
 
-D01の `candidates.jsonl` を入力とする。D01のスコープ、ハッシュ、各IDの一意性を確かめる。固定順の作り方は、UTF-8の候補パスを昇順で並べ、Python 3.11 の `random.Random(42).shuffle` を適用する。seed は設定値を使う。`ordinal` は0から付ける。先頭 `pilot.cc_records` 件を試行して、WARC と HTML の照合を行ってから続きへ進む。
+Use D01's `candidates.jsonl` as input. Verify D01's scope, hashes, and uniqueness of IDs. To get the frozen order, sort the UTF-8 candidate paths ascending and apply Python 3.11's `random.Random(seed).shuffle` with the configured seed. Assign `ordinal` values starting at zero. Try the first `pilot.cc_records` records and verify WARC and HTML before continuing.
 
-元の調査では先に2万件を取得し、残りを後から追加した。パス昇順の母集団から `random.Random(42).sample(paths, 20000)` を取り、その集合と補集合をそれぞれパス昇順から別々に `random.Random(42).shuffle` した。元のSQLiteでは、この順に挿入した行の数値IDを後工程で使った。今回のIDはD01のパスハッシュなので、同じHTMLでも記事IDをseedの入力に使う抽出標本は変わり得る。元の数値IDとパスの対応表が提供され、出所とハッシュを照合できた場合は `legacy_job_id` を任意項目として保存する。元の標本の一致を検証するには、その対応表、元の原データ、処理の版がそろう必要がある。
+The original study first acquired 20,000 records and added the rest later. It selected `random.Random(42).sample(paths, 20000)` from the population sorted by path and applied `random.Random(42).shuffle` separately to the path-sorted selected set and its complement. Downstream tasks used the numeric SQLite IDs assigned to rows inserted in that order. This run uses D01's path hashes as IDs, so samples seeded with article IDs can differ even with identical HTML. If a mapping of original numeric IDs to paths is provided and its provenance and hash can be verified, keep the ID in the optional `legacy_job_id` field. Checking whether the original sample is reproduced requires the mapping, original raw data, and processing versions.
 
-1. `url` は `http` または `https`、ホストは `dev.to`、末尾 `/` を除いたパスは候補と一致することを確認する。`warc_filename` は `crawl-data/CC-MAIN-2025-43/segments/` 以下の `.warc.gz`、許可文字は `[A-Za-z0-9_./-]`、`..` 要素なし。`offset` は非負整数、`length` は1以上8 MiB以下の整数。
-2. `https://data.commoncrawl.org/<warc_filename>` に `Range: bytes=<offset>-<offset+length-1>`、`Accept-Encoding: identity` でリクエストする。リダイレクトを拒否する。外側の応答は HTTP 206 と `Content-Range: bytes <offset>-<end>/<total>` を必須とし、`total > end` と受信長 `length` を照合する。HTTP 200 の代替応答はボディを読む前に拒否する。
-3. 1件ずつ取得し、直前の通信終了から3秒以上空ける。タイムアウトは30秒。圧縮WARCの受信が完了したらハッシュを記録して保存する。検証済みの同じWARCは再通信せず使う。
-4. gzip 展開後32 MiB以内の、ただ1件の `response` レコードを読む。`WARC-Target-URI` は索引の `url` と完全一致させる。`WARC-Truncated` があれば失敗とする。内部HTTPは200かつ media type が `text/html`。HTTP圧縮は `identity`、`gzip`、`deflate` に対応し、転送形式もデコードする。展開した空でないHTMLは16 MiB以下とし、抽出や文字コード変換を加えずバイト列で保存する。ページ内の外部リソースは取得しない。
-5. HTMLメタデータを別記録にする。JSON-LD の `@type` に `Article`、`BlogPosting`、`TechArticle`、`NewsArticle` のいずれかを持つノードの文字列 `datePublished` を集める。値が1種類なら採用。複数なら公開日は `null` として警告を残す。値がなければ `meta` の `article:published_time` を使う。公開年は解析できた公開日時から取得し、取得日時や更新日時で埋めない。`html_lang` は `<html lang>`、`modified_at` は対応する JSON-LD の `dateModified`。HTMLの宣言値は言語判定に使わない。
+1. Check that `url` uses `http` or `https`, its host is `dev.to`, and its path matches the candidate after removing any trailing slash. Require a `warc_filename` ending in `.warc.gz` under `crawl-data/CC-MAIN-2025-43/segments/`, using only `[A-Za-z0-9_./-]` and excluding `..` path components. Require an integer `offset` of at least zero and an integer `length` from 1 byte to 8 MiB.
+2. Request `https://data.commoncrawl.org/<warc_filename>` with `Range: bytes=<offset>-<offset+length-1>` and `Accept-Encoding: identity`. Reject redirects. Require outer HTTP 206 and `Content-Range: bytes <offset>-<end>/<total>`. Verify that `total > end` and the received length equals `length`. Reject a fallback HTTP 200 before reading the body.
+3. Retrieve one record at a time, at least three seconds after the previous request finishes. Use a 30-second timeout. When the compressed WARC is fully received, record its hash and save it. Reuse the same verified WARC from storage on resumption.
+4. Read exactly one `response` record within a 32 MiB gzip decompression limit. Require `WARC-Target-URI` to match the indexed `url` exactly. Fail records with `WARC-Truncated`. Require internal HTTP 200 and a media type of `text/html`. Handle HTTP `identity`, `gzip`, and `deflate` content encodings and decode the transfer encoding. Save the nonempty decoded HTML bytes within a 16 MiB limit, before any text extraction or character-set conversion. Leave external page resources unfetched.
+5. Record HTML metadata separately. Collect string `datePublished` values from JSON-LD nodes with an `@type` of `Article`, `BlogPosting`, `TechArticle`, or `NewsArticle`. Use the value if there is exactly one distinct value. If multiple values are present, set publication time to `null` and record a warning. If there is no value, use the `meta` field `article:published_time`. Derive publication year only from a parsed publication timestamp. Read `html_lang` from `<html lang>` and `modified_at` from `dateModified` in the matching JSON-LD. Keep the HTML language declaration as metadata, outside language classification.
 
-WARCとHTMLは `warc/<idの先頭2文字>/<id>.warc.gz` と `html/<idの先頭2文字>/<id>.html` に保存する。成功行には両方のパスと SHA-256 を持たせる。失敗でも検証を通った保存物があれば台帳に残す。
+Save WARC and HTML to `warc/<first-two-id-characters>/<id>.warc.gz` and `html/<first-two-id-characters>/<id>.html`. Record paths and SHA-256 hashes for both on successful rows. If an acquisition fails but produced verified artifacts, keep those in the ledger.
 
-`429` または `Retry-After` 付きの失敗では送信を止める。タイムアウト、接続障害、408、429、500、502、503、504 は再試行対象。404、形式不一致、URL不一致、過大な保存位置などは理由付きで確定失敗にする。再試行は1区切りに同じ候補を1回まで、累積の処理開始は最大3回か `limits.retries + 1` の小さい方。下限待機は失敗回数ごとに60秒から倍増させ、独自の待機は1時間で頭打ちとする。サーバーの指定がそれより長い場合は指定を使う。連続5件の一時通信エラー、保存障害、権限エラーでは区切りを止める。復旧後は同じ候補を続け、失敗分の別候補への差し替えやライブ本文への変更は行わない。
+Stop requests on a `429` or any failure with `Retry-After`. Timeouts, connection failures, 408, 429, 500, 502, 503, and 504 are retryable. Record terminal failures and reasons for cases such as 404, format or URL mismatch, and oversized ranges. Retry a candidate at most once per chunk. Cap cumulative starts at the smaller of three and `limits.retries + 1`. Start wait times at 60 seconds and double them with each failure, capping the locally calculated wait at one hour. Use any longer server-specified wait. Stop the chunk after five consecutive transient network errors, a storage failure, or a permission error. Resume the same candidate set and use each candidate's original capture. Preserve failed outcomes as recorded.
 
-| ファイル | 確定する項目 |
+| File | Required fields and contents |
 | --- | --- |
-| `acquisitions.jsonl` | `ordinal` 順で1候補1行。D01の項目に `ordinal`、`status`、`attempt_count`、`range_http_status`、`original_http_status`、`html_file`、`html_sha256`、`html_bytes`、`warc_file`、`warc_sha256`、`warc_bytes`、`warc_record_id`、`warc_captured_at`、`saved_at`、`title`、`published_at`、`published_year`、`publication_source`、`modified_at`、`html_lang`、`failure_stage`、`failure_reason` を加える。利用できない値は `null`。 |
-| `attempts.jsonl` | 候補ID、開始・終了日時、再試行状態、HTTP状態、キャッシュ利用、エラー、`next_retry_at`。 |
-| `summary.json` | 計画数、処理済み数、成功・失敗・残件数、試行と待機の記録、取得対象のハッシュ。 |
+| `acquisitions.jsonl` | One row per candidate in `ordinal` order. Add `ordinal`, `status`, `attempt_count`, `range_http_status`, `original_http_status`, `html_file`, `html_sha256`, `html_bytes`, `warc_file`, `warc_sha256`, `warc_bytes`, `warc_record_id`, `warc_captured_at`, `saved_at`, `title`, `published_at`, `published_year`, `publication_source`, `modified_at`, `html_lang`, `failure_stage`, and `failure_reason` to the D01 fields. Use `null` for unavailable values. |
+| `attempts.jsonl` | Candidate ID, start and end times, retry status, HTTP status, cache use, error, and `next_retry_at`. |
+| `summary.json` | Planned, processed, successful, failed, and remaining counts, attempt and wait history, and acquisition input hash. |
 
-`full` 完了時はD01の全IDとD02の `succeeded` または `failed` の全IDが一致する。全件失敗や通信停止中の残件は、範囲取得と入力の妥当性を確認できないため、取得完了として後工程へ渡さない。
+For `full` completion, the D01 IDs must match all D02 IDs marked `succeeded` or `failed`. If all candidates failed or a network pause left pending records, hold the downstream handoff until you can verify range retrieval and input validity.
 
-## D03で2026年の各月1,000件を固定する
+## D03 Freeze 1000 records per month in 2026
 
-一覧は `GET https://dev.to/api/articles/latest?per_page=1000&page=<整数>`。個別応答は `GET https://dev.to/api/articles/<整数ID>`。`Accept: application/vnd.forem.api-v1+json` を指定する。対象ホストは `dev.to`、通信は HTTPS のみ。リダイレクトは拒否する。許可済みの資格情報が環境にあれば `api-key` ヘッダーに使う。値はコマンド引数、ログ、設定、成果物に書かない。応答に資格情報が混入していないことを確かめる。
+List with `GET https://dev.to/api/articles/latest?per_page=1000&page=<integer>`. Retrieve details with `GET https://dev.to/api/articles/<integer-id>`. Send `Accept: application/vnd.forem.api-v1+json`. Use HTTPS only and restrict requests to `dev.to`. Reject redirects. If authorized credentials are present in the environment, use them in the `api-key` header. Keep credential values out of command arguments, logs, settings, and artifacts. Check responses for inadvertent credential inclusion.
 
-1. 最初に一覧1ページ目の形を調べ、API が返した5つの有効IDで個別応答、保存、読戻しを確かめる。対象期間外のIDも接続確認に使える。確認専用の個別応答は計画の取得件数から外す。一覧1ページ目を条件どおりに検証して確定した場合は一覧走査で再利用できる。認証済みの深いページが利用可能かを確認するときは、1,001ページ目を確認専用として扱う。
-2. 一覧は1ページ目から順に進め、1区切りの最大20ページと `limits` を併用する。200応答から空でない配列を読み、各行の `id` が1以上64ビット符号付き整数の最大値以下の整数であることを確かめる。タイムゾーン付きの `published_at` を UTC に変換する。マイクロ秒まで統一し、月は UTC に変換した後の日時から取得する。
-3. `2026-01-01T00:00:00Z <= published_at < 2026-11-01T00:00:00Z` の行を保存する。`id` は最初に確定した期間内の行を使い、重複数と日時が食い違う行を記録する。対象期間より古い行が初めて出たページを最後まで保存し、ページ番号とその行の日時を下限到達の根拠にする。200以外、空配列、解析エラーから下限到達を推定しない。オフセットページング中に内容が動くため、下限まで確認できても網羅率は不明と記す。
-4. 一覧に含まれる原JSONをそのまま保存する。ページ台帳、候補行、次ページ番号を同じトランザクションで確定する。当時の公開アクセスでは1,000ページが上限だった。実行時に制限へ達したら記録して止める。401、403、リダイレクトでは送信を止め、許可済みのアクセス経路と設定を確認する。回避手段で上限を越えない。
-5. 下限到達の根拠と、UTC1〜10月の各月に1,000以上の一意なIDがあることを検証する。各月のIDを `sha256(f'{seed}:{id}'.encode('utf-8')).hexdigest()` の昇順で並べ、同順位では数値IDが小さいものを先にする。各月の先頭1,000件を採用し、1月から10月まで順に1件ずつ取り出す操作を1,000回繰り返す。位置は1始まり。候補不足を別月で埋めない。タグ、APIの言語属性、本文の長さで候補順を変えない。
-6. `plan.jsonl` を書込み、一覧台帳と計画のハッシュを固定する。再開時も同じ `id`、月、位置を使う。計画の先頭5件の個別応答を先に読み、結果を確かめる。計画に対して保存した有効な応答は全量の取得分にも使う。続きは未処理から1区切り最大50件と `limits` の範囲で進める。
-7. 個別HTTP 200では、応答の `id` が要求IDと一致することを確かめる。`body_html` と `body_markdown` は文字列または `null` を受け付ける。片方でも空白以外の文字を含めば `saved`、どちらも空、空白のみ、欠落、または `null` なら `empty`。JSONの元バイト列はどちらの状態でも保存する。`saved` では、フィールドをUTF-8で符号化した `body.html` と `body.md` も保存する。欠落または `null` の方は空のバイト列を使う。公開日時に変化があれば差を記録し、計画上の月を保つ。HTTP 404 は `not_found`、確定した他の取得失敗は `failed` とする。
+1. Inspect the shape of the first listing page and use five valid IDs returned by the API to verify detail retrieval, storage, and readback. IDs outside the time window can serve as connection probes. Exclude probe-only detail responses from planned acquisition counts. Reuse the first listing page in the main scan if it was verified and committed under the listing rules. When checking deep authenticated pagination, treat that fetch of page 1,001 as a probe only.
+2. Scan beginning at page 1, with at most 20 pages per chunk and the configured `limits`. Read a nonempty array from each HTTP 200 and verify that each `id` is an integer from 1 to the signed 64-bit maximum. Convert time-zone-aware `published_at` values to UTC. Normalize to microsecond precision and derive the month after UTC conversion.
+3. Save rows satisfying `2026-01-01T00:00:00Z <= published_at < 2026-11-01T00:00:00Z`. For duplicate IDs, use the first committed in-window row and record duplicate counts and timestamp discrepancies. Save the entire first page containing a row older than the time window. Use its page number and the row's timestamp as evidence that the scan reached the lower bound. Require a valid HTTP 200 with a parsed row before marking the lower bound reached. Record coverage as unknown because listings can shift during offset pagination.
+4. Save original listing JSON bytes as received. Commit the page ledger, candidate rows, and next page number in one transaction. Historical public access was capped at 1,000 pages. Record and stop at limits encountered during the run. Stop on 401, 403, or redirects and check the authorized access route and configuration. Stay within access limits.
+5. Verify the lower-bound evidence and that each UTC month from January to October has at least 1,000 unique IDs. Sort each month's IDs by ascending `sha256(f'{seed}:{id}'.encode('utf-8')).hexdigest()`, breaking ties by ascending numeric ID. Keep the first 1,000 per month. Cycle through January to October, taking one ID per month, for 1,000 cycles. Number positions starting at 1. Keep monthly quotas independent and preserve the candidate order regardless of tags, API language attributes, or body length.
+6. Write `plan.jsonl` and freeze the hashes of the listing ledger and the plan. Preserve IDs, months, and positions on resumption. Retrieve and check the first five planned detail responses. Count valid responses saved for those planned IDs toward the full acquisition. Continue with unprocessed IDs in chunks of at most 50, within `limits`.
+7. For HTTP 200 details, verify that the response `id` matches the requested ID. Accept strings or `null` in `body_html` and `body_markdown`. Record `saved` if either field contains a non-whitespace character. Record `empty` if both fields are empty, whitespace-only, absent, or `null`. Save the original JSON bytes in both cases. For `saved`, also save UTF-8 versions of the fields as `body.html` and `body.md`, with empty bytes for an absent or `null` field. If publication time changed, record the difference and keep the planned month. Use `not_found` for HTTP 404 and `failed` for other terminal acquisition failures.
 
-DEV API のリクエストは1件ずつ、3秒以上の間隔で送る。タイムアウト30秒。通信障害、429、5xx は初回に加え `limits.retries` の範囲で再試行し、既定は合計4回。試行回数をページ番号または計画IDごとに記録する。待機は3秒、6秒、12秒と増やし、`Retry-After` が長ければ指定期限を使う。権限エラー、継続中のレート制限、連続5件の個別取得の一時障害、保存障害では区切りを止める。失敗した一覧ページは読み飛ばさず、根拠と再開条件を残す。個別取得の連続障害が復旧したら残件を続け、再試行上限に達した個別IDは理由付きで残す。全件で接続に失敗した場合は停止原因を解消してから再開する。保存済み原JSONのハッシュが一致していれば本文ファイルは原JSONから復元できる。API由来の本文は取得時の公開状態で、公開後の編集や削除により前回の実行と異なり得る。
+Send DEV API requests one at a time, at least three seconds apart, with a 30-second timeout. Retry network failures, 429, and 5xx responses up to `limits.retries` beyond the initial attempt, defaulting to four attempts total. Record attempt counts by page number or planned ID. Wait 3, 6, and 12 seconds between attempts, using the server deadline if `Retry-After` is longer. Stop the chunk on permission errors, ongoing rate limits, five consecutive transient detail retrieval failures, or storage errors. Retain failed listing pages as pending and record evidence and resumption conditions. When consecutive detail failures are resolved, resume pending work and record reasons for IDs that reached their retry limit. If all connection attempts fail, resolve the cause before resuming. Verified raw JSON can be used to restore body files. The API body reflects the published state at retrieval time. Later edits and deletions can produce differences across runs.
 
-| ファイル | 確定する項目 |
+| File | Required fields and contents |
 | --- | --- |
-| `pages.jsonl` | ページ番号、要求URL、取得日時、HTTP状態、原JSONへの相対パスとハッシュ、行数、期間内行数、最小・最大日時、下限到達フラグ。 |
-| `plan.jsonl` | `position`、`id`、`month`、UTCの `published_at`、`seed_rank`、初出ページと行番号、言語の参考値があれば `language_hint`。 |
-| `responses.jsonl` | `plan.jsonl` の全IDに1行ずつ。`id`、`position`、`month`、`status`、`request_url`、`fetched_at`、`http_status`、`attempt_count`、`raw_file`、`raw_sha256`、`html_file`、`html_sha256`、`markdown_file`、`markdown_sha256`、`detail_published_at`、`failure_reason`。利用できない値は `null`。 |
-| `requests.jsonl` | 確認、一覧、個別の役割、URL、開始・終了日時、HTTP状態、失敗理由、再試行、待機期限。記録ヘッダーは `Date`、`ETag`、`Content-Type`、`Retry-After`、レート制限情報などの許可リストに絞る。 |
-| `summary.json` | 期間、seed、下限到達の証拠、ページ数、月別候補・計画・結果数、重複と食い違い、残件、取得時刻の範囲。 |
+| `pages.jsonl` | Page number, request URL, retrieval time, HTTP status, relative raw JSON path and hash, total rows, in-window rows, earliest and latest timestamps, and lower-bound flag. |
+| `plan.jsonl` | `position`, `id`, `month`, UTC `published_at`, `seed_rank`, first page and row number, and `language_hint` if available. |
+| `responses.jsonl` | One row per ID in `plan.jsonl`. Include `id`, `position`, `month`, `status`, `request_url`, `fetched_at`, `http_status`, `attempt_count`, `raw_file`, `raw_sha256`, `html_file`, `html_sha256`, `markdown_file`, `markdown_sha256`, `detail_published_at`, and `failure_reason`. Use `null` for unavailable values. |
+| `requests.jsonl` | Probe, listing, or detail role, URL, start and end timestamps, HTTP status, failure reason, retries, and wait deadline. Log only allowlisted headers such as `Date`, `ETag`, `Content-Type`, `Retry-After`, and rate-limit information. |
+| `summary.json` | Time window, seed, lower-bound evidence, page count, monthly candidate, plan, and outcome counts, duplicates, discrepancies, pending count, and retrieval time range. |
 
-一覧原JSONは `raw/pages/<ページ番号>.json`、個別原JSONは `raw/details/<id>/<応答SHA-256>.json` に保存する。本文ファイルは `articles/<id>/<応答SHA-256>/` に置く。`manifest.json` のファイルハッシュと `pages.jsonl`、`responses.jsonl` の参照を照合する。`full` 完了時はUTC1〜10月が各1,000件、全10,000件の計画に対し、すべてのIDに確定した取得結果がある。本文の英語判定と抽出済み本文の作成は Phase 2のS02へ渡す。
+Save raw listing JSON under `raw/pages/<page-number>.json` and raw detail JSON under `raw/details/<id>/<response-sha256>.json`. Put body files in `articles/<id>/<response-sha256>/`. Check hashes in `manifest.json` against entries in `pages.jsonl` and `responses.jsonl`. For `full` completion, require a finalized outcome for each of the 10,000 planned IDs, with exactly 1,000 per UTC month from January through October. Pass the data to Phase 2 S02 for language classification and body extraction.

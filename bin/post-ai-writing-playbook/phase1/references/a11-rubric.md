@@ -1,46 +1,46 @@
-# タイトル対応材料の校正規則案
+# Draft calibration rubric for material that fulfills the title
 
-状態は草案。対象はA07の盲検校正32件に限る。親の独立確認まで固定版として扱わない。
+This draft covers only the 32 blinded A07 calibration cases. It becomes frozen after independent review by the parent task.
 
-## 入力と判定順
+## Inputs and decision order
 
-タイトルだけを読んで約束を一つ選ぶ。本文を読んで約束を後付けしない。タイトルから二つ以上の読みが残る場合は「特定の約束なし/不明」とし、内容状態を`undeterminable`にする。次に保存本文をDOM順に読み、約束に対応する最初の具体的な材料を探す。外部リンク先、動画、画像内の文字は読まない。
+Read the title alone and identify one promise. Freeze that decision before reading the body. If the title supports two or more interpretations, choose “no specific promise or unclear” and set the content state to `undeterminable`. Then read the archived body in DOM order and find the first concrete material that fulfills the promise. Consider only the archived text, excluding external pages, videos, and text within images.
 
-| タイトルの約束 | 最初の材料として数えるもの | 校正例 |
+| Title promise | What counts as the first material | Calibration examples |
 | --- | --- | --- |
-| 操作・実装 | 読者が実施できる具体的な操作、設定、コマンド、実装の手がかり | 7のGET要求、23のFuse導入、32のコンソール操作 |
-| 不具合の解決 | 問題への具体的な点検、変更、または復旧操作 | 10のProcfile点検 |
-| 比較・選定 | 候補に固有の観点や結果。二者の対比なら両側がそろう範囲 | 2の関数用途、5の割引率、16の二つのイベントの違い |
-| 経験・意見 | 本人の出来事や観測、または主張を支える具体例 | 9の会員数、17の閲覧数、29の開発経験 |
-| 特定の約束なし/不明 | タイトルから材料の種類が一意に定まらない | 1、4、21、24、25、27 |
+| Operation or implementation | A concrete action, setting, command, or implementation detail the reader can use | GET request in 7, Fuse setup in 23, console operation in 32 |
+| Troubleshooting | A concrete check, change, or recovery action for the problem | Procfile check in 10 |
+| Comparison or selection | A criterion or result specific to an option. For a two-way comparison, include both sides. | Function uses in 2, discount rates in 5, difference between two events in 16 |
+| Experience or opinion | A firsthand event or observation, or a concrete example supporting a claim | Member count in 9, views in 17, development experience in 29 |
+| No specific promise or unclear | The title leaves the type of material ambiguous | 1, 4, 21, 24, 25, 27 |
 
-製品名と短い説明だけのタイトルは、使用経験・設計説明・操作のどれを約束するか一意に決められない。6の「Blockchatting: A Peer-to-Peer Messaging dApp」は本文の「I have built」を分類の根拠にせず、判断不能にする。「From CMS To Contextual Editing」は移行操作と概念説明の両方に読めるため、18も判断不能にする。「Getting better at team communication」は体験と助言の両方に読めるため、21は判断不能とする。
+A product name with a brief description can leave it unclear whether the title promises experience, a design explanation, or an operation. In 6, classify “Blockchatting: A Peer-to-Peer Messaging dApp” as undeterminable using the title alone, regardless of “I have built” in the body. “From CMS To Contextual Editing” could promise migration instructions or a conceptual explanation, so 18 is also undeterminable. “Getting better at team communication” could promise experience or advice, so 21 is undeterminable.
 
-## 内容状態
+## Content states
 
-| 状態 | 条件 |
+| State | Condition |
 | --- | --- |
-| `matched` | 保存本文に最初の対応材料を特定できる。引用と位置を記す。 |
-| `no_material` | 約束は明確だが、保存本文には対応材料がない。 |
-| `undeterminable` | タイトルの約束、または保存本文内の対応箇所を一意に決められない。 |
-| `inapplicable` | 保存されたものが評価対象の記事ではない。 |
+| `matched` | The first matching material can be identified in the archived body. Record the excerpt and position. |
+| `no_material` | The promise is clear and the archived body lacks matching material. |
+| `undeterminable` | The title promise or matching passage cannot be determined unambiguously. |
+| `inapplicable` | The archived item is outside the article evaluation scope. |
 
-挨拶、記事内容の予告、目次、見出しだけの名称列挙は材料に数えない。関連する外部記事の紹介を、その記事の手順として数えない。12と13は外部に実装説明がある可能性を残したまま、保存本文について`no_material`とする。28のメタデータ風広告と31の週刊ニュースレターは`inapplicable`とする。
+Exclude greetings, previews, tables of contents, and lists of names found only in headings. Treat references to related external articles as references alone. Assign `no_material` to the archived bodies for 12 and 13 even though implementation details may appear elsewhere. Assign `inapplicable` to the metadata-like advertisement in 28 and the weekly newsletter in 31.
 
-操作・実装の最初の材料は、対象に結び付いた最小の具体的操作方針から採る。26の「I use compose function」は、関数合成を使うという操作方針なので材料に数える。後続の`asyncCompose`コードに必要な詳細の真偽や十分性は、この初出位置の判定では評価しない。
+For an operation or implementation, start at the first minimal, concrete approach tied to the subject. In 26, “I use compose function” counts because it describes a concrete approach using function composition. The correctness or sufficiency of details in the later `asyncCompose` code is outside this first-occurrence judgment.
 
-このラベルは材料が最初に現れる場所を表す。材料の真偽、十分性、質、読者の満足は判定しない。本文中の日付、固有名詞、製品版から年代や著者を推測できるという盲検の限界を残す。
+The label captures where the material first appears. Record that readers may infer year or author from dates, proper names, and product versions even in blinded packets. Correctness, sufficiency, quality, and reader satisfaction are outside the rating.
 
-## 位置の保存
+## Save positions
 
-保存済みのS語軸を使い、材料に該当する最初のtokenから最後のtokenまでの半開区間`[start,end)`を`S_word_ranges`へ順序どおり保存する。source unitの先頭、文の先頭、見出し、接続句へ丸めない。複数のsource unitにまたがるときも区間を統合しない。`S_start`と`S_end`は範囲全体の外枠だけを表し、途中に材料が連続していることを意味しない。16の`[109,122)`と`[159,185)`がその例である。旧source unit、token、S語数は変更しない。
+Use the saved S word sequence and record each half-open range `[start,end)` from the first qualifying token through the last in `S_word_ranges`, in order. Keep exact token boundaries instead of rounding to the start of a source unit or sentence, a heading, or a transition. Preserve distinct ranges when material spans several source units. `S_start` and `S_end` give the outer bounds and allow gaps, as shown by `[109,122)` and `[159,185)` in 16. Preserve existing source units, tokens, and S word counts.
 
-S外の材料にはS語位置を作らない。18のコマンドは本文char区間`[965,1027)`と隣接S境界131を、分類判断不能の反例に残す。23では散文の`[44,59)`と`[59,65)`に加え、sudo行の本文char区間`[434,462)`と隣接S境界65を別に保存する。これらの盲検packetには生DOMノードのlocatorがない。本文の見た目からコード候補と判断した記録であり、後続のDOM側照合まで`code_block`と断定しない。引用は`body_context_text`の原文を使う。15では見出しを引用から除き、出来事を述べる文だけを引用する。
+Use a separate body-character range and adjacent S boundary for material outside S. For the command in 18, retain body-character range `[965,1027)` and adjacent S boundary 131 as a counterexample where the classification is indeterminate. In 23, save body-character range `[434,462)` for the sudo line and adjacent S boundary 65 separately from the prose spans `[44,59)` and `[59,65)`. The blinded packets lack raw DOM node locators. Record them as code candidates based on how the body appears and wait for DOM verification before assigning `code_block`. Quote the original `body_context_text`. In 15, quote only the sentence about the event, excluding the heading.
 
-`no_material`、`undeterminable`、`inapplicable`にはS位置を与えない。「位置なし」を0や記事末尾に置き換えない。真の`0`語位置と、数値`0`に単位が付く表現は有効な観測である。S語数が0なら比率はNAとし、計算できる先行S語数0とは区別する。
+Leave S position missing for `no_material`, `undeterminable`, and `inapplicable`. A true position of `0` words and a numerical value of `0` with a unit both count as observations. When S has zero words, use NA for the ratio and retain a computable preceding S count of 0 when applicable.
 
-## 機械候補との境界
+## Machine-generated candidates
 
-コードブロックとinline codeを別候補として拾う。数値と単位、および制約や前提の候補は保存済みP/L/U散文単位をすべて対象とし、段落だけに狭めない。校正packetでは`paragraph`と`list_item`のkindを確認した。数値の範囲表現は単一値より先に照合し、`20-30 minutes`を`30 minutes`へ縮めない。`70,000 registered members`の介在語は`registered`に限定する。`2GB3`、`2GB_foo`、`20-30 minutesXYZ`、`20-30 minutes3`の部分一致は拒否する。保存URLのtoken spanと重なる候補も除外する。`0ms`は候補であり、位置なしの代入値ではない。
+Identify code blocks and inline code separately. Look for number-and-unit expressions and candidate constraints or prerequisites in every saved P/L/U prose unit. Calibration packets covered `paragraph` and `list_item` kinds. Match numeric ranges before single values, preserving `20-30 minutes` in full. Allow only `registered` as the intervening word in `70,000 registered members`. Reject substring matches in `2GB3`, `2GB_foo`, `20-30 minutesXYZ`, and `20-30 minutes3`. Reject candidates that overlap a saved URL token span. Treat `0ms` as a valid candidate.
 
-すべてのDOM `ol`の先頭位置を補助構造として残す。別の`numbered_procedure_candidate`は、直下の`li`が固定した`Step 数字`の接頭句を持つか、最初の3件中2件以上が辞書に固定した命令動詞で始まるときだけ記録する。どちらも機械候補であり、意味上の手順というラベルではない。2の番号付き関数列挙と5の提供者列挙は、番号があるだけでは手順にならない反例である。候補辞書は校正32件に基づく案として別ファイルへ保存した。評価128件や全量結果を見て追加しない。
+Save the start of every DOM `ol` as auxiliary structural data. Record a separate `numbered_procedure_candidate` when a direct `li` child has the frozen Step-plus-number prefix or at least two of the first three children start with imperative verbs from the frozen dictionary. Both cues identify machine-generated candidates. The numbered list of functions in 2 and the list of providers in 5 illustrate numbering alone. Save the candidate dictionary separately as a draft based on the 32 calibration cases. Keep it fixed after opening the 128 evaluation cases or full-cohort results.

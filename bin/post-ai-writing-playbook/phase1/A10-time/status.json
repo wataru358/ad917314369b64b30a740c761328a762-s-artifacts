@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "A10",
-      "title": "変化が始まった時期",
-      "description": "変化が始まった時期",
+      "title": "Timing of Changes",
+      "description": "Timing of Changes",
       "priority": 17,
       "status": "not_started",
       "passes": false,
@@ -23,17 +23,17 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "全期間格子、支持窓、非支持理由、季節性、対象/固定qのマスクを再現できる。",
+          "criterion": "The grid for the full period, supported windows, reasons for insufficient support, seasonality, and the cohort and fixed-q masks can be reproduced.",
           "met": false
         },
         {
           "id": "C02",
-          "criterion": "固定境界、事前点検、両偽境界、候補BICとブロック再抽出の状態・失敗IDがある。",
+          "criterion": "Records cover the fixed boundary, pre-trend checks, both placebo boundaries, candidate BIC scores, and block-resampling statuses and failed replicate IDs.",
           "met": false
         },
         {
           "id": "C03",
-          "criterion": "暦ラグHACと数値、図点、停止条件を独立計算で確認する。",
+          "criterion": "Calendar-lag HAC, numerical results, plotted points, and stopping conditions are checked by independent calculation.",
           "met": false
         }
       ],

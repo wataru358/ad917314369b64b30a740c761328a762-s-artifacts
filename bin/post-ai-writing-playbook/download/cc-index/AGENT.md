@@ -1,28 +1,28 @@
-# D01　Common CrawlのDEV候補を固定する
+# D01 Freeze the Common Crawl DEV candidates
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and [branch rules](../AGENT.md) before starting this leaf task.
 
-## 目的
+## Goal
 
-CC-MAIN-2025-43の公開Parquet索引から、定義に合うdev.toの候補パスと各パスの保存位置を固定する。
+Use the public CC-MAIN-2025-43 Parquet index to freeze the dev.to candidate paths that meet the definition and select a capture location for each path.
 
-## 入力
+## Inputs
 
-- ルート設定のcrawl、seed、通信上限、pilot.cc_records
-- 選んだcrawlのcc-index-table.paths.gzとsubset=warcのParquet索引
+- Root configuration for the crawl, seed, transfer limits, and pilot.cc_records
+- The cc-index-table.paths.gz file and subset=warc Parquet index for the selected crawl
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream files from the upstream output_dir returned by workflow.py and the manifest.
 
-## 手順
+## Steps
 
-1. 一覧の取得元、圧縮上限、フィルタと候補ルートの定義を固定する。保存済み一覧のハッシュを確認して再利用する。
-2. キー順に必要列と範囲を読む。まず5候補を索引から読戻し、重複排除と保存位置の選択を確かめる。
-3. ファイルの件数と候補を一緒に確定し、保存した一覧にある全キーの処理が終わるまで、設定の上限ごとに続ける。
-4. 最も早い保存記録を固定した候補を出力する。全ファイルの完了、候補IDとパス、件数を独立検証担当が保存物から確認する。
+1. Freeze the list source, compression limit, filters, and candidate route definition. Verify the saved list hash before reusing it.
+2. Read only the required columns and ranges in key order. Read back five candidates from the index first to verify deduplication and capture selection.
+3. Commit the file counts and candidates together. Continue within the configured limits until all keys in the saved list have been processed.
+4. Write the candidate list with the earliest capture frozen for each path. Have an independent reviewer verify file completion, candidate IDs and paths, and counts from the saved artifacts.
 
-## 必要な出力
+## Required outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save everything in the output_dir returned by start.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -31,23 +31,23 @@ CC-MAIN-2025-43の公開Parquet索引から、定義に合うdev.toの候補パ�
 - `index-files.jsonl`
 - `candidates.jsonl`
 
-## 完了条件
+## Acceptance criteria
 
-- C01　保存した圧縮一覧のSHA-256がmanifestと一致し、展開して得た対象キーと処理済み索引台帳が一対一で対応する。
-- C02　5候補の少数検証の記録があり、索引上のフィルタ、正規化したパス、保存位置を追跡できる。
-- C03　候補行はpath順で一意。IDを再計算して全行で一致し、保存位置は日時と同順位の規則で確定している。
-- C04　ファイル別件数と全体件数が一致する。索引の全ファイルを処理済みと確認し、対象範囲と歴史上の参考件数を区別して報告している。
+- C01 The saved compressed list matches the SHA-256 in the manifest, and its eligible keys correspond one-to-one with the processed index ledger.
+- C02 The five-candidate pilot records the index filters, normalized paths, and capture locations.
+- C03 Candidate rows are unique and sorted by path. Recomputed IDs match every row, and capture locations follow the timestamp and tie-breaking rules.
+- C04 Per-file counts agree with the totals. The report confirms processing of every index file and distinguishes the covered scope from historical reference counts.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Have an independent reviewer verify the saved artifacts and definitions before completion. Check the receipt criteria, artifacts, and hashes, then run workflow.py finish from the root. Completion covers the full task.
 
-## 参照する固定規則
+## Reference specifications
 
-- [download-spec.md](../download-spec.md#共通の保存と再開)
-- [download-spec.md](../download-spec.md#d01の候補と保存位置を固定する)
+- [download-spec.md](../download-spec.md#storage-and-resumption)
+- [download-spec.md](../download-spec.md#d01-freeze-candidates-and-capture-locations)
 
-## 混同しないこと
+## Notes
 
-- 200・HTMLは索引上の取得条件。記事本文、公開年、英語の採否は後で判定する。
-- 索引の途中集計から全体件数を推計しない。未処理のキーを件数0に置き換えない。
+- HTTP 200 and HTML are index acquisition filters. Assess the article body, publication year, and English-language eligibility later.
+- Report partial index counts as partial. Leave counts for unprocessed keys missing.
 
-引継ぎは [download-handoff.md](download-handoff.md)。状態は[status.json](status.json)。
+See [download-handoff.md](download-handoff.md) for the handoff and [status.json](status.json) for status.

@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "V01",
-      "title": "条件を変えた再分析",
-      "description": "条件を変えた再分析",
+      "title": "Sensitivity analyses",
+      "description": "Sensitivity analyses",
       "priority": 20,
       "status": "not_started",
       "passes": false,
@@ -31,17 +31,17 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "予定の変種×六主指標の全セルが計算値または理由付き状態を持つ。必須未処理はない。",
+          "criterion": "Every planned variant-by-primary-metric cell has a calculated value or a state with a reason. All required work has been processed.",
           "met": false
         },
         {
           "id": "C02",
-          "criterion": "原比較との差・n・欠測・支持を別計算で照合し、定義上のゼロと反転を区別する。",
+          "criterion": "Independent calculations verify differences from the original comparison, sample sizes, missingness, and support, and distinguish zeros by definition from reversals.",
           "met": false
         },
         {
           "id": "C03",
-          "criterion": "A04境界・重複の未測定、A11・A12探索、図の反例と制約を保存する。",
+          "criterion": "Unmeasured A04 boundaries and duplication, A11/A12 exploratory results, and figure counterexamples and constraints are saved.",
           "met": false
         }
       ],

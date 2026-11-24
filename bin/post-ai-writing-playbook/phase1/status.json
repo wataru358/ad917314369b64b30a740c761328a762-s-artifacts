@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "T00",
-      "title": "入力と実行条件を固定",
-      "description": "入力と実行条件を固定",
+      "title": "Freeze the inputs and execution conditions",
+      "description": "Freeze the inputs and execution conditions",
       "priority": 4,
       "status": "not_started",
       "passes": false,
@@ -20,7 +20,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "All leaf criteria and independent verification evidence are present, and the task is complete.",
           "met": false
         }
       ],
@@ -29,8 +29,8 @@
     },
     {
       "id": "T01",
-      "title": "本文言語判定と英語集合",
-      "description": "本文言語判定と英語集合",
+      "title": "Body language classification and English cohort",
+      "description": "Body language classification and English cohort",
       "priority": 5,
       "status": "not_started",
       "passes": false,
@@ -40,7 +40,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "All leaf criteria and independent verification evidence are present, and the task is complete.",
           "met": false
         }
       ],
@@ -49,8 +49,8 @@
     },
     {
       "id": "T02",
-      "title": "分割・特徴量・メタデータ",
-      "description": "分割・特徴量・メタデータ",
+      "title": "Segmentation, features, and metadata",
+      "description": "Segmentation, features, and metadata",
       "priority": 6,
       "status": "not_started",
       "passes": false,
@@ -60,7 +60,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "All leaf criteria and independent verification evidence are present, and the task is complete.",
           "met": false
         }
       ],
@@ -69,8 +69,8 @@
     },
     {
       "id": "T03",
-      "title": "対象統計と収録範囲",
-      "description": "対象統計と収録範囲",
+      "title": "Cohort statistics and coverage",
+      "description": "Cohort statistics and coverage",
       "priority": 7,
       "status": "not_started",
       "passes": false,
@@ -80,7 +80,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "All leaf criteria and independent verification evidence are present, and the task is complete.",
           "met": false
         }
       ],
@@ -89,8 +89,8 @@
     },
     {
       "id": "A01",
-      "title": "記事と段落の長さ",
-      "description": "記事と段落の長さ",
+      "title": "Article and Paragraph Length",
+      "description": "Article and Paragraph Length",
       "priority": 8,
       "status": "not_started",
       "passes": false,
@@ -100,7 +100,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "All leaf criteria and independent verification evidence are present, and the task is complete.",
           "met": false
         }
       ],
@@ -109,8 +109,8 @@
     },
     {
       "id": "A02",
-      "title": "文のリズムと句読法",
-      "description": "文のリズムと句読法",
+      "title": "Sentence Rhythm and Punctuation",
+      "description": "Sentence Rhythm and Punctuation",
       "priority": 9,
       "status": "not_started",
       "passes": false,
@@ -120,7 +120,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "All leaf criteria and independent verification evidence are present, and the task is complete.",
           "met": false
         }
       ],
@@ -129,8 +129,8 @@
     },
     {
       "id": "A03",
-      "title": "リスト・太字・見出し",
-      "description": "リスト・太字・見出し",
+      "title": "Lists, Bold Text, and Headings",
+      "description": "Lists, Bold Text, and Headings",
       "priority": 10,
       "status": "not_started",
       "passes": false,
@@ -140,7 +140,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "All leaf criteria and independent verification evidence are present, and the task is complete.",
           "met": false
         }
       ],
@@ -149,8 +149,8 @@
     },
     {
       "id": "A04",
-      "title": "語彙の発見と検証",
-      "description": "語彙の発見と検証",
+      "title": "Vocabulary Discovery and Validation",
+      "description": "Vocabulary Discovery and Validation",
       "priority": 11,
       "status": "not_started",
       "passes": false,
@@ -160,7 +160,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "All leaf criteria and independent verification evidence are present, and the task is complete.",
           "met": false
         }
       ],
@@ -169,8 +169,8 @@
     },
     {
       "id": "A05",
-      "title": "書き手の声と呼びかけ",
-      "description": "書き手の声と呼びかけ",
+      "title": "Author Voice and Direct Address",
+      "description": "Author Voice and Direct Address",
       "priority": 12,
       "status": "not_started",
       "passes": false,
@@ -180,7 +180,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "All leaf criteria and independent verification evidence are present, and the task is complete.",
           "met": false
         }
       ],
@@ -189,8 +189,8 @@
     },
     {
       "id": "A06",
-      "title": "見出しと冒頭・末尾",
-      "description": "見出しと冒頭・末尾",
+      "title": "Headings, Openings, and Endings",
+      "description": "Headings, Openings, and Endings",
       "priority": 13,
       "status": "not_started",
       "passes": false,
@@ -201,7 +201,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "All leaf criteria and independent verification evidence are present, and the task is complete.",
           "met": false
         }
       ],
@@ -210,8 +210,8 @@
     },
     {
       "id": "A07",
-      "title": "経験談と具体的な検証記述",
-      "description": "経験談と具体的な検証記述",
+      "title": "Personal Experience and Concrete Verification Details",
+      "description": "Personal Experience and Concrete Verification Details",
       "priority": 14,
       "status": "not_started",
       "passes": false,
@@ -222,7 +222,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "All leaf criteria and independent verification evidence are present, and the task is complete.",
           "met": false
         }
       ],
@@ -231,8 +231,8 @@
     },
     {
       "id": "A08",
-      "title": "コードと近接散文",
-      "description": "コードと近接散文",
+      "title": "Code and Nearby Prose",
+      "description": "Code and Nearby Prose",
       "priority": 15,
       "status": "not_started",
       "passes": false,
@@ -242,7 +242,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "All leaf criteria and independent verification evidence are present, and the task is complete.",
           "met": false
         }
       ],
@@ -251,8 +251,8 @@
     },
     {
       "id": "A09",
-      "title": "話題と書き手の入れ替わり",
-      "description": "話題と書き手の入れ替わり",
+      "title": "Changes in Topic and Author Composition",
+      "description": "Changes in Topic and Author Composition",
       "priority": 16,
       "status": "not_started",
       "passes": false,
@@ -269,7 +269,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "All leaf criteria and independent verification evidence are present, and the task is complete.",
           "met": false
         }
       ],
@@ -278,8 +278,8 @@
     },
     {
       "id": "A10",
-      "title": "変化が始まった時期",
-      "description": "変化が始まった時期",
+      "title": "Timing of Changes",
+      "description": "Timing of Changes",
       "priority": 17,
       "status": "not_started",
       "passes": false,
@@ -292,7 +292,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "All leaf criteria and independent verification evidence are present, and the task is complete.",
           "met": false
         }
       ],
@@ -301,8 +301,8 @@
     },
     {
       "id": "A11",
-      "title": "具体的な材料までの位置",
-      "description": "具体的な材料までの位置",
+      "title": "Position of the First Concrete Material",
+      "description": "Position of the First Concrete Material",
       "priority": 18,
       "status": "not_started",
       "passes": false,
@@ -315,7 +315,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "All leaf criteria and independent verification evidence are present, and the task is complete.",
           "met": false
         }
       ],
@@ -324,8 +324,8 @@
     },
     {
       "id": "A12",
-      "title": "文体距離と分布の偏り",
-      "description": "文体距離と分布の偏り",
+      "title": "Style Distances and Distributional Shifts",
+      "description": "Style Distances and Distributional Shifts",
       "priority": 19,
       "status": "not_started",
       "passes": false,
@@ -340,7 +340,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "All leaf criteria and independent verification evidence are present, and the task is complete.",
           "met": false
         }
       ],
@@ -349,8 +349,8 @@
     },
     {
       "id": "V01",
-      "title": "条件を変えた再分析",
-      "description": "条件を変えた再分析",
+      "title": "Sensitivity analyses",
+      "description": "Sensitivity analyses",
       "priority": 20,
       "status": "not_started",
       "passes": false,
@@ -371,7 +371,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "All leaf criteria and independent verification evidence are present, and the task is complete.",
           "met": false
         }
       ],
@@ -380,8 +380,8 @@
     },
     {
       "id": "R01",
-      "title": "日本語の執筆材料",
-      "description": "日本語の執筆材料",
+      "title": "Japanese editorial materials",
+      "description": "Japanese editorial materials",
       "priority": 21,
       "status": "not_started",
       "passes": false,
@@ -404,7 +404,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "All leaf criteria and independent verification evidence are present, and the task is complete.",
           "met": false
         }
       ],

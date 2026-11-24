@@ -1,11 +1,11 @@
-# T00 の引継ぎ
+# T00 Handoff
 
-初期状態は未着手。過去の研究の完了を引き継いだものではない。
+The initial state is pending. Prior research provides provenance for this run.
 
-最初の操作は、この末端のAGENT.mdとstatus.jsonを読み、ルートで `python3 workflow.py start T00 --owner <担当ID>` を実行すること。依存が未完了なら先行作業へ戻る。
+First read AGENT.md and status.json for this task, then run `python3 workflow.py start T00 --owner <owner-id>` from the root. If a dependency is incomplete, return to the prerequisite task.
 
-T01へ全候補台帳、抽出結果、probeとコードのハッシュを渡す。途中からは一致するシャードを再利用する。
+Pass the full candidate ledger, extraction results, probe, and code hashes to T01. Reuse matching shards when resuming partway through.
 
-## 再開記録
+## Resume Log
 
-実行した担当がここへ追記する。担当ID、run_id、attempt、出力先、固定入力とhash、checkpoint、完了した操作、未完了、阻害、次の一コマンドを残す。同じattemptへ戻るときは進捗を消さず追記する。
+The operator adds the owner ID, run_id, attempt, output directory, frozen inputs and hashes, checkpoint, completed operations, outstanding work, blockers, and the next command. Append updates when resuming the same attempt so earlier progress stays recorded.

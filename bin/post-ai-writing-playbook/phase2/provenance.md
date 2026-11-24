@@ -1,28 +1,28 @@
-# Phase 2の出典台帳
+# Phase 2 source ledger
 
-パスは元リポジトリのrootからの相対パス。SHA-256は読んだ原版のバイトに対する値。この一覧は記録専用であり、別環境での実行は配布物と新runの入力を使う。
+Paths are relative to the original repository root. SHA-256 values cover the source bytes read. This ledger records provenance. To execute in a different environment, use the distributed files and inputs for the new run.
 
-`measurement-spec.md` は固定仕様の測定部分を収録し、入出力、実行段階、盲検担当の表示を配布用に更新した。`settings.json` は数値設定と測定項目を保持し、パス解決と担当の記録を移植した。旧セッションの待機状態、実行先、モデル指定は取り込んでいない。残りの文書は下記の資料から実行に必要な情報を整理した。
+`measurement-spec.md` includes the measurement portion of the fixed specification, with input and output conventions, execution stages, and descriptions of blinded assessors updated for distribution. `settings.json` preserves the numeric settings and measurement items and adapts path resolution and operator records. Historical session wait state, output destinations, and model assignments were outside the port. The other documents organize the execution details from the sources below.
 
-| 配布物 | 原版パス | 原版SHA-256 |
+| Distributed files | Original path | Original SHA-256 |
 | --- | --- | --- |
 | measurement-spec.md | `bin/analytics/post-ai-writing/PHASE2-measurement-spec.md` | `4806e397bba5da111b72befdf50b963067f611feaa920b0c8a93806b0d86e94b` |
 | settings.json | `bin/analytics/post-ai-writing/phase2-measurement-settings-v1.json` | `c5a808a3dd453346585ff42a9050dfd94062f2165c0b9d2069c40a7b97ed4c93` |
-| AGENT.md、phase2-handoff.md、task-specs.json | `bin/analytics/post-ai-writing/質疑応答と原稿ドラフト/handoff.md` | `285e44c388ba1e099eec6903b7b0348baaccf502566d143b4bde5252838efbcc` |
-| phase2-handoff.md、comparisons.md | `bin/analytics/post-ai-writing/phase2-research/session-qa-handoff-20261115-v1/handoff.md` | `67ebf0ba029a513fe8e518a1b263e3cb66cfd638da8eaa1e8a5c34b5ac9b3f67` |
-| comparisons.md、task-specs.json | `bin/analytics/post-ai-writing/PHASE2-analysis-plan.md` | `1bf3b3f3840cf46b25448ef470c7f8819ad955dac8215f847ed261ce7316b8e4` |
-| comparisons.md、task-specs.json | `bin/analytics/post-ai-writing/PHASE2-extraction-pilot.md` | `42ab8f48a30c4e4e68f9afde60585a6fc1ba687bbeb5fa83d965e9c4f21340fd` |
-| comparisons.md、task-specs.json | `bin/analytics/post-ai-writing/PHASE2-language-pilot.md` | `bcdff57623b1658688b72e4cd12e268567d1842a731b7ffcc1ab09ab75dfee5d` |
-| comparisons.md、task-specs.json | `bin/analytics/post-ai-writing/phase2-corpus-policy-v1.json` | `340245799f2c8ac7d0e5c537bfcf6b29c2fcf9fa0727432f5c531550a6a72cba` |
+| AGENT.md, phase2-handoff.md, task-specs.json | `bin/analytics/post-ai-writing/質疑応答と原稿ドラフト/handoff.md` | `285e44c388ba1e099eec6903b7b0348baaccf502566d143b4bde5252838efbcc` |
+| phase2-handoff.md, comparisons.md | `bin/analytics/post-ai-writing/phase2-research/session-qa-handoff-20261115-v1/handoff.md` | `67ebf0ba029a513fe8e518a1b263e3cb66cfd638da8eaa1e8a5c34b5ac9b3f67` |
+| comparisons.md, task-specs.json | `bin/analytics/post-ai-writing/PHASE2-analysis-plan.md` | `1bf3b3f3840cf46b25448ef470c7f8819ad955dac8215f847ed261ce7316b8e4` |
+| comparisons.md, task-specs.json | `bin/analytics/post-ai-writing/PHASE2-extraction-pilot.md` | `42ab8f48a30c4e4e68f9afde60585a6fc1ba687bbeb5fa83d965e9c4f21340fd` |
+| comparisons.md, task-specs.json | `bin/analytics/post-ai-writing/PHASE2-language-pilot.md` | `bcdff57623b1658688b72e4cd12e268567d1842a731b7ffcc1ab09ab75dfee5d` |
+| comparisons.md, task-specs.json | `bin/analytics/post-ai-writing/phase2-corpus-policy-v1.json` | `340245799f2c8ac7d0e5c537bfcf6b29c2fcf9fa0727432f5c531550a6a72cba` |
 | comparisons.md | `bin/analytics/post-ai-writing/phase2-research/corpus-review-20261107-v1/report-ja.md` | `9233076a9aaeeb2a34dae17e94591d1404d8d9684577dc18d2f0f334b8053dcd` |
-| comparisons.md、measurement-spec.md | `bin/analytics/post-ai-writing/phase2_sampling.py` | `b0e05aa334fc4ace96eac4092c43dad4c1228e145c305844316f3a6c592b30ab` |
-| comparisons.md、measurement-spec.md | `bin/analytics/post-ai-writing/phase2_lexical.py` | `7bcfef71e9b597c8ab84a2248a52107bbe3ef0922e756a17a0b0b5ea05de29f6` |
+| comparisons.md, measurement-spec.md | `bin/analytics/post-ai-writing/phase2_sampling.py` | `b0e05aa334fc4ace96eac4092c43dad4c1228e145c305844316f3a6c592b30ab` |
+| comparisons.md, measurement-spec.md | `bin/analytics/post-ai-writing/phase2_lexical.py` | `7bcfef71e9b597c8ab84a2248a52107bbe3ef0922e756a17a0b0b5ea05de29f6` |
 | comparisons.md | `bin/analytics/post-ai-writing/phase2_annotations.py` | `0ce79f6f21df3f0803f9856f96fed9285414d77ac5958c6a1346031806545854` |
-| comparisons.md、task-specs.json | `bin/analytics/post-ai-writing/phase2_comparisons.py` | `5599c112e0021e126bf197e0195890a74c0f7a1882e6a6e2ca62f58b8106eed8` |
-| comparisons.md、phase2-handoff.md | `bin/analytics/post-ai-writing/phase2-research/session-compute-20261113-v1/STATUS.md` | `ab8c5a40231e5d38ea04ff2aafbbf5a410fcb214cd49b6d61d0b3ba900fc0e82` |
+| comparisons.md, task-specs.json | `bin/analytics/post-ai-writing/phase2_comparisons.py` | `5599c112e0021e126bf197e0195890a74c0f7a1882e6a6e2ca62f58b8106eed8` |
+| comparisons.md, phase2-handoff.md | `bin/analytics/post-ai-writing/phase2-research/session-compute-20261113-v1/STATUS.md` | `ab8c5a40231e5d38ea04ff2aafbbf5a410fcb214cd49b6d61d0b3ba900fc0e82` |
 | comparisons.md | `bin/analytics/post-ai-writing/phase2-research/session-parent30-20261113-v4/STATUS.md` | `0082195d958ada574686ff0e011a0df14f793f28f548de98ceb5a7fe3b31c732` |
-| comparisons.md、phase2-handoff.md | `bin/analytics/post-ai-writing/phase2-research/session-s05-review-20261114-v1/item-decisions.json` | `79069af05bbcd484e0c17297fa172e6c6ab20eeae745b842c97d4aa67c8b9fd6` |
-| comparisons.md、task-specs.json | `bin/analytics/post-ai-writing/phase2-research/session-s05-review-20261114-v1/report-ja.md` | `4a8b6df3277210ce28644a4d4607f1ce6143ccc01bfba6122381ca90e498faf5` |
+| comparisons.md, phase2-handoff.md | `bin/analytics/post-ai-writing/phase2-research/session-s05-review-20261114-v1/item-decisions.json` | `79069af05bbcd484e0c17297fa172e6c6ab20eeae745b842c97d4aa67c8b9fd6` |
+| comparisons.md, task-specs.json | `bin/analytics/post-ai-writing/phase2-research/session-s05-review-20261114-v1/report-ja.md` | `4a8b6df3277210ce28644a4d4607f1ce6143ccc01bfba6122381ca90e498faf5` |
 | supplements.md | `bin/analytics/post-ai-writing/phase2-research/session-s06-enrichment-20261115-v1/supplement-20261116-v1/README.md` | `762ce6270109cf7d8dd860bdd65fdbecdc39b5f08ad216dbf858dbe52b9ec980` |
 | supplements.md | `bin/analytics/post-ai-writing/phase2-research/session-s06-enrichment-20261115-v1/supplement-20261116-v1/WORK-CONTRACT.md` | `22c3f5cec13704dafc5fca92dfa07e101fce2468cddc7131fa3d84787f8a3f3f` |
 | supplements.md | `bin/analytics/post-ai-writing/phase2-research/session-s06-enrichment-20261115-v1/supplement-20261116-v1/conditions/guide.md` | `5929bcf8f3ec4f3226ce1e58d3e1b66f9f0e1aeeca154fbf28af574d95851d09` |

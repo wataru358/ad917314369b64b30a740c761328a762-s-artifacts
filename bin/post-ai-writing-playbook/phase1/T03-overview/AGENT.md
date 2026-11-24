@@ -1,29 +1,29 @@
-# T03　対象統計と収録範囲
+# T03 Cohort statistics and coverage
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and [Phase 1 rules](../AGENT.md) before starting this task.
 
-## 目的
+## Purpose
 
-候補数・有効範囲・欠測・分布を説明する対象表と図を作る。
+Produce tables and figures that show candidate counts, valid coverage, missing data, and distributions.
 
-## 入力
+## Inputs
 
-- T00入力と抽出台帳
+- T00 input and extraction ledgers
 - T01 cohort.csv
-- T02記事、指標、metadata
+- T02 articles, metrics, and metadata
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream files from the upstream output_dir and manifest returned by workflow.py. Use paths from the current run.
 
-## 手順
+## Steps
 
-1. 全候補の日時、取得、言語状態、採否を結合し、欠行と重複を検査する。
-2. 採用記事のP/L/U/Sの和・中央値・分位・0を含む語数帯、日時可用性、同文・著者・タグ・組織の分母を集計する。
-3. UTC年月と四半期の全格子を作り、設定と取得証拠から完結、部分、未観測、不明を割り当てる。
-4. 図の実ファイルを開き、点と年ごとの分母・NAを元表から独立に照合する。
+1. Join dates, acquisition state, language state, and inclusion decisions for every candidate. Check for missing and duplicate rows.
+2. For included articles, aggregate P/L/U/S totals, medians, quantiles, and word-count bands including zero. Summarize date availability and denominators for identical text, authors, tags, and organizations.
+3. Build complete grids for UTC months and quarters. Use settings and acquisition evidence to classify them as complete, partial, unobserved, or unknown.
+4. Open the figure files and independently check points, yearly denominators, and NA values against the source tables.
 
-## 必要な出力
+## Required Outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs in the output_dir returned by the start command.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -34,24 +34,24 @@
 - `word-bands.csv`
 - `overview.svg`
 
-## 完了条件
+## Completion Criteria
 
-- C01　候補から採用までの記事数が保存則に合い、P/L/U/Sの語数・帯・分位を再計算できる。
-- C02　8年・96月・32四半期の観測状態と部分年が明示される。
-- C03　年・期間の件数と不明日付、既知著者、組織、タグ、重複の対象が区別される。
+- C01 Article counts reconcile from candidacy to inclusion. P/L/U/S word counts, bands, and quantiles can be recalculated.
+- C02 Coverage states for eight years, 96 months, and 32 quarters identify partial years explicitly.
+- C03 Year and period counts distinguish unknown dates, known authors, organizations, tags, and duplicate text.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before completion, have a different person independently verify the saved artifacts and definitions. Check the criteria, artifacts, and hashes in the receipt, then run workflow.py finish from the root. Completion requires the full task to pass after the pilot.
 
-## 参照する固定規則
+## Frozen Rules
 
 - [measurement-spec.md](../measurement-spec.md)
 - [analysis-methods.md](../analysis-methods.md)
 - [t03-settings.json](../references/t03-settings.json)
 
-## 混同しないこと
+## Pitfalls
 
-- 2025年の未観測月を0にしない。
-- DEV全体の投稿数と呼ばない。
-- 保存日の中央値を公開年に転用しない。
+- Keep unobserved months in 2025 distinct from months with zero articles.
+- Describe counts as counts for the archived cohort.
+- Derive publication years from publication dates.
 
-引継ぎは [phase1-handoff.md](phase1-handoff.md)。状態は[status.json](status.json)。
+See [phase1-handoff.md](phase1-handoff.md) for the handoff and [status.json](status.json) for the current state.

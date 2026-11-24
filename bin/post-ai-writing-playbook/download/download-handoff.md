@@ -1,16 +1,16 @@
-# ダウンロードの引継ぎ
+# Download handoff
 
-開始位置は、このパッケージのルートで `python3 workflow.py next` を実行して確認する。同じ `run_id` とプロファイルで続け、途中の成果物を別の設定で作り直さない。`status.json` の更新は `workflow.py` に任せる。
+Run `python3 workflow.py next` at the package root to find where to begin. Continue with the same `run_id` and profile and keep in-progress artifacts under their original settings. Use `workflow.py` to update `status.json`.
 
-| 見つかった状態 | 次に行うこと |
+| Current state | Next action |
 | --- | --- |
-| D01の索引走査が一部完了 | `manifest.paths.gz` と確定済みファイルキーを照合する。最初の未処理キーから走査を再開する。 |
-| D02が未着手 | D01の完了記録と `manifest.json` のハッシュを確かめる。固定順の先頭5件でWARCとHTMLの保存を確認する。 |
-| D02が処理途中 | 小分け実行の停止理由、`not_before`、未処理と再試行対象を読む。キャッシュ済みWARCを照合し、対象を追加せず続ける。 |
-| D03の計画が未確定 | 確定済み一覧ページの最後と下限到達の根拠を読む。ページ上限や権限が原因の場合は停止理由と再開条件を記録する。 |
-| D03の計画が確定済み | `plan.jsonl` のハッシュと取得台帳を照合する。次の未処理ID、または再試行対象IDから取得を続ける。 |
-| 必須成果物が読める | 別の検証担当が [取得仕様](download-spec.md) と現物を照合する。根拠ファイルのハッシュを完了レシートに含めて `workflow.py finish` を実行する。 |
+| D01 index scan is partially complete | Verify `manifest.paths.gz` against the committed file keys. Resume at the first unprocessed key. |
+| D02 is unstarted | Verify D01's completion record and `manifest.json` hash. Check WARC and HTML storage on the first five frozen candidates. |
+| D02 is in progress | Read the chunk stop reason, `not_before`, and the pending and retryable entries. Verify the cached WARC records and continue with the original candidate set. |
+| D03 plan is still open | Read the last committed listing page and evidence for reaching the lower date bound. If page limits or permissions blocked progress, record the reason and conditions for resuming. |
+| D03 plan is frozen | Verify the `plan.jsonl` hash against the acquisition ledger. Resume with the next unprocessed or retryable ID. |
+| Required artifacts can be read | Have an independent reviewer check the files against the [acquisition specification](download-spec.md). Include the evidence file hashes in the completion receipt and run `workflow.py finish`. |
 
-Phase 1のT00へ渡す入口はD02の `acquisitions.jsonl` と `manifest.json`。取得失敗の行にも候補IDと失敗理由がある。Phase 2の収録担当へ渡す入口はD03の `plan.jsonl`、`responses.jsonl`、`manifest.json`。一覧で得た公開日時、個別応答の取得日時、本文の保存可否を読めるようにする。
+Pass D02's `acquisitions.jsonl` and `manifest.json` to Phase 1 T00. Failed acquisitions also carry their candidate IDs and failure reasons. Pass D03's `plan.jsonl`, `responses.jsonl`, and `manifest.json` to the Phase 2 corpus task. Make the publication time from the listing, the retrieval time of the detail response, and the body storage outcome accessible.
 
-中断を引き継ぐときは `run_id`、プロファイル、タスク、確定済みの成果物とハッシュ、次のファイルキーまたはID、停止理由、待機期限を記す。外部要因で再開できない場合は、失敗した操作と復帰条件を残す。取得が済んだ件数と、後工程で採用された件数は別欄で報告する。
+When handing off interrupted work, record the `run_id`, profile, task, committed artifacts and hashes, next file key or ID, stop reason, and wait deadline. If an external dependency prevents resumption, record the failed action and conditions for recovery. Report acquisition counts and downstream inclusion counts in separate fields.

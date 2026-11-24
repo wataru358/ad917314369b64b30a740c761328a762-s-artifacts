@@ -1,11 +1,11 @@
-# A11 の引継ぎ
+# A11 Handoff
 
-初期状態は未着手。過去の研究の完了を引き継いだものではない。
+This task starts with status `not_started`. Record completion for this run only.
 
-最初の操作は、この末端のAGENT.mdとstatus.jsonを読み、ルートで `python3 workflow.py start A11 --owner <担当ID>` を実行すること。依存が未完了なら先行作業へ戻る。
+First read this task's `AGENT.md` and `status.json`. From the project root, run `python3 workflow.py start A11 --owner <owner-id>`. If any dependencies are incomplete, return to those tasks first.
 
-V01/R01へ機械と内容の別表、支持不能の範囲と絶対/相対位置の反例を渡す。再評価が未実行なら必須未処理にする。
+Pass separate automated and content tables, unsupported scopes, and counterexamples about absolute versus relative position to V01 and R01. Mark any outstanding reevaluation as required work.
 
-## 再開記録
+## Progress Log
 
-実行した担当がここへ追記する。担当ID、run_id、attempt、出力先、固定入力とhash、checkpoint、完了した操作、未完了、阻害、次の一コマンドを残す。同じattemptへ戻るときは進捗を消さず追記する。
+The task owner appends their owner ID, `run_id`, `attempt`, output location, frozen inputs and their hashes, checkpoint, completed work, pending work, blockers, and the next command. Append to the existing log when resuming the same attempt.

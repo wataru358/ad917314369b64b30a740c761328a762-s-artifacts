@@ -1,28 +1,28 @@
-# A05　書き手の声と呼びかけ
+# A05 Author Voice and Direct Address
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and the [branch rules](../AGENT.md) before starting this task.
 
-## 目的
+## Purpose
 
-Pの代名詞、短縮形、接続表現、句読記号を辞書で測る。
+Measure pronouns, contractions, connective expressions, and punctuation in P using a dictionary.
 
-## 入力
+## Inputs
 
-- T03対象
-- T02 P単位、文、token、author ID
+- T03 cohort
+- T02 P units, sentences, tokens, and author IDs
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream input files from the `output_dir` and manifest that `workflow.py` returns for each dependency. Use those locations for inputs in this run.
 
-## 手順
+## Steps
 
-1. 同梱辞書を凍結してP内の語形・句とP段落冒頭を走査する。
-2. 年・期間・語数帯別の使用割合、千P語の密度、条件付き密度、記事語数0の状態を集計する。
-3. 固定抜粋でUS、we、you、引用、短縮形の解釈を点検する。
-4. 辞書マッチと分母・クラスタ再抽出・図の数字を別実装と照合する。
+1. Freeze the bundled dictionary and scan P for word forms and phrases, including paragraph openings.
+2. Summarize the share of articles using each form, density per 1,000 P words, conditional density, and zero-word status by year, period, and word-count band.
+3. Audit interpretations of US, we, you, quotations, and contractions against fixed excerpts.
+4. Check dictionary matches, denominators, cluster resampling, and plotted values against an independent implementation.
 
-## 必要な出力
+## Required Outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs in the `output_dir` returned by `start`.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -33,23 +33,23 @@ Pの代名詞、短縮形、接続表現、句読記号を辞書で測る。
 - `voice-audit.json`
 - `voice.svg`
 
-## 完了条件
+## Completion Criteria
 
-- C01　全記事の語形計数、使用記事率、全記事と使用記事の密度の分母が別に出る。
-- C02　曖昧な人称と短縮形を盲検抜粋で点検し、辞書は結果前に固定される。
-- C03　単数一人称と短縮形の千P語値をT02 IDへ一意に戻せる。
+- C01 Word-form counts for all articles, the share of articles using each form, and density denominators for all articles and articles using the form are reported separately.
+- C02 Ambiguous pronouns and contractions are checked in blinded excerpts, and the dictionary is frozen before results are examined.
+- C03 First-person singular and contraction rates per 1,000 P words can be mapped unambiguously to T02 IDs.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before marking this task complete, have another reviewer independently check the saved outputs and definitions. Verify the receipt criteria, artifacts, and hashes, then record completion with `workflow.py finish` from the project root. Completion requires the full run.
 
-## 参照する固定規則
+## Frozen Rules
 
 - [measurement-spec.md](../measurement-spec.md)
 - [analysis-methods.md](../analysis-methods.md)
 - [a05-settings.json](../references/a05-settings.json)
 
-## 混同しないこと
+## Interpretation
 
-- Iを個人経験の計数にしない。
-- 語形一致をAI使用と読まない。
+- Treat matches for I as word-form counts. Use content evidence to assess personal experience.
+- Interpret word-form matches as linguistic features. They provide no evidence of AI use on their own.
 
-引継ぎは [phase1-handoff.md](phase1-handoff.md)。状態は[status.json](status.json)。
+See [phase1-handoff.md](phase1-handoff.md) for the handoff and [status.json](status.json) for the current status.

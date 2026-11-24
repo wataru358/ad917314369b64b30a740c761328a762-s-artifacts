@@ -1,31 +1,31 @@
-# P2-S02　新集合の全文採否を固定する
+# P2-S02 Lock full-text inclusion decisions for the new corpus
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and [branch rules](../AGENT.md) before starting this task.
 
-## 目的
+## Objective
 
-固定planの全IDに結果を付け、採用した2026年の英語IDと抽出本文を確定する。
+Record an outcome for every ID in the fixed plan and finalize the accepted English-language 2026 IDs and their extracted prose.
 
-## 入力
+## Inputs
 
-- S01のinput-index.json、plan.json、pilot-plan.json
-- 索引されたD03原応答、HTML、Markdown
-- 索引されたT00抽出規則、T01言語規則
+- S01's input-index.json, plan.json, and pilot-plan.json
+- Indexed D03 raw responses, HTML, and Markdown
+- Indexed T00 extraction rules and T01 language rules
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream files using the upstream output_dir and manifest returned by workflow.py. Use paths resolved from the current run instead of absolute paths from earlier conversations.
 
-## 手順
+## Steps
 
-1. 固定plan順で原応答のID、UTC、hashを照合する。HTMLから旧と同じ抽出器でP/L/U、本文順、見出し、太字、DOM対応、警告を保存する。失敗した記事も理由付きで記録する。
-2. 固定のpilotを実行する。180文字未満の構造診断やMarkdownのみを採用除外条件にしない。Markdownの無断代用を避ける。
-3. 旧機械規則でS、P、L、Sの1,200文字区間を採点する。スコアと分けて、機械状態にかかわらず全件のSを内容で読む。既確認のpilot行は同一本文hashを確認して再利用する。残りは最大25件ずつ進める。
-4. 全文を読み、本文ラベルと証拠を封印する。その後、対応スコアだけを開く。バッチの範囲、時刻、判定担当、ハッシュを索引にする。確認後に閾値を変えない。
-5. 混在・不明を保留とし、非英語、本文なし、取得不能を分ける。広告、短さ、技術性は除外条件にしない。訂正は根拠、日時、開示済みフラグ、原記録hashとともに追記する。
-6. 全件の採否と構造、planと原応答の結合を独立に確認する。既存runと同じ入力を使ったか、再収録・再判定したかを報告する。
+1. Verify raw response IDs, UTC timestamps, and hashes in fixed plan order. Apply the earlier HTML extractor and save P/L/U, prose order, headings, bold spans, DOM mappings, and warnings. Record failures with reasons.
+2. Run the fixed pilot. Keep items eligible when they fall into the structural diagnostic for text under 180 characters or have only Markdown. Avoid substituting Markdown without authorization.
+3. Apply the earlier automated scoring rules to S, P, L, and 1,200-character sections of S. Review all S content independently of the scores and automated status. Reuse completed pilot rows after confirming identical text hashes. Process the remaining items in batches of up to 25.
+4. Read the full text and seal the content labels and evidence. Then open only the corresponding scores. Index batch ranges, timestamps, reviewers, and hashes. Keep the thresholds fixed after review.
+5. Hold mixed and uncertain results. Record non-English content, missing prose, and unavailable responses separately. Keep ads, short texts, and technical texts eligible. Append corrections with evidence, timestamp, the score disclosure flag, and the original record hash.
+6. Independently check every inclusion decision and structure record and verify the join between the plan and raw responses. Report which inputs were reused and whether corpus intake and decisions were repeated.
 
-## 必要な出力
+## Required outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs under the output_dir returned by start.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -35,24 +35,24 @@
 - `summary.json`
 - `language-review-index.json`
 
-## 完了条件
+## Completion criteria
 
-- C01　全plan IDが計画順にrecordsとdecisionsへ1回ずつ現れ、状態別件数が総数と一致する。
-- C02　英語集合が台帳のaccept_englishと一致する。保留、本文なし、取得不能は台帳に残る。
-- C03　本文と根拠を原応答へ戻せる。ラベルの封印後に対応スコアを開示した証拠と、原判断を保つ訂正記録が読める。
-- C04　校正、診断、未使用確認、全件の範囲を区別し、独立確認が実物の抽出位置・結合・採否・来歴を照合する。
+- C01 Every plan ID appears once in records and once in decisions, in plan order. Counts by status sum to the total.
+- C02 The English corpus matches the ledger's accept_english entries. Retain held items, missing prose, and unavailable responses in the ledger.
+- C03 Trace text and evidence to the raw responses. Preserve proof that the corresponding scores were disclosed after the labels were sealed and retain the original decisions in the correction history.
+- C04 Distinguish calibration, diagnostics, unused confirmation samples, and full-corpus review. Independently check actual extraction locations, joins, inclusion decisions, and provenance.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before completion, have a separate reviewer independently check the saved outputs and definitions. Verify the receipt criteria, artifacts, and hashes, then apply the receipt with workflow.py finish from the root. Completion requires the full work after the pilot.
 
-## 参照する固定規則
+## Fixed reference rules
 
 - [measurement-spec.md](../measurement-spec.md)
 - [settings.json](../settings.json)
 - [comparisons.md](../comparisons.md)
 
-## 混同しないこと
+## Interpretation
 
-- 抽出Sの言語と元記事全体の言語は別の範囲。
-- 元runの8,942採用、220保留、7訂正は比較用の履歴。
+- The extracted S text and the complete original article have different language assessment scopes.
+- The original run's 8,942 acceptances, 220 holds, and 7 corrections are historical comparison figures.
 
-引継ぎは [phase2-handoff.md](phase2-handoff.md)。状態は[status.json](status.json)。
+See [phase2-handoff.md](phase2-handoff.md) for the handoff and [status.json](status.json) for status.

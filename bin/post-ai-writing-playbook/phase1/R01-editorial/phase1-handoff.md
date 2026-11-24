@@ -1,11 +1,11 @@
-# R01 の引継ぎ
+# R01 Handoff
 
-初期状態は未着手。過去の研究の完了を引き継いだものではない。
+The initial state is pending. Prior research provides provenance for this run.
 
-最初の操作は、この末端のAGENT.mdとstatus.jsonを読み、ルートで `python3 workflow.py start R01 --owner <担当ID>` を実行すること。依存が未完了なら先行作業へ戻る。
+First read AGENT.md and status.json for this task, then run `python3 workflow.py start R01 --owner <owner-id>` from the root. If a dependency is incomplete, return to the prerequisite task.
 
-新runの成果物とPhase 2入力indexを渡す。CLIで全体statusを同期・検査する。
+Pass the new run's outputs and the Phase 2 input index downstream. Synchronize and validate overall status with the CLI.
 
-## 再開記録
+## Resume Log
 
-実行した担当がここへ追記する。担当ID、run_id、attempt、出力先、固定入力とhash、checkpoint、完了した操作、未完了、阻害、次の一コマンドを残す。同じattemptへ戻るときは進捗を消さず追記する。
+The operator adds the owner ID, run_id, attempt, output directory, frozen inputs and hashes, checkpoint, completed operations, outstanding work, blockers, and the next command. Append updates when resuming the same attempt so earlier progress stays recorded.

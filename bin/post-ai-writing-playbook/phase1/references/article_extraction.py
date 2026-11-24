@@ -1,4 +1,4 @@
-"""DEV article-body の構造と文章を、監査できる形で分けて抽出する。"""
+"""Extract DEV article-body structure and prose separately for auditability."""
 
 from __future__ import annotations
 
@@ -128,7 +128,7 @@ def _toc(node: etree._Element) -> bool:
         set(node.get("class", "").lower().split()) & {"toc", "table-of-contents"}
     )
     marker |= node.get("role", "").lower() in {"navigation", "doc-toc"}
-    # 見出しの目次という文字や単独のアンカーは本文なので、リストを持つ容器だけを除外する。
+    # Treat TOC headings and standalone anchors as body content. Exclude only containers that hold lists.
     return (
         marker
         and tag in {"nav", "div", "section", "aside", "ul", "ol"}
@@ -170,7 +170,7 @@ def _remove_preserving_tail(node: etree._Element) -> None:
     prev = node.getprevious()
     left = parent.text if prev is None else prev.tail
     tail = node.tail or ""
-    # 削除したUIの位置に区切りを残す。空のspanや後続インライン要素を挟んでも語を接着させない。
+    # Leave a separator where UI was removed, including before empty spans and subsequent inline elements.
     boundary = " "
     if prev is None:
         parent.text = (left or "") + boundary + tail
@@ -237,7 +237,7 @@ def _clean(
     stack = [root]
     while stack:
         node = stack.pop()
-        # HTMLコメントは要素でも表示テキストでもない。tailは親の走査で保持する。
+        # Skip HTML comments as elements and visible text. The parent traversal retains their tails.
         if not _tag(node):
             continue
         if node is not root:
@@ -344,7 +344,7 @@ def _projection(
                 boundary()
             else:
                 visit(child, inside_li or is_li)
-            # tail は子の所有物ではなく親の文章。除外した code 等の後でも一度だけ読む。
+            # The parent owns the tail. Read it once, including after an excluded child such as code.
             add(child.tail)
         if block:
             flush()
@@ -528,7 +528,7 @@ def extract_article(html_bytes: bytes, *, content_type: str | None = None) -> Re
             decoded = html_bytes.decode(encoding)
         except UnicodeDecodeError:
             decoded = html_bytes.decode(encoding, errors="replace")
-            # 元からあるU+FFFDはエラーではない。デコーダが追加した置換だけを数える。
+            # Count only replacement characters inserted by the decoder. Ignore existing U+FFFD characters.
             surviving = html_bytes.decode(encoding, errors="ignore")
             replacements = decoded.count("\ufffd") - surviving.count("\ufffd")
     except (LookupError, ValueError):

@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "T02",
-      "title": "分割・特徴量・メタデータ",
-      "description": "分割・特徴量・メタデータ",
+      "title": "Segmentation, features, and metadata",
+      "description": "Segmentation, features, and metadata",
       "priority": 6,
       "status": "not_started",
       "passes": false,
@@ -20,22 +20,22 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "採用記事1件につき記事とmetadataが一行、主指標が六行ある。",
+          "criterion": "Each included article has one article row, one metadata row, and six primary metric rows.",
           "met": false
         },
         {
           "id": "C02",
-          "criterion": "S=P+L+U、文・語オフセット、太字重複除去と分母、既知著者IDが独立読取と一致する。",
+          "criterion": "S=P+L+U, sentence and word offsets, bold deduplication and denominators, and known author IDs agree with an independent reading.",
           "met": false
         },
         {
           "id": "C03",
-          "criterion": "合成例・固定標本・v2メタデータの根拠を検査し、0、NA、使用なし、投影失敗を区別する。",
+          "criterion": "Checks cover synthetic examples, fixed samples, and the evidence for v2 metadata. They distinguish zero, NA, no use, and projection failure.",
           "met": false
         },
         {
           "id": "C04",
-          "criterion": "下流側が固定コード・fixtureとデータスキーマを再利用できる。",
+          "criterion": "Downstream tasks can reuse the frozen code, fixtures, and data schema.",
           "met": false
         }
       ],

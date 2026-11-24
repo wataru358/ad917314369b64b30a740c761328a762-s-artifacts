@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "A03",
-      "title": "リスト・太字・見出し",
-      "description": "リスト・太字・見出し",
+      "title": "Lists, Bold Text, and Headings",
+      "description": "Lists, Bold Text, and Headings",
       "priority": 10,
       "status": "not_started",
       "passes": false,
@@ -20,17 +20,17 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "M05/M06の年等重み点差・区間、および構造の有無と条件付き強度が再計算できる。",
+          "criterion": "The equally year-weighted estimates and intervals for M05/M06, structural presence, and conditional intensity can be recalculated.",
           "met": false
         },
         {
           "id": "C02",
-          "criterion": "各領域のS語・L語・太字語・太字区間のカウントが一致する。",
+          "criterion": "Counts of S words, L words, bold words, and bold spans agree for each region.",
           "met": false
         },
         {
           "id": "C03",
-          "criterion": "空領域、S=0、構造なし、投影失敗と例示の役割が区別される。",
+          "criterion": "Empty regions, S=0, absent structures, projection failures, and the role of illustrative examples are distinguishable.",
           "met": false
         }
       ],

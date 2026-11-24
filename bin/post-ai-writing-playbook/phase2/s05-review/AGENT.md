@@ -1,29 +1,29 @@
-# P2-S05　18項目の算術と主張の範囲を検証する
+# P2-S05 Verify the arithmetic and scope of claims for 18 items
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and [branch rules](../AGENT.md) before starting this task.
 
-## 目的
+## Objective
 
-保存値に対し、測定と比較が支える範囲を判断する。判断と根拠を追跡可能にする。
+Determine what the measurements and comparisons support using the saved values. Make decisions and evidence traceable.
 
-## 入力
+## Inputs
 
-- S04の比較、記事値、判定、分母、診断と独立readback
-- S03の対象、設定、標本、入力ハッシュ
+- S04 comparisons, article values, assessments, denominators, diagnostics, and independent readback
+- S03 cohort, settings, samples, and input hashes
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream files using the upstream output_dir and manifest returned by workflow.py. Use paths resolved from the current run instead of absolute paths from earlier conversations.
 
-## 手順
+## Steps
 
-1. 対象manifestと比較の全キーを照合する。再利用したS04の検算と、この工程で実施した照合を区別する。既存比較から分母・月支持・有効反復・補正・NA理由を取り出す。
-2. 固定感度を全行つないで、方向、母集団変更、支持不足、適用外を区別する。品質標本のbaseline・表示エラー・広告・署名×M6も理由付きで残す。
-3. 合議参照の有無、分割の手数え差、太字の出典、V03/X01/X03の正負支持を確認する。X02は固定標本のE/G別に、有無、語率、判定可能数、一致・κ、不明範囲を点検する。
-4. VのF/R/A、著者実数、Q、条件非再現を確認する。C01は元尺度4点の外挿、範囲外、backtest、感度を照合する。取得・生存・編集・話題差が残る箇所を示す。
-5. 18項目を限定採用、保留、判断不能から根拠で決める。観測された自動値と測定妥当性を分け、各項目に許容文と証拠の位置を付ける。別担当が根拠と記述を検証する。
+1. Check the cohort manifest and all comparison keys. Distinguish reused S04 recalculations from checks performed at this stage. Extract denominators, monthly support, valid replicates, corrections, and NA reasons from the saved comparisons.
+2. Join all fixed sensitivity rows and distinguish direction, changes in population, insufficient support, and inapplicability. Keep the quality sample's baseline, display-error, advertising, and signature comparisons across all six M metrics, with reasons.
+3. Check for consensus references, manual segmentation count differences, bold provenance, and positive and negative support for V03, X01, and X03. For each of E and G in the fixed X02 sample, check presence, word rate, assessable counts, agreement and κ, and the uncertainty range due to unknown labels.
+4. Check F/R/A, raw author counts, Q, and unmet replication conditions for V. For C01, check the four-point extrapolation on the original scale, out-of-domain values, backtests, and sensitivities. Identify remaining differences in acquisition, survival, editing, and topic composition.
+5. Use evidence to assign each of the 18 items limited acceptance, hold, or indeterminate. Distinguish observed automated values from measurement validity. Record permissible wording and evidence locations for every item. Have a separate reviewer verify the evidence and wording.
 
-## 必要な出力
+## Required outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs under the output_dir returned by start.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -32,24 +32,24 @@
 - `evidence-index.json`
 - `independent-review.json`
 
-## 完了条件
+## Completion criteria
 
-- C01　M6、V01/V02とV03の5系列、X01、X02 E/G、X03、C01の18判断が重複なくあり、全比較キーと固定感度へたどれる。
-- C02　各判断の数値、分母、不確かさ、内容検証、代替説明、許容文がそろう。NAとunknownの両方に理由が読める。
-- C03　X02の固定標本差・unknown範囲、V02条件未達、品質24比較、C01の6指標とbacktestが脱落しない。
-- C04　独立担当が保存値と記述を照合し、指摘・修正・再検証を保存する。終了は全項目を確認し判断を残したことを示す。
+- C01 Retain exactly 18 decisions covering the six M metrics, V01/V02, five V03 series, X01, X02 E/G, X03, and C01. Link them to all comparison keys and fixed sensitivities.
+- C02 Provide values, denominators, uncertainty, content verification, alternative explanations, and permissible wording for each decision. Give reasons for NA and unknown values.
+- C03 Retain X02 fixed-sample differences and bounds due to unknown labels, unmet V02 criteria, all 24 quality comparisons, and the six C01 metrics and backtests.
+- C04 Have an independent reviewer check the saved values against the wording. Save findings, corrections, and verification of corrections. Completion requires checking every item and saving its decision.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before completion, have a separate reviewer independently check the saved outputs and definitions. Verify the receipt criteria, artifacts, and hashes, then apply the receipt with workflow.py finish from the root. Completion requires the full work after the pilot.
 
-## 参照する固定規則
+## Fixed reference rules
 
 - [comparisons.md](../comparisons.md)
 - [phase2-handoff.md](../phase2-handoff.md)
 - [measurement-spec.md](../measurement-spec.md)
 
-## 混同しないこと
+## Interpretation
 
-- 元runの限定採用2、保留14、判断不能2は履歴。新runの判断の割当には使わない。
-- 全compute・bootstrapの再実行は、既存照合で足りない具体的な不一致の調査に限る。
+- The original run's 2 limited acceptances, 14 holds, and 2 indeterminate decisions are historical. Assign the new run's decisions from its own evidence.
+- Rerun the full calculation and bootstrap only to investigate a specific discrepancy that the existing checks cannot resolve.
 
-引継ぎは [phase2-handoff.md](phase2-handoff.md)。状態は[status.json](status.json)。
+See [phase2-handoff.md](phase2-handoff.md) for the handoff and [status.json](status.json) for status.

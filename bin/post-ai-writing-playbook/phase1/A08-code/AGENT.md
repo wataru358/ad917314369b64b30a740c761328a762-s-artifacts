@@ -1,29 +1,29 @@
-# A08　コードと近接散文
+# A08 Code and Nearby Prose
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and the [branch rules](../AGENT.md) before starting this task.
 
-## 目的
+## Purpose
 
-コード量・言語ラベル・見出し内の前後散文を別々に測る。
+Measure the amount of code, language labels, and prose before and after code within a heading section.
 
-## 入力
+## Inputs
 
-- T03対象
-- T00抽出body_html
-- T02 S語、DOMイベント、metadata
+- T03 cohort
+- T00 extracted body_html
+- T02 S words, DOM events, and metadata
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream input files from the `output_dir` and manifest that `workflow.py` returns for each dependency. Use those locations for inputs in this run.
 
-## 手順
+## Steps
 
-1. 固定12例でpre、highlight、inline、未知言語ラベル、隣接コード、見出し境界を確認する。
-2. 全記事のブロックとinline量、明示クラス、状態を保存する。
-3. 同一区間の前後散文を対応付け、元Sと照合し、再利用フラグを付ける。
-4. 同梱の集計・区間閾値で計算し、元HTML・分母・位置・図を独立照合する。
+1. Use 12 fixed examples to check pre, highlighted blocks, inline code, unknown language labels, adjacent code, and heading boundaries.
+2. Save block and inline code counts and sizes, explicit classes, and statuses for all articles.
+3. Match preceding and following prose within the same section, check it against the original S, and flag reused matches.
+4. Apply the bundled aggregation and interval thresholds, then independently check the original HTML, denominators, positions, and figure.
 
-## 必要な出力
+## Required Outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs in the `output_dir` returned by `start`.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -35,24 +35,24 @@
 - `code-audit.json`
 - `code.svg`
 
-## 完了条件
+## Completion Criteria
 
-- C01　ブロックとinlineの二重計数がなく、元順序と前後対応、状態ごとの分母を復元できる。
-- C02　12例の固定診断があり、0と非対応と投影失敗を判別する。
-- C03　全22指標の集計と指定12の区間、層別の不成立が残る。
+- C01 Code blocks and inline code are counted once, and the original order, adjacent prose matches, and denominators for each status can be reconstructed.
+- C02 The 12 fixed diagnostic cases are recorded, with zero, no match, and projection failure distinguishable.
+- C03 Aggregates for all 22 metrics, intervals for the 12 specified metrics, and any strata with insufficient support are retained.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before marking this task complete, have another reviewer independently check the saved outputs and definitions. Verify the receipt criteria, artifacts, and hashes, then record completion with `workflow.py finish` from the project root. Completion requires the full run.
 
-## 参照する固定規則
+## Frozen Rules
 
 - [measurement-spec.md](../measurement-spec.md)
 - [analysis-methods.md](../analysis-methods.md)
 - [a08-code-rules.md](../references/a08-code-rules.md)
 - [a08-aggregation.json](../references/a08-aggregation.json)
 
-## 混同しないこと
+## Interpretation
 
-- コードありとblockあり、可視文字比とS語数あたり文字長は区別する。
-- 言語不明を推定で埋めない。
+- Distinguish the presence of any code from the presence of a code block and keep the visible-character share separate from code characters per S word.
+- Preserve unknown language labels as unknown.
 
-引継ぎは [phase1-handoff.md](phase1-handoff.md)。状態は[status.json](status.json)。
+See [phase1-handoff.md](phase1-handoff.md) for the handoff and [status.json](status.json) for the current status.

@@ -2,13 +2,13 @@
   {
     "id": "T00",
     "directory": "T00-freeze",
-    "title": "入力と実行条件を固定",
+    "title": "Freeze the inputs and execution conditions",
     "dependencies": [
       "D02"
     ],
-    "goal": "候補集合、元HTML、抽出規則、実行環境を固定し、全候補の抽出台帳を作る。",
+    "goal": "Freeze the candidate set, source HTML, extraction rules, and execution environment, then create an extraction ledger for all candidates.",
     "inputs": [
-      "D02 acquisitions.jsonl、manifest、summary、verification、成功行のHTML"
+      "D02 acquisitions.jsonl, manifest, summary, verification, and HTML for successful rows"
     ],
     "outputs": [
       "report.md",
@@ -22,16 +22,16 @@
       "pilot.json"
     ],
     "acceptance_criteria": [
-      "候補IDは一意で、全取得状態とHTMLハッシュがD02と一致する。",
-      "5候補probeと合成負例で取得失敗・抽出失敗・空Sを区別できる。",
-      "全候補の抽出状態があり、不明の捨て行がない。コード・環境・設定のSHA-256を再照合できる。"
+      "Candidate IDs are unique, and all acquisition states and HTML hashes match D02.",
+      "The five-candidate probe and synthetic negative cases distinguish acquisition failures, extraction failures, and empty S.",
+      "Every candidate has an extraction state, and all exclusions are accounted for. SHA-256 hashes for the code, environment, and configuration can be verified again."
     ],
     "steps": [
-      "D02の合格済み試行へ読み取り専用で接続し、候補ID・URL・日付・HTML参照と出典を台帳に写す。",
-      "同梱の抽出器をextract.pyとして凍結し、Python、lxml、libxmlとロケール・UTC設定、依存導入手順を記録する。",
-      "D02固定5候補で小規模抽出し、body selectorと元HTML対応を独立確認する。",
-      "同じコードで全候補を抽出する。成功、取得失敗、本文欠落・曖昧、復号・解析失敗を記録し、空Sは成功内に残す。",
-      "入力とシャードのSHA-256、一意性、ID集合、境界ケースを別実装で判定する。"
+      "Connect to the accepted D02 attempt in read-only mode. Copy candidate IDs, URLs, dates, HTML references, and sources into the ledger.",
+      "Freeze the bundled extractor as extract.py. Record Python, lxml, libxml, locale and UTC settings, and dependency installation instructions.",
+      "Run a small extraction on the five fixed D02 candidates. Independently check the body selector and its correspondence to the source HTML.",
+      "Apply the same code to every candidate. Record success, acquisition failure, missing or ambiguous body, and decoding or parsing failure. Keep empty S among the successful extractions.",
+      "Use an independent implementation to check input and shard SHA-256 hashes, uniqueness, the ID set, and edge cases."
     ],
     "references": [
       "../measurement-spec.md",
@@ -39,22 +39,22 @@
       "../references/article_extraction.py"
     ],
     "pitfalls": [
-      "固定件数や旧run IDを採否に使わない。",
-      "候補失敗を欠行にしない。",
-      "5件で止めた試行は完了にしない。"
+      "Use the current run's criteria for inclusion independently of historic counts and run IDs.",
+      "Keep a row for every failed candidate.",
+      "Leave attempts that stop after five candidates in progress."
     ],
-    "handoff": "T01へ全候補台帳、抽出結果、probeとコードのハッシュを渡す。途中からは一致するシャードを再利用する。"
+    "handoff": "Pass the full candidate ledger, extraction results, probe, and code hashes to T01. Reuse matching shards when resuming partway through."
   },
   {
     "id": "T01",
     "directory": "T01-english",
-    "title": "本文言語判定と英語集合",
+    "title": "Body language classification and English cohort",
     "dependencies": [
       "T00"
     ],
-    "goal": "全候補に状態を与え、本文の英語と公開UTC年で分析集合を固定する。",
+    "goal": "Assign a status to every candidate and freeze the analysis cohort based on English body text and UTC publication year.",
     "inputs": [
-      "T00 extraction.jsonl、input-ledger.csv、pilot.jsonおよび元D02出典"
+      "T00 extraction.jsonl, input-ledger.csv, pilot.json, and original D02 sources"
     ],
     "outputs": [
       "report.md",
@@ -68,16 +68,16 @@
       "language-review.json"
     ],
     "acceptance_criteria": [
-      "候補と同数の一意な言語・採否行があり、UTC境界と全状態の件数が合う。",
-      "盲検校正・検証・診断を分け、凍結順序、標本不足、手動補正の証拠を保存した。",
-      "採用対象に非英語・判定不能・期間外が流入せず、短文・同文は残る。"
+      "There is exactly one language and inclusion row per candidate. UTC boundaries and counts for all states reconcile.",
+      "Blinded calibration, validation, and diagnostics are separate. The freeze order, sample shortfalls, and evidence for manual overrides are saved.",
+      "The cohort excludes non-English, indeterminate, and out-of-period articles and retains short and identical articles."
     ],
     "steps": [
-      "同梱language_rules.pyをlanguage-rules.pyとして凍結し、Lingua全75言語を固定する。T00のprobe記事でS/P/Lと1200文字区間の保存と再読取を確認する。",
-      "各年の校正20、検証10と別枠診断をhashで固定する。校正と診断は閾値0.70と0.30を固定する際の品質確認に使う。",
-      "全候補を自動採点し、校正・診断の根拠付き全文判定だけを別列の手動補正にする。盲検検証の結果を保存する。",
-      "英語状態でUTC公開年が2018〜2025の候補だけadopted=trueとする。対象外・欠時刻・mixed・空・利用不能の行を残す。",
-      "独立検証で候補別ハッシュ、S区間の完全被覆とラベル、UTC年、標本・採否の集計を再計算する。"
+      "Freeze the bundled language_rules.py as language-rules.py and lock all 75 Lingua languages. Use T00 probe articles to verify that S, P, L, and 1,200-character spans can be saved and read back.",
+      "Select 20 calibration and 10 validation examples per year and a separate diagnostic sample by hash. Use calibration and diagnostics to check quality when freezing the 0.70 and 0.30 thresholds.",
+      "Score every candidate automatically. Store manual overrides in a separate column only for evidence-backed full-text decisions from calibration or diagnostics. Save the blinded validation results.",
+      "Set adopted=true only for English candidates with a UTC publication year from 2018 through 2025. Retain rows that are out of scope, missing a timestamp, mixed, empty, or unavailable.",
+      "Independently recalculate candidate hashes, complete S span coverage and labels, UTC years, and sample and inclusion totals."
     ],
     "references": [
       "../measurement-spec.md",
@@ -85,24 +85,24 @@
       "../references/language_rules.py"
     ],
     "pitfalls": [
-      "html lang・CC言語・タグは判定器の代わりにしない。",
-      "英語主体mixedは候補に留める。",
-      "手動補正で検証群を底上げしない。"
+      "Use html lang, CC language, and tags as hints only.",
+      "Keep English-dominant mixed articles as candidates only.",
+      "Evaluate the validation group independently of manual overrides."
     ],
-    "handoff": "T02へcohort.csvと凍結済み抽出・言語証拠のハッシュを渡す。支持不足は証拠とともに残す。"
+    "handoff": "Pass cohort.csv and hashes of the frozen extraction and language evidence to T02. Record insufficient support with its evidence."
   },
   {
     "id": "T02",
     "directory": "T02-features",
-    "title": "分割・特徴量・メタデータ",
+    "title": "Segmentation, features, and metadata",
     "dependencies": [
       "T01"
     ],
-    "goal": "同じ本文投影から語・文・太字・見出し・メタデータを測り、六主指標と副指標を凍結する。",
+    "goal": "Measure words, sentences, bold spans, headings, and metadata from the same body projection, and freeze the six primary metrics and secondary metrics.",
     "inputs": [
-      "T01 cohort.csv、language-review",
-      "T00 extraction.jsonl と frozen extract.py",
-      "D02保存HTML"
+      "T01 cohort.csv and language-review",
+      "T00 extraction.jsonl and frozen extract.py",
+      "HTML archived by D02"
     ],
     "outputs": [
       "report.md",
@@ -120,17 +120,17 @@
       "calibration.json"
     ],
     "acceptance_criteria": [
-      "採用記事1件につき記事とmetadataが一行、主指標が六行ある。",
-      "S=P+L+U、文・語オフセット、太字重複除去と分母、既知著者IDが独立読取と一致する。",
-      "合成例・固定標本・v2メタデータの根拠を検査し、0、NA、使用なし、投影失敗を区別する。",
-      "下流側が固定コード・fixtureとデータスキーマを再利用できる。"
+      "Each included article has one article row, one metadata row, and six primary metric rows.",
+      "S=P+L+U, sentence and word offsets, bold deduplication and denominators, and known author IDs agree with an independent reading.",
+      "Checks cover synthetic examples, fixed samples, and the evidence for v2 metadata. They distinguish zero, NA, no use, and projection failure.",
+      "Downstream tasks can reuse the frozen code, fixtures, and data schema."
     ],
     "steps": [
-      "同梱segmentation.pyと固定対照を保存し、P/L/U単位・所有ブロック・文・語をUnicodeオフセットで投影する。",
-      "5候補から採用分を試し、採用例不足は合成fixtureで補う。固定標本を年を伏せて読み、文境界、語、組織と著者の根拠を診断する。",
-      "SHA確認の済んだ採用全記事で元DOM順とS語を照合し、H、太字、リスト、コード位置、六主指標、MATTR等の副指標を保存する。",
-      "t02_metadata_v2.pyの規則で単一数値著者、タグ、組織、種別cueと出典を保存する。t02-strata-map.jsonをtopic-map.jsonとして凍結する。",
-      "別検証でID集合、語種、owner→sourceの半開区間、M01〜M06、太字・リンク位置、メタデータ矛盾、NA理由を再構成する。"
+      "Save the bundled segmentation.py and frozen controls. Project P/L/U units, owning blocks, sentences, and words using Unicode offsets.",
+      "Test the included articles from the five candidates and supplement any shortfall with synthetic fixtures. Read the fixed sample with years hidden to diagnose sentence boundaries, words, and evidence for organizations and authors.",
+      "Reconcile source DOM order with S words for every included article whose SHA-256 hash has been verified. Save H, bold spans, lists, code positions, the six primary metrics, and secondary metrics such as MATTR.",
+      "Use the t02_metadata_v2.py rules to save single numeric authors, tags, organizations, article-type cues, and sources. Freeze t02-strata-map.json as topic-map.json.",
+      "Use independent verification to reconstruct the ID set, token types, half-open owner-to-source ranges, M01–M06, bold and link positions, metadata conflicts, and NA reasons."
     ],
     "references": [
       "../measurement-spec.md",
@@ -142,25 +142,25 @@
       "../references/t02_metadata_v2.py"
     ],
     "pitfalls": [
-      "SをPに置き換えない。",
-      "組織handleは著者IDではない。",
-      "インラインコードをS語に再挿入しない。",
-      "片方の構造投影失敗を全指標へ伝播させない。"
+      "Use the full S scope for S measures.",
+      "Treat organization handles and author IDs as distinct identifiers.",
+      "Keep inline code outside the S word stream.",
+      "Limit each structure projection failure to its affected metrics."
     ],
-    "handoff": "T03へ cohort、articles、metrics、metadata、topic-map、固定segmentation.pyとfixturesを渡す。"
+    "handoff": "Pass the cohort, articles, metrics, metadata, topic map, frozen segmentation.py, and fixtures to T03."
   },
   {
     "id": "T03",
     "directory": "T03-overview",
-    "title": "対象統計と収録範囲",
+    "title": "Cohort statistics and coverage",
     "dependencies": [
       "T02"
     ],
-    "goal": "候補数・有効範囲・欠測・分布を説明する対象表と図を作る。",
+    "goal": "Produce tables and figures that show candidate counts, valid coverage, missing data, and distributions.",
     "inputs": [
-      "T00入力と抽出台帳",
+      "T00 input and extraction ledgers",
       "T01 cohort.csv",
-      "T02記事、指標、metadata"
+      "T02 articles, metrics, and metadata"
     ],
     "outputs": [
       "report.md",
@@ -174,15 +174,15 @@
       "overview.svg"
     ],
     "acceptance_criteria": [
-      "候補から採用までの記事数が保存則に合い、P/L/U/Sの語数・帯・分位を再計算できる。",
-      "8年・96月・32四半期の観測状態と部分年が明示される。",
-      "年・期間の件数と不明日付、既知著者、組織、タグ、重複の対象が区別される。"
+      "Article counts reconcile from candidacy to inclusion. P/L/U/S word counts, bands, and quantiles can be recalculated.",
+      "Coverage states for eight years, 96 months, and 32 quarters identify partial years explicitly.",
+      "Year and period counts distinguish unknown dates, known authors, organizations, tags, and duplicate text."
     ],
     "steps": [
-      "全候補の日時、取得、言語状態、採否を結合し、欠行と重複を検査する。",
-      "採用記事のP/L/U/Sの和・中央値・分位・0を含む語数帯、日時可用性、同文・著者・タグ・組織の分母を集計する。",
-      "UTC年月と四半期の全格子を作り、設定と取得証拠から完結、部分、未観測、不明を割り当てる。",
-      "図の実ファイルを開き、点と年ごとの分母・NAを元表から独立に照合する。"
+      "Join dates, acquisition state, language state, and inclusion decisions for every candidate. Check for missing and duplicate rows.",
+      "For included articles, aggregate P/L/U/S totals, medians, quantiles, and word-count bands including zero. Summarize date availability and denominators for identical text, authors, tags, and organizations.",
+      "Build complete grids for UTC months and quarters. Use settings and acquisition evidence to classify them as complete, partial, unobserved, or unknown.",
+      "Open the figure files and independently check points, yearly denominators, and NA values against the source tables."
     ],
     "references": [
       "../measurement-spec.md",
@@ -190,24 +190,24 @@
       "../references/t03-settings.json"
     ],
     "pitfalls": [
-      "2025年の未観測月を0にしない。",
-      "DEV全体の投稿数と呼ばない。",
-      "保存日の中央値を公開年に転用しない。"
+      "Keep unobserved months in 2025 distinct from months with zero articles.",
+      "Describe counts as counts for the archived cohort.",
+      "Derive publication years from publication dates."
     ],
-    "handoff": "A01〜A08へ対象表・日付・coverageと同一採用ID集合を渡す。"
+    "handoff": "Pass the cohort table, dates, coverage, and identical included ID set to A01–A08."
   },
   {
     "id": "A01",
     "directory": "A01-length",
-    "title": "記事と段落の長さ",
+    "title": "Article and Paragraph Length",
     "dependencies": [
       "T03"
     ],
-    "goal": "PとSの長さと段落長を比較し、M01の主比較を作る。",
+    "goal": "Compare P and S word counts and paragraph lengths, and produce the primary M01 comparison.",
     "inputs": [
-      "T03 coverageと対象",
-      "T02記事・metadata・M01",
-      "T00抽出と固定標本の元HTML"
+      "T03 coverage and cohort",
+      "T02 articles, metadata, and M01",
+      "T00 extraction results and original HTML for the fixed sample"
     ],
     "outputs": [
       "report.md",
@@ -221,15 +221,15 @@
       "length.svg"
     ],
     "acceptance_criteria": [
-      "M01のlog1p年等重み点差、原語数、全記事点と著者区間を再現できる。",
-      "記事等重み段落分布と段落等重み分布が別にある。",
-      "長文診断の抽出規則と照合結果があり、0語とNAを区別する。"
+      "The equally year-weighted M01 difference on the log1p scale, raw word counts, all-article point estimate, and author-cluster interval can be reproduced.",
+      "The article-weighted and paragraph-weighted paragraph distributions are reported separately.",
+      "The selection rule and audit results for long articles are recorded, and zero words and NA are distinguishable."
     ],
     "steps": [
-      "P/Sの年別語数分布、帯、1〜9月補助、M01の全点・既知著者点・著者cluster区間を計算する。",
-      "所有P段落の中央値、段落および記事を等重みにした分布を作る。",
-      "固定年別上位長文候補と原HTMLを点検する。",
-      "別式で年重み、log尺度、区間反復、図を照合する。"
+      "Compute annual P and S word count distributions and bands, the January–September supplementary results, and the M01 point estimates for all articles and for known authors, along with the author-cluster interval.",
+      "Calculate the median length of P paragraph owners and construct distributions that weight paragraphs equally and articles equally.",
+      "Audit the prespecified longest-article candidates for each year against the original HTML.",
+      "Use separate formulas to check the year weights, log scale, interval replicates, and figure."
     ],
     "references": [
       "../measurement-spec.md",
@@ -237,22 +237,22 @@
       "../references/a01-settings.json"
     ],
     "pitfalls": [
-      "M01の原語数とlog差は交換できない。",
-      "記事が長いことを段落が長いことへ置き換えない。"
+      "Interpret raw word counts and differences on the log scale as distinct quantities for M01.",
+      "Use paragraph data to draw conclusions about paragraph length."
     ],
-    "handoff": "V01・R01にM01の対象、原尺度と年重み、長文点検を渡す。"
+    "handoff": "Pass the M01 cohort, original measurement scale, year weights, and long-article audit to V01 and R01."
   },
   {
     "id": "A02",
     "directory": "A02-rhythm",
-    "title": "文のリズムと句読法",
+    "title": "Sentence Rhythm and Punctuation",
     "dependencies": [
       "T03"
     ],
-    "goal": "M02〜M04と副指標を、文数と句読点の分母を保持して比較する。",
+    "goal": "Compare M02–M04 and the secondary measures while retaining the sentence-count and punctuation denominators.",
     "inputs": [
-      "T03対象・coverage",
-      "T02 P所有ブロック・文・token・M02〜M04"
+      "T03 cohort and coverage",
+      "T02 P owner blocks, sentences, tokens, and M02–M04"
     ],
     "outputs": [
       "report.md",
@@ -265,15 +265,15 @@
       "rhythm.svg"
     ],
     "acceptance_criteria": [
-      "M02〜M04は固定Pから計算され、語なし・一文・低nが区別できる。",
-      "カンマ間隔の文ベースと旧記事近似が別列で、数字内カンマが除かれる。",
-      "著者区間と図を入力から独立に照合できる。"
+      "M02–M04 are calculated from the fixed P data, with distinct cases for zero words, a single sentence, and low n.",
+      "Sentence-based comma intervals and the legacy article-level approximation are in separate columns. Commas within numbers are excluded.",
+      "The author-cluster intervals and figure can be independently verified from the inputs."
     ],
     "steps": [
-      "機械文、文長と断片、隣接差、段落1文率、句読点を計数する。",
-      "主指標の年等重み差、著者区間、各年の不足を保存する。",
-      "カンマ間隔、5個以上の補助、旧近似を別に計算する。",
-      "低n、極端CV、タグなしコード候補を診断し、負例と集計を別計算で検証する。"
+      "Count mechanically segmented sentences, sentence lengths and fragments, differences between adjacent sentences, the share of single-sentence paragraphs, and punctuation.",
+      "Save the equally year-weighted differences in the primary metrics, the author-cluster intervals, and any annual shortfalls.",
+      "Calculate sentence-based comma intervals, the supplementary result for articles with at least five commas, and the legacy approximation separately.",
+      "Diagnose low sentence counts, extreme CV values, and candidate untagged code. Check negative cases and aggregates with an independent calculation."
     ],
     "references": [
       "../measurement-spec.md",
@@ -281,22 +281,22 @@
       "../references/a02-settings.json"
     ],
     "pitfalls": [
-      "1文のCVを0にしない。",
-      "burstinessをCVと独立した発見にしない。"
+      "Report sentence-length CV as NA for a single sentence.",
+      "Treat burstiness as a transformation of CV."
     ],
-    "handoff": "A10・A12・V01・R01へ文長群の尺度、指標別対象と境界上の問題を渡す。"
+    "handoff": "Pass the sentence-length scales, metric-specific cohorts, and boundary issues to A10, A12, V01, and R01."
   },
   {
     "id": "A03",
     "directory": "A03-format",
-    "title": "リスト・太字・見出し",
+    "title": "Lists, Bold Text, and Headings",
     "dependencies": [
       "T03"
     ],
-    "goal": "構造がある記事の割合、使われる量、S上の位置を比較する。",
+    "goal": "Compare how often articles use structural elements, how extensively they use them, and where they appear in S.",
     "inputs": [
-      "T03対象・coverage",
-      "T02記事・DOMイベント・太字・M05/M06"
+      "T03 cohort and coverage",
+      "T02 articles, DOM events, bold text, and M05/M06"
     ],
     "outputs": [
       "report.md",
@@ -310,15 +310,15 @@
       "formatting.svg"
     ],
     "acceptance_criteria": [
-      "M05/M06の年等重み点差・区間、および構造の有無と条件付き強度が再計算できる。",
-      "各領域のS語・L語・太字語・太字区間のカウントが一致する。",
-      "空領域、S=0、構造なし、投影失敗と例示の役割が区別される。"
+      "The equally year-weighted estimates and intervals for M05/M06, structural presence, and conditional intensity can be recalculated.",
+      "Counts of S words, L words, bold words, and bold spans agree for each region.",
+      "Empty regions, S=0, absent structures, projection failures, and the role of illustrative examples are distinguishable."
     ],
     "steps": [
-      "主M05/M06と構造有無・使用量、見出し密度と候補を計算する。",
-      "元S語順位に基づく半分と20/60/20領域別の計数を保存する。",
-      "品質候補を固定選定しraw/clean DOMに照らす。",
-      "独立に位置と分母、主差・区間・図を立て直す。"
+      "Calculate primary M05/M06, the presence and amount of structural elements, and heading density and candidates.",
+      "Save counts for each half and each 20/60/20 region using the original S word ranks.",
+      "Select quality-check candidates by the fixed rule and compare them with the raw and cleaned DOM.",
+      "Independently reconstruct positions, denominators, primary contrasts, intervals, and the figure."
     ],
     "references": [
       "../measurement-spec.md",
@@ -326,22 +326,22 @@
       "../references/a03-settings.json"
     ],
     "pitfalls": [
-      "リストがなくS語が正なら0。S語なしはNA。",
-      "太字区間と太字語、DOMリストとL語有無は同じ量ではない。"
+      "Record zero when there is no list and the S word count is positive. Record NA when there are no S words.",
+      "Track bold spans and bold words separately, and distinguish DOM lists from the presence of L words."
     ],
-    "handoff": "A09/A12/V01/R01へ主差・位置範囲と投影の限界を渡す。"
+    "handoff": "Pass the primary contrasts, positional ranges, and projection limits to A09, A12, V01, and R01."
   },
   {
     "id": "A04",
     "directory": "A04-vocabulary",
-    "title": "語彙の発見と検証",
+    "title": "Vocabulary Discovery and Validation",
     "dependencies": [
       "T03"
     ],
-    "goal": "著者と完全一致Pをまたがせず、固定語句候補の年代差を再検証する。",
+    "goal": "Validate changes in the fixed candidate phrases across periods, keeping authors and exact P duplicates on one side of the split.",
     "inputs": [
-      "T03対象",
-      "T02元P文・所有単位・token、L/H、MATTR、metadata"
+      "T03 cohort",
+      "T02 original P sentences, owner units, tokens, L/H, MATTR, and metadata"
     ],
     "outputs": [
       "report.md",
@@ -357,16 +357,16 @@
       "vocabulary-audit.json"
     ],
     "acceptance_criteria": [
-      "発見側と検証側の既知著者および完全一致の非空Pハッシュは交差0。",
-      "候補hashは検証結果を開く前に固定され、全採否と未再現を保持する。",
-      "元単位・文・非語境界、0語P分母、レア判定、監視語、MATTR窓不足を別実装で照合できる。"
+      "Known authors and exact nonempty P hashes have zero overlap between the discovery and validation splits.",
+      "The candidate hash is frozen before validation results are opened, and every selection decision and failure to replicate is retained.",
+      "An independent implementation can check original units, sentence and nonword boundaries, the denominator for zero-word P, rarity decisions, watch terms, and insufficient MATTR windows."
     ],
     "steps": [
-      "非空Pハッシュと既知著者の連結成分を作り、固定seedハッシュで分ける。",
-      "同梱条件で1〜5語の全候補を発見群内で計数し、増減・以前はまれ・固定監視語を凍結する。",
-      "検証群を開き、候補の差・比・方向・再到達と成分cluster区間を計算する。P/L/Hと群を別にする。",
-      "著者への広がり、話題/語数帯、年別MATTR、編集時点とinlineコード境界の限界を保存する。",
-      "独立に漏れ、選定順位、分母、語境界と検証行を照合する。"
+      "Build connected components from nonempty P hashes and known authors, and split the components by a fixed-seed hash.",
+      "Count all one- to five-word candidates in the discovery split according to the bundled rules. Freeze lists of increases, decreases, previously rare terms, and prespecified watch terms.",
+      "Open the validation split and calculate differences, ratios, directions, threshold attainment, and component-cluster intervals for each candidate. Keep P, L, and H and the two splits separate.",
+      "Save results on author coverage, topic and word-count bands, annual MATTR, and the limitations of edit timestamps and inline code boundaries.",
+      "Independently check for leakage and verify selection ranks, denominators, word boundaries, and validation rows."
     ],
     "references": [
       "../measurement-spec.md",
@@ -374,23 +374,23 @@
       "../references/a04-settings.json"
     ],
     "pitfalls": [
-      "点差の同方向は有意差ではない。",
-      "候補数を埋めるために閾値を下げない。",
-      "P完全一致を近似重複へ外挿しない。"
+      "Report agreement in the direction of point estimates separately from statistical significance.",
+      "Keep the prespecified thresholds when fewer candidates qualify.",
+      "Limit the exact-duplicate conclusion to exact P matches."
     ],
-    "handoff": "A06・V01へsplit.csvの群と成分を書き渡す。検証表・未再現・境界リスクをA09/R01へ渡す。"
+    "handoff": "Pass split assignments and components from `split.csv` to A06 and V01. Pass the validation table, failures to replicate, and boundary risks to A09 and R01."
   },
   {
     "id": "A05",
     "directory": "A05-voice",
-    "title": "書き手の声と呼びかけ",
+    "title": "Author Voice and Direct Address",
     "dependencies": [
       "T03"
     ],
-    "goal": "Pの代名詞、短縮形、接続表現、句読記号を辞書で測る。",
+    "goal": "Measure pronouns, contractions, connective expressions, and punctuation in P using a dictionary.",
     "inputs": [
-      "T03対象",
-      "T02 P単位、文、token、author ID"
+      "T03 cohort",
+      "T02 P units, sentences, tokens, and author IDs"
     ],
     "outputs": [
       "report.md",
@@ -404,15 +404,15 @@
       "voice.svg"
     ],
     "acceptance_criteria": [
-      "全記事の語形計数、使用記事率、全記事と使用記事の密度の分母が別に出る。",
-      "曖昧な人称と短縮形を盲検抜粋で点検し、辞書は結果前に固定される。",
-      "単数一人称と短縮形の千P語値をT02 IDへ一意に戻せる。"
+      "Word-form counts for all articles, the share of articles using each form, and density denominators for all articles and articles using the form are reported separately.",
+      "Ambiguous pronouns and contractions are checked in blinded excerpts, and the dictionary is frozen before results are examined.",
+      "First-person singular and contraction rates per 1,000 P words can be mapped unambiguously to T02 IDs."
     ],
     "steps": [
-      "同梱辞書を凍結してP内の語形・句とP段落冒頭を走査する。",
-      "年・期間・語数帯別の使用割合、千P語の密度、条件付き密度、記事語数0の状態を集計する。",
-      "固定抜粋でUS、we、you、引用、短縮形の解釈を点検する。",
-      "辞書マッチと分母・クラスタ再抽出・図の数字を別実装と照合する。"
+      "Freeze the bundled dictionary and scan P for word forms and phrases, including paragraph openings.",
+      "Summarize the share of articles using each form, density per 1,000 P words, conditional density, and zero-word status by year, period, and word-count band.",
+      "Audit interpretations of US, we, you, quotations, and contractions against fixed excerpts.",
+      "Check dictionary matches, denominators, cluster resampling, and plotted values against an independent implementation."
     ],
     "references": [
       "../measurement-spec.md",
@@ -420,24 +420,24 @@
       "../references/a05-settings.json"
     ],
     "pitfalls": [
-      "Iを個人経験の計数にしない。",
-      "語形一致をAI使用と読まない。"
+      "Treat matches for I as word-form counts. Use content evidence to assess personal experience.",
+      "Interpret word-form matches as linguistic features. They provide no evidence of AI use on their own."
     ],
-    "handoff": "A07へ同一記事の語形と分母、A12へ単数一人称・短縮形密度を渡す。"
+    "handoff": "Pass word-form counts and denominators for the same articles to A07, and first-person singular and contraction densities to A12."
   },
   {
     "id": "A06",
     "directory": "A06-structure",
-    "title": "見出しと冒頭・末尾",
+    "title": "Headings, Openings, and Endings",
     "dependencies": [
       "T03",
       "A04"
     ],
-    "goal": "辞書による見出し機能、パターン集中、冒頭末尾表現を比較する。",
+    "goal": "Compare dictionary-based heading functions, concentration of heading patterns, and expressions at article openings and endings.",
     "inputs": [
-      "T03対象",
-      "T02見出しとS/P位置",
-      "A04 split.csv と候補凍結証拠"
+      "T03 cohort",
+      "T02 headings and S/P positions",
+      "A04 split.csv and evidence that candidates were frozen"
     ],
     "outputs": [
       "report.md",
@@ -452,15 +452,15 @@
       "structure.svg"
     ],
     "acceptance_criteria": [
-      "見出し校正・凍結・評価の順序があり、見出しなし・辞書認識なしと集中度が再計算できる。",
-      "まとめ存在、条件付き節長、S位置が各々の分母で読める。",
-      "冒頭末尾候補が検証前に固定され、全候補の検証結果と群漏れが照合される。"
+      "The sequence of heading calibration, freezing, and evaluation is recorded, and heading absence, dictionary nonmatches, and concentration can be recalculated.",
+      "The presence of a summary, conditional section length, and S position each have an explicit denominator.",
+      "Opening and ending candidates are frozen before validation. All candidate results and checks for split leakage are verified."
     ],
     "steps": [
-      "固定見出し辞書を発見側の盲検60候補で確認し、規則と未一致を凍結する。",
-      "見出しごとのSカーソル・節語数、機能列、年別集中度とサイズ調整を計算する。",
-      "A04群の先頭/末尾50P語を使い、2〜5語列の増減各15を窓ごとに固定して別群で検証する。",
-      "原DOM順、見出し階層、同文と著者の集中、固定候補・図を独立確認する。"
+      "Calibrate the fixed heading dictionary on 60 blinded discovery candidates, then freeze the rules and record unmatched headings.",
+      "Calculate the S cursor and section word count for each heading, along with function sequences, annual concentration, and the size adjustment.",
+      "Use the first and last 50 P words in the A04 splits. Freeze 15 increasing and 15 decreasing two- to five-word sequences for each window, then validate them in the other split.",
+      "Independently verify original DOM order, heading hierarchy, concentration by identical text and author, fixed candidates, and the figure."
     ],
     "references": [
       "../measurement-spec.md",
@@ -468,23 +468,23 @@
       "../references/a06-settings.json"
     ],
     "pitfalls": [
-      "まとめ見出しが増えたことだけで構造全体が画一化したと書かない。",
-      "見出し辞書は意味上の正解ではない。"
+      "Assess full-article structural uniformity using evidence beyond the prevalence of summary headings.",
+      "Interpret dictionary labels as rule-based classifications."
     ],
-    "handoff": "A11へ見出しパス、区間境界と先行S語、R01へ集中と節長を渡す。"
+    "handoff": "Pass heading paths, span boundaries, and preceding S word counts to A11, and concentration and section lengths to R01."
   },
   {
     "id": "A07",
     "directory": "A07-evidence",
-    "title": "経験談と具体的な検証記述",
+    "title": "Personal Experience and Concrete Verification Details",
     "dependencies": [
       "T03",
       "A05"
     ],
-    "goal": "固定盲検標本で内容記述を読み、全記事の機械代理との対応を調べる。",
+    "goal": "Read content descriptions in a fixed blinded sample and examine how they correspond to automated proxies across all articles.",
     "inputs": [
-      "T03対象",
-      "T02原DOM、文単位、元本文/metadata",
+      "T03 cohort",
+      "T02 original DOM, sentence units, source article text, and metadata",
       "A05 voice-article.csv"
     ],
     "outputs": [
@@ -501,16 +501,16 @@
       "evidence-summary.csv"
     ],
     "acceptance_criteria": [
-      "固定校正と固定評価は不交差。規則凍結後に評価記事を全文確認し、全件に根拠付き状態と範囲がある。",
-      "再評価は固定subsetを別セッションで行い、初回と再評価と裁定を保つ。",
-      "全量代理、内容標本、S/P分母、判断不能範囲、支持不足を区別できる。"
+      "The fixed calibration and evaluation samples are disjoint. Every evaluation article is read in full after the rules are frozen, and each article has an evidence-backed status and span.",
+      "The fixed subset is reevaluated in a separate session. The initial review, reevaluation, and adjudication are retained.",
+      "Corpus-wide proxies, sampled content, S and P denominators, indeterminate cases, and insufficient support are distinguishable."
     ],
     "steps": [
-      "各年を固定hashで並べ、校正4、評価16を保存する。年や著者を隠し、内容rubricと代理辞書を別々に凍結する。",
-      "各年4件を抜いて別セッション用の固定packetを残す。評価全文を読み、五カテゴリに根拠・S文ID・状態・内容種別・操作modeを付ける。",
-      "別セッション再評価の未開封入力、実行記録・裁定を保つ。",
-      "全量25代理を固定P語句・数字・リンク・DOM規則で計測し、同一標本内のA05語形と内容対応を点検する。",
-      "上限下限、各分母、記事種・年・帯、代理の不一致を集計する。別読者の根拠監査と別実装のカウント検査を行う。"
+      "Order each year's articles by a fixed hash and save four for calibration and sixteen for evaluation. Hide year and author, then freeze the content rubric and proxy dictionary separately.",
+      "Select four evaluation articles per year and save a fixed packet for a separate session. Read every evaluation article in full and record evidence, S sentence IDs, status, content type, and operation mode for five categories.",
+      "Retain the unopened inputs, execution record, and adjudication for the separate-session reevaluation.",
+      "Measure all 25 proxies corpus-wide using fixed P phrase, number, link, and DOM rules. Check how A05 word forms correspond to content within the same sample.",
+      "Summarize upper and lower bounds, each denominator, article types, years, word-count bands, and proxy disagreements. Have another reader audit the evidence and check the counts with an independent implementation."
     ],
     "references": [
       "../measurement-spec.md",
@@ -520,24 +520,24 @@
       "../references/a07-proxy-settings-v1.json"
     ],
     "pitfalls": [
-      "本人が実施したか、記事がそう記したか、代理が一致したかを分ける。",
-      "判断不能を無として加えない。",
-      "架空の再評価やまとめラベルで穴を埋めない。"
+      "Distinguish whether the author did the work, whether the article reports it, and whether the proxy matches.",
+      "Keep indeterminate cases distinct from confirmed absence.",
+      "Record any missing reevaluation or unavailable detailed coding explicitly."
     ],
-    "handoff": "A11に固定校正・評価の盲検packetと対応台帳、A09/R01に代理と内容の別出力を渡す。"
+    "handoff": "Pass fixed blinded calibration and evaluation packets and the crosswalk to A11. Pass separate proxy and content outputs to A09 and R01."
   },
   {
     "id": "A08",
     "directory": "A08-code",
-    "title": "コードと近接散文",
+    "title": "Code and Nearby Prose",
     "dependencies": [
       "T03"
     ],
-    "goal": "コード量・言語ラベル・見出し内の前後散文を別々に測る。",
+    "goal": "Measure the amount of code, language labels, and prose before and after code within a heading section.",
     "inputs": [
-      "T03対象",
-      "T00抽出body_html",
-      "T02 S語、DOMイベント、metadata"
+      "T03 cohort",
+      "T00 extracted body_html",
+      "T02 S words, DOM events, and metadata"
     ],
     "outputs": [
       "report.md",
@@ -552,15 +552,15 @@
       "code.svg"
     ],
     "acceptance_criteria": [
-      "ブロックとinlineの二重計数がなく、元順序と前後対応、状態ごとの分母を復元できる。",
-      "12例の固定診断があり、0と非対応と投影失敗を判別する。",
-      "全22指標の集計と指定12の区間、層別の不成立が残る。"
+      "Code blocks and inline code are counted once, and the original order, adjacent prose matches, and denominators for each status can be reconstructed.",
+      "The 12 fixed diagnostic cases are recorded, with zero, no match, and projection failure distinguishable.",
+      "Aggregates for all 22 metrics, intervals for the 12 specified metrics, and any strata with insufficient support are retained."
     ],
     "steps": [
-      "固定12例でpre、highlight、inline、未知言語ラベル、隣接コード、見出し境界を確認する。",
-      "全記事のブロックとinline量、明示クラス、状態を保存する。",
-      "同一区間の前後散文を対応付け、元Sと照合し、再利用フラグを付ける。",
-      "同梱の集計・区間閾値で計算し、元HTML・分母・位置・図を独立照合する。"
+      "Use 12 fixed examples to check pre, highlighted blocks, inline code, unknown language labels, adjacent code, and heading boundaries.",
+      "Save block and inline code counts and sizes, explicit classes, and statuses for all articles.",
+      "Match preceding and following prose within the same section, check it against the original S, and flag reused matches.",
+      "Apply the bundled aggregation and interval thresholds, then independently check the original HTML, denominators, positions, and figure."
     ],
     "references": [
       "../measurement-spec.md",
@@ -569,15 +569,15 @@
       "../references/a08-aggregation.json"
     ],
     "pitfalls": [
-      "コードありとblockあり、可視文字比とS語数あたり文字長は区別する。",
-      "言語不明を推定で埋めない。"
+      "Distinguish the presence of any code from the presence of a code block and keep the visible-character share separate from code characters per S word.",
+      "Preserve unknown language labels as unknown."
     ],
-    "handoff": "A11へコードイベントと位置、A09/R01へ集合ごとの分母を渡す。"
+    "handoff": "Pass code events and positions to A11 and denominators for each set to A09 and R01."
   },
   {
     "id": "A09",
     "directory": "A09-composition",
-    "title": "話題と書き手の入れ替わり",
+    "title": "Changes in Topic and Author Composition",
     "dependencies": [
       "A01",
       "A02",
@@ -588,11 +588,11 @@
       "A07",
       "A08"
     ],
-    "goal": "話題・長さの構成、既知著者への重み、本人内差を測る。",
+    "goal": "Measure topic and length composition, weighting across known authors, and within-author differences.",
     "inputs": [
-      "T02 metrics/metadata/記事",
+      "T02 metrics, metadata, and articles",
       "T03 coverage",
-      "A01〜A08の比較と適用範囲"
+      "A01–A08 comparisons and scopes of applicability"
     ],
     "outputs": [
       "report.md",
@@ -609,16 +609,16 @@
       "composition.svg"
     ],
     "acceptance_criteria": [
-      "指標ごとに六年の支持、共通範囲、固定重み、ESS、除外率を照合できる。",
-      "同一対象の無調整と固定構成、既知著者等重み、本人内の点差・選択率を区別する。",
-      "分解恒等式、各探索の適用範囲、タグ/本文AI語句と未知の判定を検証できる。"
+      "For each metric, the six years of support, common support, fixed weights, effective sample size (ESS), and exclusion rates can be checked.",
+      "Unadjusted and fixed-composition estimates for the same cohort, equal known-author weighting, and within-author point differences and selection rates are distinguishable.",
+      "The decomposition identity, scope of each exploratory analysis, AI labels for tags and body phrases, and rules for unknown states can be verified."
     ],
     "steps": [
-      "話題×P語数帯で支持30を満たすセルと基準期固定qを凍結する。指標別cell・年・分類キーを保存する。",
-      "全体と共通範囲、固定組成と同対象の無調整値を比較する。",
-      "年内著者等重みと、両期間に現れる著者の年等重み本人内差を計算する。",
-      "寄与分解、著者cluster区間、A04〜A08の適用範囲を保存し、固定辞書からAI話題タグと本文S語句を別々に付ける。",
-      "重み、分解、区間・独立した適用範囲を元表から再計算する。"
+      "Freeze topic-by-P word-count cells that meet the support threshold of 30 and baseline weights q. Save cell, year, and classification keys for each metric.",
+      "Compare the full cohort with the common-support cohort, and compare fixed-composition estimates with unadjusted estimates for the same cohort.",
+      "Give each author equal weight within a year and calculate equally year-weighted within-author differences for authors observed in both periods.",
+      "Save the contribution decomposition, author-cluster intervals, and the scope of A04–A08. Use the fixed dictionary to label AI topics in tags and AI phrases in body S separately.",
+      "Recalculate the weights, decomposition, and intervals from the source tables, and independently verify the scopes of applicability."
     ],
     "references": [
       "../measurement-spec.md",
@@ -627,27 +627,27 @@
       "../references/t02-strata-map.json"
     ],
     "pitfalls": [
-      "自分自身の語数帯で層を揃えたM01は別の問い。",
-      "比較の支持不足を母集団に一般化しない。",
-      "語句露出をAI使用や意味話題の真値にしない。"
+      "An M01 comparison stratified by each article's own word-count band answers a separate question.",
+      "Limit conclusions to the cohort with sufficient support for the comparison.",
+      "Treat phrase presence as a text feature. AI use and semantic topics require their own evidence."
     ],
-    "handoff": "A10へweights.csvをmetric_id、topic_primary、W_P_band、q、support、基準質量で渡す。A12とV01へ構成・著者比較を渡す。"
+    "handoff": "Pass `weights.csv` with `metric_id`, `topic_primary`, `W_P_band`, `q`, support, and baseline mass to A10. Pass composition and author comparisons to A12 and V01."
   },
   {
     "id": "A10",
     "directory": "A10-time",
-    "title": "変化が始まった時期",
+    "title": "Timing of Changes",
     "dependencies": [
       "A01",
       "A02",
       "A03",
       "A09"
     ],
-    "goal": "支持診断後に固定境界、偽境界、探索折点、外挿の限界を報告する。",
+    "goal": "After checking support, report the fixed boundary, placebo boundaries, exploratory breakpoints, and limits of extrapolation.",
     "inputs": [
       "T03 coverage/date-ledger",
-      "T02六指標と著者",
-      "A09 weights.csv・支持と対象"
+      "T02 six main metrics and author IDs",
+      "A09 weights.csv, support, and cohort"
     ],
     "outputs": [
       "report.md",
@@ -663,16 +663,16 @@
       "time.svg"
     ],
     "acceptance_criteria": [
-      "全期間格子、支持窓、非支持理由、季節性、対象/固定qのマスクを再現できる。",
-      "固定境界、事前点検、両偽境界、候補BICとブロック再抽出の状態・失敗IDがある。",
-      "暦ラグHACと数値、図点、停止条件を独立計算で確認する。"
+      "The grid for the full period, supported windows, reasons for insufficient support, seasonality, and the cohort and fixed-q masks can be reproduced.",
+      "Records cover the fixed boundary, pre-trend checks, both placebo boundaries, candidate BIC scores, and block-resampling statuses and failed replicate IDs.",
+      "Calendar-lag HAC, numerical results, plotted points, and stopping conditions are checked by independent calculation."
     ],
     "steps": [
-      "年・月・四半期、1〜9月補助の格子と対象を作る。支持診断は値を見る前に固定する。",
-      "支持した窓に季節と実暦tを含む固定回帰を当て、2022年11〜12月の扱いと暦HACを検証する。",
-      "事前傾向照合と2020/21偽境界、同月の構成比較を実行し、不成立行も保存する。",
-      "0/1折点で全候補BIC、連続ブロック再抽出、安定基準を計算する。",
-      "欠測ありの合成データと連続例で係数、HAC、候補マスク、反復の一部または全量、図を独立検証する。"
+      "Build annual, monthly, quarterly, and supplementary January–September grids and cohorts. Freeze support diagnostics before examining values.",
+      "Fit the prespecified regression with seasonality and actual calendar time t in supported windows. Verify the treatment of November and December 2022 and the calendar-lag HAC calculation.",
+      "Check pre-trends and the 2020 and 2021 placebo boundaries. Compare composition within the same months and retain rows with insufficient support.",
+      "Compare models with zero or one breakpoint across all candidate BIC scores, resample contiguous blocks, and apply the stability criteria.",
+      "Use synthetic data with missing observations and a complete example to independently verify coefficients, HAC, candidate masks, some or all replicates, and figures."
     ],
     "references": [
       "../measurement-spec.md",
@@ -680,27 +680,27 @@
       "../references/a10-methods.json"
     ],
     "pitfalls": [
-      "S02相当の支持表を推定済みと扱わない。",
-      "行番号で欠測月を詰めない。",
-      "2023年から六指標一斉、反実仮想、AI因果を主張しない。"
+      "Treat a support table equivalent to S02 as a diagnostic. Estimation is a separate step.",
+      "Use calendar time so missing months remain visible in the time index.",
+      "Report supported timing for each metric individually. Counterfactual estimates and claims that AI caused the changes require a separate design."
     ],
-    "handoff": "V01/R01へ日付・期間範囲、支持、結論の反例、推定不能を渡す。"
+    "handoff": "Pass dates and period ranges, support, counterexamples to the conclusions, and cases with unavailable estimates to V01 and R01."
   },
   {
     "id": "A11",
     "directory": "A11-position",
-    "title": "具体的な材料までの位置",
+    "title": "Position of the First Concrete Material",
     "dependencies": [
       "T03",
       "A06",
       "A07",
       "A08"
     ],
-    "goal": "全記事の機械的位置と、固定評価標本の題名に対応する材料位置を測る。",
+    "goal": "Measure mechanically detected positions across all articles and locate the first title-relevant material in the fixed evaluation sample.",
     "inputs": [
-      "T02 S語とDOMの対応",
+      "T02 mapping between S words and the DOM",
       "A06 headings.csv",
-      "A07固定評価と校正",
+      "A07 fixed evaluation and calibration samples",
       "A08 code-events.csv"
     ],
     "outputs": [
@@ -717,16 +717,16 @@
       "position.svg"
     ],
     "acceptance_criteria": [
-      "全採用記事でSカーソルの一致、四機械候補の位置、0/なし/入力欠落/割合NAが区別できる。",
-      "A07固定標本全件に題名の約束、根拠範囲、S外錨または不成立理由があり、別セッション再評価・裁定を保存する。",
-      "機械と内容の対応、層別のnと支持、反例、実際の図の照合がそろう。"
+      "S cursor alignment agrees across all adopted articles. Positions are available for the four automated candidates, and zero, absence, missing input, and an undefined proportion are distinguishable.",
+      "Every article in the fixed A07 sample has a recorded title promise, an evidence span, and an out-of-S anchor or reason an assessment could not be made, as applicable. Separate-session reevaluation and adjudication are retained.",
+      "The correspondence between automated and content measures, sample sizes and support by stratum, counterexamples, and checks against the plotted values are recorded."
     ],
     "steps": [
-      "校正標本から候補辞書・タイトル対応rubricを固定する。A06/A08のDOM位置とS語をつないで全記事の機械初出を保存する。",
-      "A07評価標本を年伏せで全文読解し、題名に対応する最初の材料と根拠のS/DOM範囲を記録する。",
-      "固定32件を独立したトップレベルセッションで再評価し、初回を伏せ、差分を裁定する。",
-      "固定層の各年ペアで有無30・位置20の支持条件を適用し、内容の不成立も残す。",
-      "独立の原文再読、位置再計算、誤位置・S=0の負例、図値を検証する。"
+      "Freeze the candidate dictionary and the title-relevance rubric using the calibration sample. Link A06/A08 DOM positions to S words and save the first mechanically detected occurrence for all articles.",
+      "Read A07 evaluation articles in full with the year hidden, and record the first material that addresses the title and the S and DOM spans that support it.",
+      "Reevaluate 32 prespecified articles in an independent top-level session, withholding the initial ratings, and adjudicate disagreements.",
+      "For each year pair in the fixed strata, require support of 30 for presence and 20 for position. Retain unsupported content comparisons.",
+      "Independently reread source text, recalculate positions, test negative cases for incorrect positions and S=0, and verify plotted values."
     ],
     "references": [
       "../measurement-spec.md",
@@ -735,16 +735,16 @@
       "../references/a11-rubric.md"
     ],
     "pitfalls": [
-      "歴史runの38,980件は機械、128件は内容。その範囲を混ぜない。",
-      "短い位置は読書時間や質の根拠ではない。",
-      "同じ会話の別ワーカーを別セッションと呼ばない。"
+      "The historical run used 38,980 articles for automated measures and 128 for content review. Attribute findings to the applicable cohort.",
+      "Interpret earlier positions as positional measures. Reading time and quality require their own evidence.",
+      "Use a separate top-level session for reevaluation, with a different worker in the same conversation treated as part of the original session."
     ],
-    "handoff": "V01/R01へ機械と内容の別表、支持不能の範囲と絶対/相対位置の反例を渡す。再評価が未実行なら必須未処理にする。"
+    "handoff": "Pass separate automated and content tables, unsupported scopes, and counterexamples about absolute versus relative position to V01 and R01. Mark any outstanding reevaluation as required work."
   },
   {
     "id": "A12",
     "directory": "A12-style",
-    "title": "文体距離と分布の偏り",
+    "title": "Style Distances and Distributional Shifts",
     "dependencies": [
       "T03",
       "A01",
@@ -753,11 +753,11 @@
       "A05",
       "A09"
     ],
-    "goal": "六指標の分布変化と、書式・語り口別の固定基準距離を測る。",
+    "goal": "Measure changes in the distributions of six metrics and distances from a fixed baseline for formatting and author voice.",
     "inputs": [
-      "T02主指標・見出し密度とP文",
-      "A05人称と短縮形",
-      "A09話題・P帯・対象表",
+      "T02 primary metrics, heading density, and P sentences",
+      "A05 grammatical person and contractions",
+      "A09 topic, P word-count band, and cohort tables",
       "T03 coverage"
     ],
     "outputs": [
@@ -773,16 +773,16 @@
       "style.svg"
     ],
     "acceptance_criteria": [
-      "基準期年等重みCDF、分位と同点が再現できる。",
-      "各組の完全ケース・共通層・固定重み、別著者のseed付きペアIDと距離を照合できる。",
-      "原尺度、端値、未知種別、対象率、著者等重み、同文診断とペア依存を明記する。"
+      "The equally year-weighted baseline CDF, quantiles, and ties can be reproduced.",
+      "Complete cases, common strata, fixed weights, and seeded different-author pair IDs and distances can be verified for each group.",
+      "Original scales, endpoint values, unknown categories, cohort coverage, equal author weighting, exact-text diagnostics, and pair dependence are documented."
     ],
     "steps": [
-      "六指標の年別分位、使用ゼロ割合、基準閾値両端と同値を作る。",
-      "完全ケースの基準期経験CDFで固定midrankを計算し、組・定数・欠損を切り分ける。",
-      "各組各層で共通支持を測り、別著者ペアを均一に抽出して距離を集計する。",
-      "著者ペアを先に選ぶ副抽出と、保存文の完全一致共有を診断する。",
-      "別実装で基準CDF、重み、選択ペア、分母・図を照合する。"
+      "Calculate annual quantiles, zero-use shares, and the shares below, above, and exactly at baseline thresholds for the six metrics.",
+      "Compute fixed midranks from the baseline empirical CDF for complete cases. Account for each metric group, constant values, and missing values.",
+      "Measure common support for each group and stratum, then sample different-author pairs uniformly and summarize their distances.",
+      "Check a secondary sampling scheme that selects author pairs first, and diagnose exact matches among saved sentences shared between articles.",
+      "Use an independent implementation to check the baseline CDF, weights, selected pairs, denominators, and figure."
     ],
     "references": [
       "../measurement-spec.md",
@@ -790,16 +790,16 @@
       "../references/a12-distance.json"
     ],
     "pitfalls": [
-      "同じ記事・著者を共有するペアを独立nにしない。",
-      "二つの距離を単一AIスコアにしない。",
-      "unknown層の結果を全記事へ広げない。"
+      "Account for dependence between pairs that share an article or author.",
+      "Report the two style distances individually as measures of formatting and voice.",
+      "Limit results for the unknown stratum to articles in that stratum."
     ],
-    "handoff": "V01/R01へ分布と書式/語り口の別結果、共通層範囲、適用上の不足を渡す。"
+    "handoff": "Pass distribution results and separate formatting and voice findings, the scope of common strata, and limits on applicability to V01 and R01."
   },
   {
     "id": "V01",
     "directory": "V01-sensitivity",
-    "title": "条件を変えた再分析",
+    "title": "Sensitivity analyses",
     "dependencies": [
       "A01",
       "A02",
@@ -814,11 +814,11 @@
       "A11",
       "A12"
     ],
-    "goal": "事前に決めた感度条件を一つずつ適用し、結論の適用範囲を確かめる。",
+    "goal": "Apply the prespecified sensitivity conditions one at a time to determine where the conclusions hold.",
     "inputs": [
-      "A01〜A12の合格済み出力",
-      "T00〜T03の凍結入力と特徴量",
-      "A04重複成分"
+      "Accepted outputs from A01–A12",
+      "Frozen inputs and features from T00–T03",
+      "A04 duplicate-text components"
     ],
     "outputs": [
       "report.md",
@@ -831,16 +831,16 @@
       "sensitivity.svg"
     ],
     "acceptance_criteria": [
-      "予定の変種×六主指標の全セルが計算値または理由付き状態を持つ。必須未処理はない。",
-      "原比較との差・n・欠測・支持を別計算で照合し、定義上のゼロと反転を区別する。",
-      "A04境界・重複の未測定、A11・A12探索、図の反例と制約を保存する。"
+      "Every planned variant-by-primary-metric cell has a calculated value or a state with a reason. All required work has been processed.",
+      "Independent calculations verify differences from the original comparison, sample sizes, missingness, and support, and distinguish zeros by definition from reversals.",
+      "Unmeasured A04 boundaries and duplication, A11/A12 exploratory results, and figure counterexamples and constraints are saved."
     ],
     "steps": [
-      "同梱の条件表から具体的な変種IDを固定し、各条件を一つずつ変える。",
-      "部位、文境界、語形、言語、品質、話題、組成、著者、期間、日時、重複の比較を記録する。",
-      "支持ゼロ・不足・必要入力の欠落を数え、実装上のfailureや残作業を別状態にする。",
-      "旧結果と現比較の対象違い、A11/A12の探索と反例を独立に確認する。",
-      "表・図・大偏差の元記事抜き取りを独立実行する。"
+      "Freeze concrete variant IDs from the bundled condition list. Change one condition at a time.",
+      "Record comparisons for body regions, sentence boundaries, word forms, language, quality, topics, composition, authors, periods, dates, and duplicates.",
+      "Count zero support, insufficient support, and missing required inputs. Track implementation failures and pending work with separate states.",
+      "Independently check differences in scope between historical and current comparisons, A11/A12 exploratory analyses, and counterexamples.",
+      "Independently verify tables and figures and spot-check source articles for large deviations."
     ],
     "references": [
       "../measurement-spec.md",
@@ -848,15 +848,15 @@
       "../references/v01-variants.json"
     ],
     "pitfalls": [
-      "計算不能を影響なしとみなさない。",
-      "0をまたぐかだけで頑健と決めない。"
+      "Record unevaluable cases explicitly.",
+      "Assess robustness using more than whether an interval crosses zero."
     ],
-    "handoff": "R01へ全変種の結果状態、印象と異なる反例、原尺度・分母が変わる条件を渡す。"
+    "handoff": "Pass all variant result states, counterexamples to apparent trends, and conditions that change the original scale or denominator to R01."
   },
   {
     "id": "R01",
     "directory": "R01-editorial",
-    "title": "日本語の執筆材料",
+    "title": "Japanese editorial materials",
     "dependencies": [
       "T03",
       "A01",
@@ -873,11 +873,11 @@
       "A12",
       "V01"
     ],
-    "goal": "比較と探索を検証済みの日本語執筆材料にまとめ、Phase 2へ固定入力を渡す。",
+    "goal": "Compile the comparisons and exploratory analyses into verified Japanese editorial materials and pass frozen inputs to Phase 2.",
     "inputs": [
-      "T03の対象とcoverage",
-      "A01〜A12とV01の元表、図、manifest、verification",
-      "T00/T01/T02/A09の入力資産"
+      "T03 cohort and coverage",
+      "Source tables, figures, manifests, and verification from A01–A12 and V01",
+      "Input assets from T00/T01/T02/A09"
     ],
     "outputs": [
       "report.md",
@@ -891,27 +891,27 @@
       "phase2-inputs.json"
     ],
     "acceptance_criteria": [
-      "六主指標の尺度、元表、記事と既知著者の点、区間対象、比較年と未実行検定の表示が一致する。",
-      "主張と保留が元表行・分母・反例・不足へ追跡でき、既存図を実際に開いて照合した。",
-      "Phase 2の必要入力参照がパッケージ相対パスとハッシュで解決し、必須未解決事項はない。"
+      "The scales of the six primary metrics, source tables, point estimates for articles and known authors, interval populations, comparison years, and labels for tests left unrun all agree.",
+      "Claims and withheld conclusions can be traced to source table rows, denominators, counterexamples, and shortfalls. The existing figures were opened and checked.",
+      "Every required Phase 2 input resolves by package-relative path and hash, and all required issues have been resolved."
     ],
     "steps": [
-      "対象・主比較・具体的材料・位置・構造と文体・反例・限界を日本語で記す。",
-      "方向未指定の二指標、結果前固定時刻、著者区間の別対象、p/Holmの実行状態を照合する。",
-      "主張台帳と元表index、保留の理由、比較集合ごとの限界を保存する。",
-      "図を開いて値・n・期間・区間の説明を突合する。",
-      "D02、T00抽出器、T01採否と検出器、T02語文・metadata・topic-map、T03 coverage、A09固定qをphase2-inputs.jsonに登録する。",
-      "独立レビュアーが事実・計測・図・ハッシュと相対参照を点検する。"
+      "Describe the cohort, primary comparisons, concrete material, positions, structure and style, counterexamples, and limitations in Japanese.",
+      "Verify the two metrics without a specified direction, the pre-result freeze time, the separate population for author-based intervals, and whether the p-value and Holm procedures ran.",
+      "Save the claim ledger and source table index, reasons for withholding claims, and limitations for each comparison cohort.",
+      "Open the figures and check that the values, sample sizes, periods, and intervals match the descriptions.",
+      "Register D02, the T00 extractor, T01 inclusion decisions and detector, T02 segmentation, metadata, and topic map, T03 coverage, and the A09 fixed q in phase2-inputs.json.",
+      "Have an independent reviewer check facts, measurements, figures, hashes, and relative references."
     ],
     "references": [
       "../measurement-spec.md",
       "../analysis-methods.md"
     ],
     "pitfalls": [
-      "旧runの採用22件と保留4件は期待値ではない。",
-      "日本語草稿の代筆、英訳、公開は別作業。",
-      "関連の裏付けがない異なる集合の結果を結ばない。"
+      "Base acceptance and withholding on this run's evidence. The original run recorded 22 accepted and four withheld claims.",
+      "Treat drafting the Japanese article, translating it into English, and publishing it as separate tasks.",
+      "Connect results across different cohorts only where the evidence supports the relationship."
     ],
-    "handoff": "新runの成果物とPhase 2入力indexを渡す。CLIで全体statusを同期・検査する。"
+    "handoff": "Pass the new run's outputs and the Phase 2 input index downstream. Synchronize and validate overall status with the CLI."
   }
 ]

@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "A05",
-      "title": "書き手の声と呼びかけ",
-      "description": "書き手の声と呼びかけ",
+      "title": "Author Voice and Direct Address",
+      "description": "Author Voice and Direct Address",
       "priority": 12,
       "status": "not_started",
       "passes": false,
@@ -20,17 +20,17 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "全記事の語形計数、使用記事率、全記事と使用記事の密度の分母が別に出る。",
+          "criterion": "Word-form counts for all articles, the share of articles using each form, and density denominators for all articles and articles using the form are reported separately.",
           "met": false
         },
         {
           "id": "C02",
-          "criterion": "曖昧な人称と短縮形を盲検抜粋で点検し、辞書は結果前に固定される。",
+          "criterion": "Ambiguous pronouns and contractions are checked in blinded excerpts, and the dictionary is frozen before results are examined.",
           "met": false
         },
         {
           "id": "C03",
-          "criterion": "単数一人称と短縮形の千P語値をT02 IDへ一意に戻せる。",
+          "criterion": "First-person singular and contraction rates per 1,000 P words can be mapped unambiguously to T02 IDs.",
           "met": false
         }
       ],

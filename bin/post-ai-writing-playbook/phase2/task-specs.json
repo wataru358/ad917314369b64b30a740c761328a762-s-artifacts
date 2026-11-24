@@ -2,16 +2,16 @@
   {
     "id": "P2-S01",
     "directory": "s01-plan",
-    "title": "比較と収録の実行計画を固定する",
+    "title": "Lock the comparison and corpus intake plan",
     "dependencies": [
       "R01",
       "D03"
     ],
-    "goal": "二つの取得経路から、固定UTC月窓の比較に必要な入力と実行順を確定する。",
+    "goal": "Confirm the inputs and execution order for comparing the fixed UTC month windows across both acquisition routes.",
     "inputs": [
-      "R01の検証済みphase2-inputs.jsonと索引先",
-      "D03の検証済みplan.jsonl、responses.jsonl、保存HTMLと原応答",
-      "固定測定仕様と設定"
+      "R01's verified phase2-inputs.json and the files it indexes",
+      "D03's verified plan.jsonl, responses.jsonl, archived HTML, and raw responses",
+      "Fixed measurement specification and settings"
     ],
     "outputs": [
       "report.md",
@@ -22,16 +22,16 @@
       "pilot-plan.json"
     ],
     "acceptance_criteria": [
-      "R01とD03のreceipt、入力パス、ハッシュ、必要列、結合キーを照合し、全入力と例外を列挙する。",
-      "主対象、全60年月セル、重み、D/H、盲検、比較、検証、資料の順序と定義版を固定する。",
-      "抽出・言語pilotの選択、閲覧順、標本不足、全量との違いを記録する。"
+      "Check the R01 and D03 receipts, input paths, hashes, required columns, and join keys. List all inputs and exceptions.",
+      "Lock the primary cohort, all 60 year-month cells, weights, D/H, blinding, the order of comparisons, verification and reporting, and the definition version.",
+      "Record extraction and language pilot selection, access order, sample shortfalls, and differences from the full corpus."
     ],
     "steps": [
-      "R01とD03の受理済みreceiptの出力先を開く。必要列、正規化したパス、本数とID対応を検証する。公開UTC、取得日時、CC capture、編集日時を別項目にする。",
-      "Phase 1との対象・定義差を記録する。旧の採否を固定し、旧2018〜2022年と新2026年の共通UTC1〜10月を主対象にする。",
-      "収録、採否、測定仕様固定、D候補固定、H、独立検算、18項目判断、資料化の順序と閲覧制限をplan.jsonに記録する。正当な0と欠測を分ける。",
-      "抽出pilotは固定planの先頭50件を通常例にする。コード、表、引用、入れ子リスト、埋め込み、カード、短文、警告、空、Markdownのみ、解析失敗の各最大2件をSHA256(42:phase2-extraction:<分類>:<記事ID>)順に選ぶ。重複IDは1件にまとめて選択理由を併記する。",
-      "言語pilotは構造診断を精度標本と分ける。先頭50件を校正、既選択を除いた計画順で各月5件を確認とする。ラベルを先に封印し、スコアは後から開く。元の50/19/50は履歴とする。"
+      "Open the output directories from the accepted R01 and D03 receipts. Verify required columns, normalized paths, counts, and ID mappings. Record UTC publication time, retrieval time, CC capture time, and edit time in separate fields.",
+      "Document differences in cohort scope and definitions from Phase 1. Lock the earlier inclusion decisions and use the common January through October UTC window for 2018–2022 and 2026 as the primary cohort.",
+      "Record the sequence and access restrictions in plan.json for corpus intake, inclusion decisions, specification lock, D candidate lock, H, independent recomputation, the 18 item decisions, and reporting. Distinguish valid zeros from missing measurements.",
+      "For the extraction pilot, use the first 50 items in the fixed plan as routine examples. Select up to two items each for code, tables, quotations, nested lists, embeds, cards, short text, warnings, empty bodies, Markdown-only bodies, and parse failures, ordered by SHA256(42:phase2-extraction:<category>:<article ID>). Keep duplicate IDs in a single row with all selection reasons.",
+      "For the language pilot, keep structural diagnostics separate from the accuracy sample. Use the first 50 items for calibration and the first five items per month in plan order for confirmation, excluding items already selected. Seal the labels before viewing the scores. Retain the original 50/19/50 counts as history."
     ],
     "references": [
       "../measurement-spec.md",
@@ -39,23 +39,23 @@
       "../comparisons.md"
     ],
     "pitfalls": [
-      "取得経路と時期が重なる。APIとCCの網羅性を同等とみなさない。",
-      "pilotは小規模の品質確認。fullの採否と比較には全入力での検証が要る。"
+      "The acquisition route and period overlap. Account for differences in coverage between the API and CC.",
+      "The pilot is a small quality check. Full-corpus inclusion decisions and comparisons require verification against every input."
     ],
-    "handoff": "S02へ入力索引と計画を渡す。再開時は同じplanと入力ハッシュを照合する。"
+    "handoff": "Pass the input index and plan to S02. On resumption, check the plan and input hashes against the original records."
   },
   {
     "id": "P2-S02",
     "directory": "s02-corpus",
-    "title": "新集合の全文採否を固定する",
+    "title": "Lock full-text inclusion decisions for the new corpus",
     "dependencies": [
       "P2-S01"
     ],
-    "goal": "固定planの全IDに結果を付け、採用した2026年の英語IDと抽出本文を確定する。",
+    "goal": "Record an outcome for every ID in the fixed plan and finalize the accepted English-language 2026 IDs and their extracted prose.",
     "inputs": [
-      "S01のinput-index.json、plan.json、pilot-plan.json",
-      "索引されたD03原応答、HTML、Markdown",
-      "索引されたT00抽出規則、T01言語規則"
+      "S01's input-index.json, plan.json, and pilot-plan.json",
+      "Indexed D03 raw responses, HTML, and Markdown",
+      "Indexed T00 extraction rules and T01 language rules"
     ],
     "outputs": [
       "report.md",
@@ -68,18 +68,18 @@
       "language-review-index.json"
     ],
     "acceptance_criteria": [
-      "全plan IDが計画順にrecordsとdecisionsへ1回ずつ現れ、状態別件数が総数と一致する。",
-      "英語集合が台帳のaccept_englishと一致する。保留、本文なし、取得不能は台帳に残る。",
-      "本文と根拠を原応答へ戻せる。ラベルの封印後に対応スコアを開示した証拠と、原判断を保つ訂正記録が読める。",
-      "校正、診断、未使用確認、全件の範囲を区別し、独立確認が実物の抽出位置・結合・採否・来歴を照合する。"
+      "Every plan ID appears once in records and once in decisions, in plan order. Counts by status sum to the total.",
+      "The English corpus matches the ledger's accept_english entries. Retain held items, missing prose, and unavailable responses in the ledger.",
+      "Trace text and evidence to the raw responses. Preserve proof that the corresponding scores were disclosed after the labels were sealed and retain the original decisions in the correction history.",
+      "Distinguish calibration, diagnostics, unused confirmation samples, and full-corpus review. Independently check actual extraction locations, joins, inclusion decisions, and provenance."
     ],
     "steps": [
-      "固定plan順で原応答のID、UTC、hashを照合する。HTMLから旧と同じ抽出器でP/L/U、本文順、見出し、太字、DOM対応、警告を保存する。失敗した記事も理由付きで記録する。",
-      "固定のpilotを実行する。180文字未満の構造診断やMarkdownのみを採用除外条件にしない。Markdownの無断代用を避ける。",
-      "旧機械規則でS、P、L、Sの1,200文字区間を採点する。スコアと分けて、機械状態にかかわらず全件のSを内容で読む。既確認のpilot行は同一本文hashを確認して再利用する。残りは最大25件ずつ進める。",
-      "全文を読み、本文ラベルと証拠を封印する。その後、対応スコアだけを開く。バッチの範囲、時刻、判定担当、ハッシュを索引にする。確認後に閾値を変えない。",
-      "混在・不明を保留とし、非英語、本文なし、取得不能を分ける。広告、短さ、技術性は除外条件にしない。訂正は根拠、日時、開示済みフラグ、原記録hashとともに追記する。",
-      "全件の採否と構造、planと原応答の結合を独立に確認する。既存runと同じ入力を使ったか、再収録・再判定したかを報告する。"
+      "Verify raw response IDs, UTC timestamps, and hashes in fixed plan order. Apply the earlier HTML extractor and save P/L/U, prose order, headings, bold spans, DOM mappings, and warnings. Record failures with reasons.",
+      "Run the fixed pilot. Keep items eligible when they fall into the structural diagnostic for text under 180 characters or have only Markdown. Avoid substituting Markdown without authorization.",
+      "Apply the earlier automated scoring rules to S, P, L, and 1,200-character sections of S. Review all S content independently of the scores and automated status. Reuse completed pilot rows after confirming identical text hashes. Process the remaining items in batches of up to 25.",
+      "Read the full text and seal the content labels and evidence. Then open only the corresponding scores. Index batch ranges, timestamps, reviewers, and hashes. Keep the thresholds fixed after review.",
+      "Hold mixed and uncertain results. Record non-English content, missing prose, and unavailable responses separately. Keep ads, short texts, and technical texts eligible. Append corrections with evidence, timestamp, the score disclosure flag, and the original record hash.",
+      "Independently check every inclusion decision and structure record and verify the join between the plan and raw responses. Report which inputs were reused and whether corpus intake and decisions were repeated."
     ],
     "references": [
       "../measurement-spec.md",
@@ -87,23 +87,23 @@
       "../comparisons.md"
     ],
     "pitfalls": [
-      "抽出Sの言語と元記事全体の言語は別の範囲。",
-      "元runの8,942採用、220保留、7訂正は比較用の履歴。"
+      "The extracted S text and the complete original article have different language assessment scopes.",
+      "The original run's 8,942 acceptances, 220 holds, and 7 corrections are historical comparison figures."
     ],
-    "handoff": "S03へ英語ID、records、未採用理由、入力ハッシュを渡す。再開時は検証済みの封印バッチを再利用する。"
+    "handoff": "Pass the English-language IDs, records, reasons for non-inclusion, and input hashes to S03. Reuse verified sealed batches when resuming."
   },
   {
     "id": "P2-S03",
     "directory": "s03-spec",
-    "title": "対象、測定仕様と著者分割を固定する",
+    "title": "Lock the cohort, measurement specification, and author split",
     "dependencies": [
       "P2-S02"
     ],
-    "goal": "S04で使う共通月、固定仕様、著者分割と確認標本を結果開示前に確定する。",
+    "goal": "Finalize the common months, fixed specification, author split, and confirmation samples for S04 before disclosing results.",
     "inputs": [
-      "S02の英語集合、records、manifest",
-      "S01が索引したR01の採否、構造、語・文実装、タグ",
-      "固定仕様と設定"
+      "S02's English corpus, records, and manifest",
+      "R01 inclusion decisions, structure, word and sentence implementations, and tags indexed by S01",
+      "Fixed specification and settings"
     ],
     "outputs": [
       "report.md",
@@ -117,17 +117,17 @@
       "fixtures.json"
     ],
     "acceptance_criteria": [
-      "旧の採否、新の英語ID、60セルごとの実測数、対象外の理由を元の入力から検証できる。",
-      "著者と非空完全同文による連結成分がD/Hをまたがない。未知著者、成分サイズ、セル支持を出し、近似群の越境をS04の診断へ渡す。",
-      "X02と自動定義標本を分け、D/H別の枠、選択、salt、不足、本文ハッシュが固定される。",
-      "旧Phase 1と異なる6指標の分母とNA、語彙境界、太字投影、重み、bootstrapの小例を確認する。"
+      "Verify the earlier inclusion decisions, newer English-language IDs, observed counts for all 60 cells, and exclusion reasons against the original inputs.",
+      "Connected components based on authors and nonempty exact text matches stay within one D/H partition. Report unknown authors, component sizes, and support by cell. Pass near-duplicate groups spanning the partitions to S04 diagnostics.",
+      "Keep X02 and automated-definition samples separate. Lock slots, selections, salts, shortfalls, and text hashes by D/H partition.",
+      "Check small examples covering the six metrics' denominators and NA treatment where they differ from Phase 1, lexical boundaries, bold projection, weighting, and bootstrap."
     ],
     "steps": [
-      "受理済みrunからパスを解決し、設定と入力ハッシュを保存する。共通UTC月を抽出し、日付不明などを理由付きで台帳へ残す。",
-      "旧CCと新APIの記事ID領域を分ける。単一の既知数値著者だけ両経路で統合する。年月別対象、著者、タグ、edited_at、取得日時、capture時刻の欠測を照合する。",
-      "固定SとP/Lの順序から非空完全一致word列を作る。著者の連結成分の最小キーを使い固定SHA256 parityでD/Hを付ける。Hの語彙比較は開かない。",
-      "X02の校正は旧2枠/年月、新10枠/月、確認は旧12、新30を選ぶ。固定saltを使い著者内1記事。別にX02標本を除いて各経路50校正、100確認を選ぶ。IDとblind ID対応を隔離する。",
-      "固定した語・文規則を取り込み、合成小例でapostrophe、Unicode・URL、fragment、P/L、太字区間、0とNA、重み、区間不足を確かめる。"
+      "Resolve paths from the accepted runs and save settings and input hashes. Select the common UTC months and record exceptions such as unknown dates in the ledger with reasons.",
+      "Use separate article ID namespaces for the earlier CC and newer API data. Merge only unique known numeric author IDs across routes. Check cohort counts by year and month and missing authors, tags, edited_at, retrieval times, and capture times.",
+      "Build nonempty exact-match word sequences from fixed S and P/L ordering. Assign D/H by fixed SHA-256 parity of the smallest key in each connected author component. Keep H lexical comparisons sealed.",
+      "For X02 calibration, select 2 earlier slots per year-month and 10 newer slots per month. For confirmation, select 12 and 30 respectively. Use the fixed salt and one article per author. Separately select 50 calibration and 100 confirmation articles per route, excluding the X02 samples. Isolate the mapping between IDs and blind IDs.",
+      "Import the fixed word and sentence rules. Use small synthetic fixtures to check apostrophes, Unicode and URLs, fragments, P/L, bold spans, zeros and NA, weights, and insufficient support for intervals."
     ],
     "references": [
       "../measurement-spec.md",
@@ -135,22 +135,22 @@
       "../comparisons.md"
     ],
     "pitfalls": [
-      "S03では仕様を固定し、Hの結果値は見ない。",
-      "経路間で記事IDの数値を結合しない。handleと組織IDは個人著者の代用にしない。"
+      "Lock the specification in S03 and keep H results sealed.",
+      "Use separate numeric article ID namespaces for each route. Identify individuals by their numeric author IDs, excluding handles and organization IDs."
     ],
-    "handoff": "S04へ対象、D/H、設定、標本、テストを渡す。再開時は入力hashと開示履歴を確かめる。"
+    "handoff": "Pass the cohort, D/H assignments, settings, samples, and tests to S04. Check input hashes and disclosure history on resumption."
   },
   {
     "id": "P2-S04",
     "directory": "s04-compute",
-    "title": "固定仕様で計算と独立判定を実行する",
+    "title": "Run the calculations and independent assessments against the fixed specification",
     "dependencies": [
       "P2-S03"
     ],
-    "goal": "対象を変えずに基本6指標、語彙、X01〜X03、C01を計算し、支持・不確かさ・検証を保存する。",
+    "goal": "Calculate the six core metrics, vocabulary, X01–X03, and C01 on the fixed cohort. Save support, uncertainty, and verification evidence.",
     "inputs": [
-      "S03が封印した対象、設定、D/H、標本とテスト",
-      "S03のmanifestが指す原入力と固定抽出・語文実装"
+      "Cohort, settings, D/H assignments, samples, and tests sealed by S03",
+      "Original inputs and fixed extraction, word, and sentence implementations referenced by the S03 manifest"
     ],
     "outputs": [
       "report.md",
@@ -165,18 +165,18 @@
       "readback.json"
     ],
     "acceptance_criteria": [
-      "元データ、設定、コード、環境、D/H、標本、辞書をhashで追跡でき、Dの選択と分類を封印してからHを開いている。",
-      "Mの6指標をすべての記事に対応させる。V01/V02の全候補、V03の固定5系列、X01〜X03、C01の計算と支持、区間、失敗理由が出力される。",
-      "X02の独立AI判定2系統と自動定義の確認記録があり、陽性span、手数え、欠損、unknownを検証できる。標本支持不足の枠は明示される。",
-      "5000反復、4750有効条件、Holm/BH、0分母、必要月と各固定感度の扱いを独立検算で再現する。比較の全キーを列挙し、網羅性と元値を確かめる。"
+      "Trace original data, settings, code, environment, D/H, samples, and dictionaries by hash. Seal D selections and classifications before opening H.",
+      "Map the six M metrics to every article. Output calculations, support, intervals, and failure reasons for all V01/V02 candidates, the five fixed V03 series, X01–X03, and C01.",
+      "Retain two independent AI assessments for X02 and the automated-definition verification records. Positive spans, manual counts, missing values, and unknowns are verifiable. Identify slots with insufficient sample support.",
+      "Independently reproduce the handling of 5,000 replicates, the 4,750 valid-replicate requirement, Holm/BH, zero denominators, required months, and each fixed sensitivity. List all comparison keys and check coverage and original values."
     ],
     "steps": [
-      "S03のハッシュと合成例を検証する。新データへ旧の語・文規則と太字投影を適用し、旧の規範中間値を再利用する。P文とP+Lの分母を区別し、M01〜M06の数値・分子・分母・理由・位置を各記事に記録する。",
-      "DだけでV01の同じ期間20出現・10著者・最大占有率0.20と順位、V02の旧R≤1%・新R≥2%・新20著者・占有率≤0.10・新F≥0.05/1000を適用する。V01上限200、V02上限100。V03の固定5系列は検索式をそのまま使う。分類、X01辞書、妥当性標本を封印後、Hで全候補を確認する。",
-      "X01ではDで候補5-gramを分類する。主辞書は一般説明で除外フラグなし。H同期間で本人以外の2著者以上が使う一致のword位置unionをW_Bで割る。X03は最初と最後の各50語で5+8表現、主は末尾。見出しと短文重なり、共有signatureは補助に残す。",
-      "S03のblind IDで独立AIの2系統へX02と別の自動定義標本を割り付ける。担当、packet、根拠、原回答を保存し、相互の開示前に封印する。E/Gは文ごとに別ラベル。不一致や判断不能、語率の上下限、一致率とκ、必要セルを記録する。参照のない検証は未検証とする。",
-      "F/R/A、D/Hの件数、NA、未知著者の別探索、年・月の全表を作る。主値、感度、近似同文群、話題支持と除外質量、200語窓、タグ除外を区別する。V01/V02の同じ語の行は保持し、BHは仮説unionに一度だけ適用する。",
-      "固定seed PCG64で著者クラスタの再抽出を行う。月と旧年の重み、C01の各反復での回帰とプールSD、外挿backtest、各補正の対象を記録する。比較一覧、算術・区間の独立readback、再実行コマンドを保存する。"
+      "Verify the S03 hashes and synthetic fixtures. Apply the earlier word, sentence, and bold projection rules to the new data and reuse the canonical intermediate values for the earlier data. Keep denominators for P sentences and P+L distinct. Record each article's M01–M06 values, numerators, denominators, reasons, and positions.",
+      "Use only D to apply V01's same-period rules of 20 occurrences, 10 authors, a maximum author share of 0.20, and fixed ranking. Apply V02's rules of earlier R≤1%, newer R≥2%, 20 newer authors, share≤0.10, and newer F≥0.05/1000. Cap V01 at 200 and V02 at 100. Apply the fixed V03 queries to all five series. Seal the classifications, X01 dictionary, and validation sample before checking all candidates on H.",
+      "Classify candidate X01 5-grams on D. The primary dictionary includes general explanation entries with no exclusion flags. Within each H period, divide the union of matching word positions for phrases used by at least two other authors by W_B. For X03, test the fixed 5 opening and 8 closing expressions in the first and last 50 words respectively, with the close as primary. Keep headings, overlaps in short articles, and shared signatures as supplementary outputs.",
+      "Use the S03 blind IDs to assign X02 and the separate automated-definition sample to two independent AI assessment streams. Save reviewer, packet, evidence, and original response, and seal both streams before either sees the other. Label E and G separately for each sentence. Record disagreements, indeterminate cases, word-rate bounds, agreement and κ, and required cells. Mark checks without a reference as unverified.",
+      "Produce F/R/A, D/H counts, NA, separate exploration for unknown authors, and complete yearly and monthly tables. Distinguish primary values, sensitivity estimates, near-duplicate groups, topic support and excluded mass, 200-word windows, and tag exclusions. Keep separate V01 and V02 rows for shared terms and apply BH once to the union of hypotheses.",
+      "Resample author clusters with PCG64 and the fixed seed. Record the monthly and earlier-year weights, per-replicate C01 regression and pooled SD, extrapolation backtests, and the family covered by each correction. Save the comparison index, independent arithmetic and interval readback, and rerun commands."
     ],
     "references": [
       "../measurement-spec.md",
@@ -184,23 +184,23 @@
       "../comparisons.md"
     ],
     "pitfalls": [
-      "結果が弱くても年・月、候補、標本、閾値を選び直さない。",
-      "精度基準の未達と処理失敗を区別する。計算照合と内容妥当性に別の証拠が要る。",
-      "C01は旧4年の年平均の記述外挿。著者ブートストラップは年次構造の変化を測らない。"
+      "Keep years, months, candidates, samples, and thresholds fixed even when results are weak.",
+      "Record failures to meet accuracy thresholds and processing failures separately. Use separate evidence for computational checks and content validity.",
+      "C01 is a descriptive extrapolation of four earlier annual means. The author bootstrap quantifies variation across author clusters, leaving changes in year-level structure outside its scope."
     ],
-    "handoff": "封印した比較、診断、独立読戻しをS05へ渡す。再開時は最後の検証済みチェックポイントと入力・辞書・判定hashを照合する。"
+    "handoff": "Pass the sealed comparisons, diagnostics, and independent readback to S05. On resumption, check the most recent verified checkpoint and the input, dictionary, and assessment hashes."
   },
   {
     "id": "P2-S05",
     "directory": "s05-review",
-    "title": "18項目の算術と主張の範囲を検証する",
+    "title": "Verify the arithmetic and scope of claims for 18 items",
     "dependencies": [
       "P2-S04"
     ],
-    "goal": "保存値に対し、測定と比較が支える範囲を判断する。判断と根拠を追跡可能にする。",
+    "goal": "Determine what the measurements and comparisons support using the saved values. Make decisions and evidence traceable.",
     "inputs": [
-      "S04の比較、記事値、判定、分母、診断と独立readback",
-      "S03の対象、設定、標本、入力ハッシュ"
+      "S04 comparisons, article values, assessments, denominators, diagnostics, and independent readback",
+      "S03 cohort, settings, samples, and input hashes"
     ],
     "outputs": [
       "report.md",
@@ -212,17 +212,17 @@
       "independent-review.json"
     ],
     "acceptance_criteria": [
-      "M6、V01/V02とV03の5系列、X01、X02 E/G、X03、C01の18判断が重複なくあり、全比較キーと固定感度へたどれる。",
-      "各判断の数値、分母、不確かさ、内容検証、代替説明、許容文がそろう。NAとunknownの両方に理由が読める。",
-      "X02の固定標本差・unknown範囲、V02条件未達、品質24比較、C01の6指標とbacktestが脱落しない。",
-      "独立担当が保存値と記述を照合し、指摘・修正・再検証を保存する。終了は全項目を確認し判断を残したことを示す。"
+      "Retain exactly 18 decisions covering the six M metrics, V01/V02, five V03 series, X01, X02 E/G, X03, and C01. Link them to all comparison keys and fixed sensitivities.",
+      "Provide values, denominators, uncertainty, content verification, alternative explanations, and permissible wording for each decision. Give reasons for NA and unknown values.",
+      "Retain X02 fixed-sample differences and bounds due to unknown labels, unmet V02 criteria, all 24 quality comparisons, and the six C01 metrics and backtests.",
+      "Have an independent reviewer check the saved values against the wording. Save findings, corrections, and verification of corrections. Completion requires checking every item and saving its decision."
     ],
     "steps": [
-      "対象manifestと比較の全キーを照合する。再利用したS04の検算と、この工程で実施した照合を区別する。既存比較から分母・月支持・有効反復・補正・NA理由を取り出す。",
-      "固定感度を全行つないで、方向、母集団変更、支持不足、適用外を区別する。品質標本のbaseline・表示エラー・広告・署名×M6も理由付きで残す。",
-      "合議参照の有無、分割の手数え差、太字の出典、V03/X01/X03の正負支持を確認する。X02は固定標本のE/G別に、有無、語率、判定可能数、一致・κ、不明範囲を点検する。",
-      "VのF/R/A、著者実数、Q、条件非再現を確認する。C01は元尺度4点の外挿、範囲外、backtest、感度を照合する。取得・生存・編集・話題差が残る箇所を示す。",
-      "18項目を限定採用、保留、判断不能から根拠で決める。観測された自動値と測定妥当性を分け、各項目に許容文と証拠の位置を付ける。別担当が根拠と記述を検証する。"
+      "Check the cohort manifest and all comparison keys. Distinguish reused S04 recalculations from checks performed at this stage. Extract denominators, monthly support, valid replicates, corrections, and NA reasons from the saved comparisons.",
+      "Join all fixed sensitivity rows and distinguish direction, changes in population, insufficient support, and inapplicability. Keep the quality sample's baseline, display-error, advertising, and signature comparisons across all six M metrics, with reasons.",
+      "Check for consensus references, manual segmentation count differences, bold provenance, and positive and negative support for V03, X01, and X03. For each of E and G in the fixed X02 sample, check presence, word rate, assessable counts, agreement and κ, and the uncertainty range due to unknown labels.",
+      "Check F/R/A, raw author counts, Q, and unmet replication conditions for V. For C01, check the four-point extrapolation on the original scale, out-of-domain values, backtests, and sensitivities. Identify remaining differences in acquisition, survival, editing, and topic composition.",
+      "Use evidence to assign each of the 18 items limited acceptance, hold, or indeterminate. Distinguish observed automated values from measurement validity. Record permissible wording and evidence locations for every item. Have a separate reviewer verify the evidence and wording."
     ],
     "references": [
       "../comparisons.md",
@@ -230,23 +230,23 @@
       "../measurement-spec.md"
     ],
     "pitfalls": [
-      "元runの限定採用2、保留14、判断不能2は履歴。新runの判断の割当には使わない。",
-      "全compute・bootstrapの再実行は、既存照合で足りない具体的な不一致の調査に限る。"
+      "The original run's 2 limited acceptances, 14 holds, and 2 indeterminate decisions are historical. Assign the new run's decisions from its own evidence.",
+      "Rerun the full calculation and bootstrap only to investigate a specific discrepancy that the existing checks cannot resolve."
     ],
-    "handoff": "S06へ18行の判断と保存値の参照を渡す。再開時はローカル照合でmanifestと根拠の同一性を確認する。"
+    "handoff": "Pass the 18 decision rows and references to saved values to S06. On resumption, verify the manifest and evidence locally against the original records."
   },
   {
     "id": "P2-S06",
     "directory": "s06-report",
-    "title": "比較結果と追加4資料をまとめる",
+    "title": "Compile the comparisons and four supplementary materials",
     "dependencies": [
       "P2-S05"
     ],
-    "goal": "数字・図・用例・主張を元の比較に結び、読み手が対象と限界を確認できる資料にする。",
+    "goal": "Link numbers, figures, examples, and claims to the underlying comparisons so readers can verify the scope and limitations.",
     "inputs": [
-      "S05の18判断、固定感度、evidence-index、独立確認",
-      "S04の比較、候補、年・月表、格納した記事値、X02判定",
-      "S03の対象と保存タグ"
+      "S05's 18 decisions, fixed sensitivities, evidence-index, and independent checks",
+      "S04 comparisons, candidates, yearly and monthly tables, stored article values, and X02 assessments",
+      "S03 cohort and saved tags"
     ],
     "outputs": [
       "report.md",
@@ -261,17 +261,17 @@
       "tag-periods.tsv"
     ],
     "acceptance_criteria": [
-      "18判断と全固定候補を保持する。分母と出典のある本文・表・図・用例を索引でき、保存比較へ戻れる。",
-      "11月16日の追加4資料を固定条件で作り、行数・対象・欠測・単位・保存値を独立に確認する。",
-      "記事使用率と陽性内量の積、年別の未観測期間、タグ欠測とAIタグ定義が表示から確認できる。",
-      "HTMLの表示、検索、リンクを実物で確認し、確認できない範囲、任意の11月23日作業の有無を記録する。"
+      "Retain the 18 decisions and all fixed candidates. Index prose, tables, figures, and examples with denominators and sources, and link them to the saved comparisons.",
+      "Build the four November 16 resources under the fixed conditions. Independently verify row counts, cohorts, missingness, units, and saved values.",
+      "Show the product of article prevalence and the mean among positive articles, the years without observations, tag missingness, and the definition of AI tags.",
+      "Verify HTML rendering, search, and links on the actual output. Record any areas that could not be verified and whether the optional November 23 work was performed."
     ],
     "steps": [
-      "S05にある許容文を18行の主張台帳に写し、数値と根拠を結び付ける。11の問いの入口を作る。対象、分布、年別、感度、X02のE/G組合せを本文・図・表からたどれるようにする。",
-      "固定候補全行とF/R/Aの条件別比較、年別・月別表、必要のある用例と出典を残す。分類の根拠は封印したD文脈を使う。引用は必要最小限とし、AI著作の判定例にしない。",
-      "比較の9条件、M05/M06の使用率と使用内の量、一般説明表現の年別、保存タグ構成の4資料を保存値から作る。全件表と要約を分け、各表の検算、元行、再実行コマンドを索引へ登録する。",
-      "対象世代、分母、point/percentage point、NA理由、残る取得・測定・構成差を見える場所へ置く。図の値・年軸と説明、検索とリンクを独立に照合する。",
-      "11月23日の追加が明示された場合はタグ別書式と固定24記事のHTML有無照合を別の派生ファイルへ保存する。原データ、本compute、候補、正式判断は保持する。"
+      "Copy S05's permissible wording to an 18-row claim ledger and link the values and evidence. Provide entry points for the 11 questions. Let readers find the cohort, distribution, yearly results, sensitivities, and X02 E/G combinations through the text, figures, and tables.",
+      "Preserve all fixed candidate rows, F/R/A comparisons by condition, yearly and monthly tables, and necessary examples with sources. Base the classifications on sealed D contexts. Quote only what is needed and avoid presenting examples as AI authorship judgments.",
+      "Build four resources from saved values for the nine comparison conditions, M05/M06 prevalence and amount among users, yearly general explanatory expressions, and saved tag composition. Keep full tables and summaries separately. Index each table's checks, source rows, and rerun commands.",
+      "Make the cohort periods, denominators, points versus percentage points, reasons for NA, and remaining differences in acquisition, measurement, and composition easy to find. Independently check chart values, year axes, descriptions, search, and links.",
+      "If the November 23 supplement is explicitly requested, save formatting by tag and the fixed 24-article HTML presence check in separate derived files. Preserve original data, main calculations, candidates, and formal decisions."
     ],
     "references": [
       "../supplements.md",
@@ -279,9 +279,9 @@
       "../phase2-handoff.md"
     ],
     "pitfalls": [
-      "全件を技術記事として分類した比較ではない。タグ欠測から話題やAI著作を決めない。",
-      "対象は固定観測集合。追加資料は購入・公開・最終稿や測定精度の証明に当たらない。"
+      "The comparison uses a fixed observed corpus. Treat topic and AI authorship as unknown when the only evidence is a missing tag, and avoid treating the whole corpus as classified technical articles.",
+      "The supplementary materials describe the fixed observed corpus. Purchasing, publication, final manuscript approval, and measurement accuracy are outside their scope."
     ],
-    "handoff": "18判断と資料をrootの取りまとめへ渡す。配布物とrun内で、indexから関連する表と証拠を開けることを確認する。"
+    "handoff": "Pass the 18 decisions and materials to the root-level summary. Verify that the index opens the relevant tables and evidence in the distribution and the run output."
   }
 ]

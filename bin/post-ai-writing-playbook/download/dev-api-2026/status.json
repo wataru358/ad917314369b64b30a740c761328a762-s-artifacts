@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "D03",
-      "title": "DEV APIの2026年1〜10月の固定標本を取得する",
-      "description": "DEV APIの2026年1〜10月の固定標本を取得する",
+      "title": "Retrieve a fixed DEV API sample for January through October 2026",
+      "description": "Retrieve a fixed DEV API sample for January through October 2026",
       "priority": 3,
       "status": "not_started",
       "passes": false,
@@ -18,22 +18,22 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "5件の接続確認結果があり、一覧ページ番号と最古行から対象期間の下限到達を確認できる。保存済みの一覧ページは1から連続し、オフセットページングの限界を明記している。",
+          "criterion": "The connection probe records five results. The listing page number and oldest row establish that the scan reached the lower date bound. Saved listing pages are consecutive from page 1, and the report describes the limitations of offset pagination.",
           "met": false
         },
         {
           "id": "C02",
-          "criterion": "計画はseedのハッシュ順から再計算でき、UTC1〜10月が各1,000件、合計10,000の一意なID。タグと言語属性で絞っていない。",
+          "criterion": "The plan can be reproduced from the seeded hash order and contains 1,000 unique IDs per UTC month from January through October, for 10,000 in total. Selection uses the full eligible set regardless of tags or language attributes.",
           "met": false
         },
         {
           "id": "C03",
-          "criterion": "計画の先頭5件の保存・読戻しの記録がある。全計画IDにsaved、empty、not_found、failedの各結果が対応する。未処理IDと差し替えIDがない。",
+          "criterion": "The first five planned responses have been saved and read back. Every planned ID has a saved, empty, not_found, or failed outcome. All original planned IDs are accounted for.",
           "met": false
         },
         {
           "id": "C04",
-          "criterion": "200の正常な個別応答は、空本文を含めて保存し、応答IDとハッシュを照合できる。失敗は理由付きで、月別内訳と原JSONに資格情報がないことを独立検証担当が確かめている。",
+          "criterion": "Valid HTTP 200 detail responses are saved, including empty bodies, with verifiable response IDs and hashes. Failures carry reasons. An independent reviewer verifies the monthly breakdown and checks the raw JSON for credentials.",
           "met": false
         }
       ],

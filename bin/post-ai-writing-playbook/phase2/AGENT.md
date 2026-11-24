@@ -1,10 +1,10 @@
-# Phase 2を進める
+# Run Phase 2
 
-DEV英語記事の書き方を旧2018〜2022年と新2026年の共通UTC1〜10月で比べる。記事値の月平均を取り、10か月を等重みで年へ、旧5年を等重みで期間へまとめる。集計・確認・解釈の根拠を保存し、確定したことと未確認のことが読める資料を作る。
+Compare writing in English DEV articles from January through October UTC across the earlier period (2018–2022) and the newer period (2026). Average article values by month, weight the ten months equally within each year, and weight the five earlier years equally within their period. Save evidence for aggregation, verification, and interpretation so readers can identify supported findings and unresolved questions.
 
-1. [引継ぎ](phase2-handoff.md) と [研究全体の実行手順](../AGENT.md) を読む。全体の状態CLIで実行可能な工程と出力先を得る。
-2. S01を開始する前に、Phase 1のR01と取得工程D03のreceiptを検証する。S01〜S06は後の工程が前のverified出力を使う。自作のコード、派生物、作業中の記録は当該attemptの出力先だけに書く。
-3. 各工程のAGENTとhandoffに従う。S03の仕様固定前にPhase 2の結果を開かず、S04ではDの候補を封印してからHを開く。必要な処理と検証コードを新run内で実装し、証拠を読戻す。
-4. 各工程の成果物と独立検証を確認してreceiptを受理する。欠損・保留・NAには根拠を添える。実施した作業、計画しただけの作業、引き継いだ検証を状態と報告で区別する。
+1. Read the [handoff](phase2-handoff.md) and [research workflow](../AGENT.md). Use the root status CLI to find runnable tasks and output locations.
+2. Verify the Phase 1 R01 and download D03 receipts before starting S01. Each task from S01 through S06 uses the preceding task's verified outputs. Write your code, derivatives, and work logs only within the current attempt's output directory.
+3. Follow each task's AGENT and handoff. Keep Phase 2 results sealed until S03 locks the specification. In S04, seal D candidates before opening H. Implement the required processing and verification in the new run and check the saved evidence.
+4. Check each task's artifacts and independent verification before accepting its receipt. Include evidence for missing, held, and NA values. In status and reports distinguish work performed, work planned, and inherited verification.
 
-[固定測定仕様](measurement-spec.md)、[機械可読設定](settings.json)、[比較と検証の手順](comparisons.md)、[追加集計の手順](supplements.md) を使う。各ファイルの由来は [出典台帳](provenance.md) に記録した。
+Use the [fixed measurement specification](measurement-spec.md), [machine-readable settings](settings.json), [comparison and verification procedure](comparisons.md), and [supplementary analysis guide](supplements.md). See the [source ledger](provenance.md) for provenance.

@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "T03",
-      "title": "対象統計と収録範囲",
-      "description": "対象統計と収録範囲",
+      "title": "Cohort statistics and coverage",
+      "description": "Cohort statistics and coverage",
       "priority": 7,
       "status": "not_started",
       "passes": false,
@@ -20,17 +20,17 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "候補から採用までの記事数が保存則に合い、P/L/U/Sの語数・帯・分位を再計算できる。",
+          "criterion": "Article counts reconcile from candidacy to inclusion. P/L/U/S word counts, bands, and quantiles can be recalculated.",
           "met": false
         },
         {
           "id": "C02",
-          "criterion": "8年・96月・32四半期の観測状態と部分年が明示される。",
+          "criterion": "Coverage states for eight years, 96 months, and 32 quarters identify partial years explicitly.",
           "met": false
         },
         {
           "id": "C03",
-          "criterion": "年・期間の件数と不明日付、既知著者、組織、タグ、重複の対象が区別される。",
+          "criterion": "Year and period counts distinguish unknown dates, known authors, organizations, tags, and duplicate text.",
           "met": false
         }
       ],

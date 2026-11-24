@@ -1,30 +1,30 @@
-# A09　話題と書き手の入れ替わり
+# A09 Changes in Topic and Author Composition
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and the [branch rules](../AGENT.md) before starting this task.
 
-## 目的
+## Purpose
 
-話題・長さの構成、既知著者への重み、本人内差を測る。
+Measure topic and length composition, weighting across known authors, and within-author differences.
 
-## 入力
+## Inputs
 
-- T02 metrics/metadata/記事
+- T02 metrics, metadata, and articles
 - T03 coverage
-- A01〜A08の比較と適用範囲
+- A01–A08 comparisons and scopes of applicability
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream input files from the `output_dir` and manifest that `workflow.py` returns for each dependency. Use those locations for inputs in this run.
 
-## 手順
+## Steps
 
-1. 話題×P語数帯で支持30を満たすセルと基準期固定qを凍結する。指標別cell・年・分類キーを保存する。
-2. 全体と共通範囲、固定組成と同対象の無調整値を比較する。
-3. 年内著者等重みと、両期間に現れる著者の年等重み本人内差を計算する。
-4. 寄与分解、著者cluster区間、A04〜A08の適用範囲を保存し、固定辞書からAI話題タグと本文S語句を別々に付ける。
-5. 重み、分解、区間・独立した適用範囲を元表から再計算する。
+1. Freeze topic-by-P word-count cells that meet the support threshold of 30 and baseline weights q. Save cell, year, and classification keys for each metric.
+2. Compare the full cohort with the common-support cohort, and compare fixed-composition estimates with unadjusted estimates for the same cohort.
+3. Give each author equal weight within a year and calculate equally year-weighted within-author differences for authors observed in both periods.
+4. Save the contribution decomposition, author-cluster intervals, and the scope of A04–A08. Use the fixed dictionary to label AI topics in tags and AI phrases in body S separately.
+5. Recalculate the weights, decomposition, and intervals from the source tables, and independently verify the scopes of applicability.
 
-## 必要な出力
+## Required Outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs in the `output_dir` returned by `start`.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -38,25 +38,25 @@
 - `ai-cues.csv`
 - `composition.svg`
 
-## 完了条件
+## Completion Criteria
 
-- C01　指標ごとに六年の支持、共通範囲、固定重み、ESS、除外率を照合できる。
-- C02　同一対象の無調整と固定構成、既知著者等重み、本人内の点差・選択率を区別する。
-- C03　分解恒等式、各探索の適用範囲、タグ/本文AI語句と未知の判定を検証できる。
+- C01 For each metric, the six years of support, common support, fixed weights, effective sample size (ESS), and exclusion rates can be checked.
+- C02 Unadjusted and fixed-composition estimates for the same cohort, equal known-author weighting, and within-author point differences and selection rates are distinguishable.
+- C03 The decomposition identity, scope of each exploratory analysis, AI labels for tags and body phrases, and rules for unknown states can be verified.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before marking this task complete, have another reviewer independently check the saved outputs and definitions. Verify the receipt criteria, artifacts, and hashes, then record completion with `workflow.py finish` from the project root. Completion requires the full run.
 
-## 参照する固定規則
+## Frozen Rules
 
 - [measurement-spec.md](../measurement-spec.md)
 - [analysis-methods.md](../analysis-methods.md)
 - [a09-ai-topic.json](../references/a09-ai-topic.json)
 - [t02-strata-map.json](../references/t02-strata-map.json)
 
-## 混同しないこと
+## Interpretation
 
-- 自分自身の語数帯で層を揃えたM01は別の問い。
-- 比較の支持不足を母集団に一般化しない。
-- 語句露出をAI使用や意味話題の真値にしない。
+- An M01 comparison stratified by each article's own word-count band answers a separate question.
+- Limit conclusions to the cohort with sufficient support for the comparison.
+- Treat phrase presence as a text feature. AI use and semantic topics require their own evidence.
 
-引継ぎは [phase1-handoff.md](phase1-handoff.md)。状態は[status.json](status.json)。
+See [phase1-handoff.md](phase1-handoff.md) for the handoff and [status.json](status.json) for the current status.

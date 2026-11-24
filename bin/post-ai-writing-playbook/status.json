@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "download",
-      "title": "downloadの全末端を完了する",
-      "description": "downloadの全末端を完了する",
+      "title": "Complete all download leaf tasks",
+      "description": "Complete all download leaf tasks",
       "priority": 1,
       "status": "not_started",
       "passes": false,
@@ -18,7 +18,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "この枝の全末端の成果物と検証が完了した。",
+          "criterion": "All leaf tasks in this branch have completed their artifacts and verification.",
           "met": false
         }
       ],
@@ -27,8 +27,8 @@
     },
     {
       "id": "phase1",
-      "title": "phase1の全末端を完了する",
-      "description": "phase1の全末端を完了する",
+      "title": "Complete all Phase 1 leaf tasks",
+      "description": "Complete all Phase 1 leaf tasks",
       "priority": 2,
       "status": "not_started",
       "passes": false,
@@ -36,7 +36,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "この枝の全末端の成果物と検証が完了した。",
+          "criterion": "All leaf tasks in this branch have completed their artifacts and verification.",
           "met": false
         }
       ],
@@ -45,8 +45,8 @@
     },
     {
       "id": "phase2",
-      "title": "phase2の全末端を完了する",
-      "description": "phase2の全末端を完了する",
+      "title": "Complete all Phase 2 leaf tasks",
+      "description": "Complete all Phase 2 leaf tasks",
       "priority": 3,
       "status": "not_started",
       "passes": false,
@@ -54,7 +54,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "この枝の全末端の成果物と検証が完了した。",
+          "criterion": "All leaf tasks in this branch have completed their artifacts and verification.",
           "met": false
         }
       ],

@@ -1,28 +1,28 @@
-# T01　本文言語判定と英語集合
+# T01 Body language classification and English cohort
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and [Phase 1 rules](../AGENT.md) before starting this task.
 
-## 目的
+## Purpose
 
-全候補に状態を与え、本文の英語と公開UTC年で分析集合を固定する。
+Assign a status to every candidate and freeze the analysis cohort based on English body text and UTC publication year.
 
-## 入力
+## Inputs
 
-- T00 extraction.jsonl、input-ledger.csv、pilot.jsonおよび元D02出典
+- T00 extraction.jsonl, input-ledger.csv, pilot.json, and original D02 sources
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream files from the upstream output_dir and manifest returned by workflow.py. Use paths from the current run.
 
-## 手順
+## Steps
 
-1. 同梱language_rules.pyをlanguage-rules.pyとして凍結し、Lingua全75言語を固定する。T00のprobe記事でS/P/Lと1200文字区間の保存と再読取を確認する。
-2. 各年の校正20、検証10と別枠診断をhashで固定する。校正と診断は閾値0.70と0.30を固定する際の品質確認に使う。
-3. 全候補を自動採点し、校正・診断の根拠付き全文判定だけを別列の手動補正にする。盲検検証の結果を保存する。
-4. 英語状態でUTC公開年が2018〜2025の候補だけadopted=trueとする。対象外・欠時刻・mixed・空・利用不能の行を残す。
-5. 独立検証で候補別ハッシュ、S区間の完全被覆とラベル、UTC年、標本・採否の集計を再計算する。
+1. Freeze the bundled language_rules.py as language-rules.py and lock all 75 Lingua languages. Use T00 probe articles to verify that S, P, L, and 1,200-character spans can be saved and read back.
+2. Select 20 calibration and 10 validation examples per year and a separate diagnostic sample by hash. Use calibration and diagnostics to check quality when freezing the 0.70 and 0.30 thresholds.
+3. Score every candidate automatically. Store manual overrides in a separate column only for evidence-backed full-text decisions from calibration or diagnostics. Save the blinded validation results.
+4. Set adopted=true only for English candidates with a UTC publication year from 2018 through 2025. Retain rows that are out of scope, missing a timestamp, mixed, empty, or unavailable.
+5. Independently recalculate candidate hashes, complete S span coverage and labels, UTC years, and sample and inclusion totals.
 
-## 必要な出力
+## Required Outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs in the output_dir returned by the start command.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -33,24 +33,24 @@
 - `language-settings.json`
 - `language-review.json`
 
-## 完了条件
+## Completion Criteria
 
-- C01　候補と同数の一意な言語・採否行があり、UTC境界と全状態の件数が合う。
-- C02　盲検校正・検証・診断を分け、凍結順序、標本不足、手動補正の証拠を保存した。
-- C03　採用対象に非英語・判定不能・期間外が流入せず、短文・同文は残る。
+- C01 There is exactly one language and inclusion row per candidate. UTC boundaries and counts for all states reconcile.
+- C02 Blinded calibration, validation, and diagnostics are separate. The freeze order, sample shortfalls, and evidence for manual overrides are saved.
+- C03 The cohort excludes non-English, indeterminate, and out-of-period articles and retains short and identical articles.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before completion, have a different person independently verify the saved artifacts and definitions. Check the criteria, artifacts, and hashes in the receipt, then run workflow.py finish from the root. Completion requires the full task to pass after the pilot.
 
-## 参照する固定規則
+## Frozen Rules
 
 - [measurement-spec.md](../measurement-spec.md)
 - [analysis-methods.md](../analysis-methods.md)
 - [language_rules.py](../references/language_rules.py)
 
-## 混同しないこと
+## Pitfalls
 
-- html lang・CC言語・タグは判定器の代わりにしない。
-- 英語主体mixedは候補に留める。
-- 手動補正で検証群を底上げしない。
+- Use html lang, CC language, and tags as hints only.
+- Keep English-dominant mixed articles as candidates only.
+- Evaluate the validation group independently of manual overrides.
 
-引継ぎは [phase1-handoff.md](phase1-handoff.md)。状態は[status.json](status.json)。
+See [phase1-handoff.md](phase1-handoff.md) for the handoff and [status.json](status.json) for the current state.

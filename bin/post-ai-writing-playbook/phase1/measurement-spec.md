@@ -1,61 +1,61 @@
-# Phase 1 の測定仕様
+# Phase 1 measurement specification
 
-## 対象と日時
+## Cohort and dates
 
-1記事はD02の正規化パスに対応する一意な `id`。以降 `article_id=id` とする。候補全件を台帳に残す。取得失敗や本文領域不在は利用不可と記録する。同じ保存文の別パスは別記事として残す。語数による足切りは設けない。元runのSQLite job IDと新runのpath SHA-256は異なる。同じHTMLを使ってもIDをseedにする標本・抽出順は変わり得る。過去の固定標本を再現するには、同一バイト列、検証済み旧ID対応、依存版と同一の選定規則が必要になる。
+Each article has a unique `id` corresponding to the D02 normalized path. Use `article_id=id` throughout. Keep every candidate in the ledger. Mark failed acquisitions and missing body regions as unavailable. Keep articles at different paths even if their saved text is identical. Include articles of any word count. The original run used SQLite job IDs, and the new run uses path SHA-256 hashes. ID-seeded sampling and extraction order can change even when the HTML is identical. Reproducing historical frozen samples requires identical bytes, a verified mapping to historical IDs, the same dependency versions, and identical selection rules.
 
-主集合は本文が英語と判定された、UTC公開年2018〜2025年の保存記事。保存時刻を公開時刻へ代入しない。2022年は移行年。2025年は部分年として年次記述に用いる。元収録範囲は10月途中までなので、11〜12月を未観測、10月を部分月とする。同梱設定と取得ログが対象範囲を確認できない月は `coverage_unknown` とする。完結月内の0件と未観測を分ける。補助比較は1〜9月が完結している年を同じ月範囲で比べる。
+The main cohort consists of archived articles whose body text is classified as English and whose UTC publication year is 2018–2025. Use the publication timestamp to assign the year. Treat 2022 as a transition year and 2025 as a partial year in annual summaries. The original coverage extended partway through October, so mark October as a partial month and November and December as unobserved. Mark months as `coverage_unknown` if the bundled settings and acquisition logs cannot establish coverage. Keep fully covered months with zero articles distinct from unobserved months. The supplemental comparison uses January through September for years with complete coverage in those months.
 
-公開・更新・CC収録・ダウンロード時刻を別列で保持する。公開からCC保存までの間隔はUTCの二時点のepoch秒差を86400で割る。更新前後の矛盾や将来出版のフラグに元値と出典を添える。保存した本文を公開当初の版とも、未更新の版とも扱わない。
+Store publication, update, CC capture, and download timestamps in separate columns. Divide the difference between UTC publication and CC capture epoch seconds by 86,400 to calculate the delay in days. Record original values and sources for flags that indicate inconsistent update timing or future publication. Treat the archived body as the version observed at capture.
 
-## 抽出と英語判定
+## Extraction and English classification
 
-- T00は同梱 [article_extraction.py](references/article_extraction.py) を `extract.py` として凍結し、 `extract_article` を保存HTMLに適用する。元HTTP Content-TypeとcharsetをWARC応答ヘッダーから取得できる場合は渡し、既定UTF-8を使う場合は出典欠落を明示する。 `#article-body`、次に `.crayons-article__body` を優先する。候補の複数一致、未取得、復号失敗を明示する。本文以外のヘッダー等はメタデータ採取に使う。
-- 抽出器の `prose_units` を元の順序・元XPath付きで採用する。Pは `paragraph`、Lは `list_item`、Uは残りの `text`、SはP、L、Uの全体。入れ子の散文は一度だけ数える。HTMLのタイトル、見出し、コード、引用、表、画像、既知の目次とウィジェットをSから除く。未対応要素・コードらしい散文・目次候補は品質フラグに留める。
-- T01は同梱 [language_rules.py](references/language_rules.py) の規則を使う。Lingua 2.1.1の全75言語でS全文、P、L、Sの連続非重複1200コードポイント区間を採点する。最高スコア0.70以上かつ次点との差0.30以上を確信とする。元SのSHA-256、部位、区間、得点と自動判定を保存する。evidenceへの入力を article_id、prose_text、prose_sha256、extraction_status、展開済みpayloadのマッピングに揃える。スコアは校正された確率として解釈しない。
-- 非空SではP、Lまたは区間で確信した英語と非英語が共存すれば `mixed`。全Sの確信が足りなければ `unknown`。英語優勢の混在候補はSの最高候補が英語というフラグ。言語ヒントや国・タグで主集合に加えない。手動補正は結果を伏せた校正・診断で全文を確認した根拠付きの例に限り、自動判定も残す。
+- T00 freezes the bundled [article_extraction.py](references/article_extraction.py) as `extract.py` and applies `extract_article` to the archived HTML. Pass the original HTTP Content-Type and charset when available from the WARC response headers. Flag missing provenance when defaulting to UTF-8. Prefer `#article-body`, then `.crayons-article__body`. Record multiple matches, unavailable acquisitions, and decoding failures. Use headers and other non-body content to collect metadata.
+- Use the extractor's `prose_units` in source order with their original XPath. P is `paragraph`, L is `list_item`, U is the remaining `text`, and S includes all three. Count nested prose once. Exclude the HTML title, headings, code, quotations, tables, images, recognized tables of contents, and widgets from S. Track unsupported elements, code-like prose, and potential tables of contents as quality flags.
+- T01 uses the bundled [language_rules.py](references/language_rules.py). Score full S, P, L, and contiguous, nonoverlapping, 1,200-code-point chunks of S across all 75 languages in Lingua 2.1.1. A confident result requires a top score of at least 0.70 and a margin of at least 0.30 over the runner-up. Save the original S SHA-256, regions, spans, scores, and automatic classifications. Provide evidence inputs as a mapping with article_id, prose_text, prose_sha256, extraction_status, and the expanded payload. Treat the scores as classifier scores.
+- For nonempty S, assign `mixed` when confident English and non-English results coexist in P, L, or the chunks. Assign `unknown` when the full-S result lacks confidence. Flag mixed candidates as English-dominant when English is the highest-scoring language for S. Use language hints, country, and tags only as context. Limit manual overrides to documented examples whose full text was reviewed in blinded calibration or diagnostics, and keep the automatic classifications.
 
-## 語・文・構造
+## Words, sentences, and structure
 
-T02は [segmentation.py](references/segmentation.py)、 [t02_structure.py](references/t02_structure.py)、 [t02_features.py](references/t02_features.py) を固定する。T02が使う依存は同梱ディレクトリで解決し、T00出力の extract.py と同じハッシュの抽出器を使う。 `project(payload)` の単位と所有ブロックを保存する。元散文単位順と、同一のXPathで再結合した所有ブロック順を分ける。各単位から所有ブロックへのオフセット対応はUnicodeコードポイントの半開区間とする。文は所有ブロックで分割し、元単位へ逆引きできるようにする。
+T02 freezes [segmentation.py](references/segmentation.py), [t02_structure.py](references/t02_structure.py), and [t02_features.py](references/t02_features.py). Resolve T02 dependencies in the bundled directory and use the extractor with the same hash as the T00 output extract.py. Save the units and owning blocks from `project(payload)`. Keep the original prose unit order distinct from the order of owning blocks reassembled by identical XPath. Represent unit-to-owner offset mappings as half-open ranges of Unicode code points. Segment sentences within owning blocks and allow them to map back to source units.
 
-ASCII英文字列と内部の単アポストロフィ・ハイフンを語とする。`don't`、`state-of-the-art` は各1語。曲がったアポストロフィは語形の値だけ変換する。URL・メール・数・`UTF-8`・`snake_case`・非ASCIIを含むUnicode語は別のトークン種。 `Node.js` は英字2語。本文中の元の句読点とオフセットを保持する。
+An ASCII letter sequence with internal single apostrophes or hyphens is a word. Both `don't` and `state-of-the-art` count as one word. Normalize curly apostrophes in the word form only. URLs, email addresses, numbers, `UTF-8`, `snake_case`, and Unicode words containing non-ASCII characters have separate token types. `Node.js` counts as two ASCII words. Preserve the original punctuation and offsets in the body.
 
-文境界の回帰用に略語、引用符、連続記号、ドット付き技術名、小数、バージョン、`br`、末尾断片を用意する。境界処理は元のP所有ブロック内で行う。終端記号のない断片も保持する。M02とM03に使うのはASCII語が正のP文だけ。別のP所有ブロック間を連結しない。
+Include abbreviations, quotation marks, consecutive punctuation, technical names with periods, decimal numbers, versions, `br`, and trailing fragments in sentence boundary regression checks. Detect boundaries within each source P owning block. Keep fragments without terminal punctuation. Use only P sentences with at least one ASCII word for M02 and M03. Keep separate P owning blocks independent.
 
-保存済みのSへ太字文字範囲を投影する。連続する強調文字は入れ子・隣接タグをまたいで同一区間にする。通常文字、散文単位境界で区切る。ASCII語に重なる区間を数え、複数区間に重なる語も太字語数には1回加える。DOM→Sの投影に失敗した値だけを `projection_error` とする。Lの語数とliの個数を分け、入れ子とli内pの語は最も近いliへ一度配賦する。見出しHは掃除後DOM中のH1〜H6。コードCは別軸として保存する。
+Project bold character ranges onto the saved S. Merge consecutive bold characters across nested or adjacent tags. Break spans at plain characters and prose unit boundaries. Count spans that overlap an ASCII word. Count each bold word once even if several bold spans overlap it. Assign `projection_error` only to values affected by a failed DOM-to-S projection. Count L words separately from li elements. Allocate words in nested lists and p elements inside li once, to the nearest li. Heading H includes H1–H6 in the cleaned DOM. Save code C separately.
 
-## 記事別指標
+## Article-level metrics
 
-| ID | 値 | 有効・欠測 |
+| ID | Value | Validity and missingness |
 | --- | --- | --- |
-| M01 | P語数 `W_P` | Pが存在しない記事は0。主比較は `log1p(W_P)` |
-| M02 | 正語数のP文長の平均 `μ` | 有効文0件はNA |
-| M03 | P文長の母標準偏差 `σ` ÷ `μ` | 有効文2件未満はNA、2〜4件は低nフラグ |
-| M04 | `1000 × Pのカンマ数 / W_P` | 数字に挟まれるカンマを除く。 `W_P=0` はNA |
-| M05 | `W_L / (W_P + W_L + W_U)` | S語数正でリスト語なしは0。S語数0はNA |
-| M06 | `1000 × Sの太字区間数 / W_S` | S語数正で太字なしは0。S語数0はNA、投影エラーは別理由 |
+| M01 | P word count `W_P` | Articles without P have zero words. The primary comparison uses `log1p(W_P)`. |
+| M02 | Mean length `μ` of P sentences with positive word counts | NA when no sentences qualify. |
+| M03 | Population standard deviation `σ` of P sentence length divided by `μ` | NA with fewer than two qualifying sentences. Flag two to four as low n. |
+| M04 | `1000 × comma count in P / W_P` | Exclude commas between digits. NA when `W_P=0`. |
+| M05 | `W_L / (W_P + W_L + W_U)` | Zero when S has words and L has none. NA when the S word count is zero. |
+| M06 | `1000 × bold span count in S / W_S` | Zero when S has words and no bold spans qualify. NA when the S word count is zero, with a separate reason for projection errors. |
 
-副指標には所有P段落語数中央値、H2+H3の千S語密度、太字語数割合、PCVの単調変換 `(σ−μ)/(σ+μ)`、P所有ブロック内の隣接正語数文長差、1文段落率、句読記号の出現と密度を含める。MATTRはP語の小文字列を記事順に並べ、100語窓を1語ずつ動かした異なり語率の平均。50語窓は別列。窓長不足はNA。絵文字はコードポイント候補を数え、見た目の個数と区別する。A02には文内のカンマ間隔と旧記事近似 `W_P/(commas+1)` を別々に渡す。
+Secondary metrics include median P owning-paragraph word count, H2+H3 density per 1,000 S words, share of bold words, the monotonic PCV transformation `(σ−μ)/(σ+μ)`, adjacent positive-word-count sentence length differences within P owning blocks, the share of single-sentence paragraphs, and punctuation prevalence and density. For MATTR, take the P word forms in article order, lowercase them, slide a 100-word window one word at a time, and average the share of unique words. Report the 50-word window separately. Mark articles shorter than the window as NA. Count emoji code-point candidates separately from rendered emoji. Pass the within-sentence comma spacing and the historical article-level approximation `W_P/(commas+1)` to A02 as separate measures.
 
-状態付き指標行は `article_id,metric_id,value,numerator,denominator,state,reason` を共通列にする。 `ok` は有限値、 `NA` は空の値と理由。文なし、英字語なし、1文、窓不足、構造投影失敗、入力欠測を区別する。分母が定義されないM01は値があってもdenominatorが空でよい。
+Metric rows with states share the columns `article_id,metric_id,value,numerator,denominator,state,reason`. Use `ok` for a finite value or `NA` with a blank value and a reason. Distinguish no sentences, no ASCII words, one sentence, insufficient words for the window, structure projection failure, and missing inputs. M01 can have a value with a blank denominator because it has no defined denominator.
 
-## 人、タグ、層
+## Authors, tags, and strata
 
-T02は [t02_metadata_v2.py](references/t02_metadata_v2.py) と [t02_metadata.py](references/t02_metadata.py) を使い、本文HTMLのハッシュを再照合する。extract_metadataへ article_id、url、html_sha256 を渡し、T00が記録したencodingを引き継ぐ。人の数値ID、共著、ヘッダーの人リンク、JSON-LDのPerson、公開先と組織を別々に取得する。conflict、multiple、profile-only、missingを保持する。単一の安定した数値IDだけを既知著者として `dev:user:<id>` に統一する。組織スラグは本人ではない。観測できない組織を個人投稿と数えない。
+T02 uses [t02_metadata_v2.py](references/t02_metadata_v2.py) and [t02_metadata.py](references/t02_metadata.py) and rechecks the body HTML hash. Pass article_id, url, and html_sha256 to extract_metadata, using the encoding recorded by T00. Collect numeric personal IDs, coauthors, header links to people, JSON-LD Person entries, publication venues, and organizations separately. Preserve conflict, multiple, profile-only, and missing states. Treat only single stable numeric IDs as known authors and normalize them to `dev:user:<id>`. Use organization slugs only for organizations. Treat unobserved organization status as unknown.
 
-先に [t02_classification.json](references/t02_classification.json) で保存タイトル・タグから探索用の種別と複数話題cueを付ける。 [t02-strata-map.json](references/t02-strata-map.json) の優先順で最初に該当した話題を割り当てる。タグなし・分類外は `unknown`。簡易種別は別に保存し、受けた校正の一致数・総数と制約を記す。妥当性を確認できない種別は主構成調整に使わず、要求された探索で粗いcueまたはunknownとして扱う。
+First use [t02_classification.json](references/t02_classification.json) to assign exploratory article types and multiple topic cues from archived titles and tags. Assign the first matching topic by the priority order in [t02-strata-map.json](references/t02-strata-map.json). Use `unknown` for missing tags or no matching classification. Save the coarse article type separately, with calibration matches, totals, and limitations. Use only validated article types for primary composition adjustment. Treat unvalidated types as coarse cues or unknown in the requested exploratory analyses.
 
-## 主比較と区間
+## Primary comparisons and intervals
 
-有効記事値でUTC年内に記事等重みの平均 `m_y` を出す。主点差は `(m_2023+m_2024)/2 − (m_2018+m_2019+m_2020+m_2021)/4`。M05の差は100倍して百分率ポイントにする。全記事で計算した点差と、安定した数値著者ID付きだけの同尺度の点差を別列に置く。年別全n、指標有効n、NA理由別n、著者既知率、既知著者数を添える。M01の原尺度の平均・中央値・分位も残す。
+Compute the article-weighted mean `m_y` of valid values within each UTC year, giving every article equal weight. The primary point difference is `(m_2023+m_2024)/2 − (m_2018+m_2019+m_2020+m_2021)/4`. Multiply M05 differences by 100 to obtain percentage points. Store the all-article point difference and the same-scale point difference restricted to articles with stable numeric author IDs in separate columns. Include yearly total n, valid metric n, counts by NA reason, the known-author share, and the number of known authors. Keep M01 means, medians, and quantiles on the original scale too.
 
-区間は固定した対象の全年の既知著者から著者数と同数を復元抽出し、引いた人数分だけ各著者の全記事を保持して同じ点差を計算する。2,000回・seed 42、2.5/97.5の線形分位を標準とする。年ごとの独立な著者抽出や記事独立bootstrapは使わない。比較年の有効既知著者が一つでも30人未満なら区間NA。既知率が90%未満なら全体への代表性を評価できないと記す。90%以上でも区間の対象は既知著者である。途中の空の年や再抽出失敗を補完せず、有効反復数と無効理由を保存する。
+To calculate an interval, sample known authors with replacement from the fixed population across all years. Draw as many authors as there are known authors and include all articles for each author as many times as that author was drawn. Recalculate the point difference on each draw. Use 2,000 replicates with seed 42 and linear quantiles at 2.5% and 97.5%. Resample author clusters jointly across years. If any comparison year has fewer than 30 valid known authors, report NA. When the known-author share falls below 90%, state that representativeness for the full cohort cannot be assessed. The interval population is limited to known authors at any coverage level. Keep runs with empty years or failed resamples as invalid and record valid replicate counts and failure reasons.
 
-主比較は記述と区間を使う。p値・Holm補正は既定で実行しない。別途実行した場合だけ、事前固定した六指標の同じfamily、両側の中心化著者bootstrap近似、Holm補正を方法とともに表示する。計算不能の枠は補正計算上1、表示上NA。区間が0をまたぐ結果は方向未確定とする。記事保存集合の比較からAI使用、因果効果、DEV全体、文章の質、理解や読書時間を推定しない。
+Use descriptive estimates and intervals for the primary comparisons. The default omits p-values and Holm correction. If explicitly run, report the methods, including the same prespecified family of six metrics, the two-sided centered author bootstrap approximation, and Holm correction. Use 1 for unavailable tests in the correction and display NA. Treat direction as undetermined when an interval crosses zero. Interpret these comparisons within the archived cohort. They do not establish AI use, causal effects, all-DEV patterns, writing quality, comprehension, or reading time.
 
-## 下流のファイル契約
+## Downstream file contracts
 
-`articles.jsonl` は採用記事1行ずつ。 `article_id`、タイトル、UTC公開・更新・収録時刻、本文抽出のハッシュ、 `units` と Unicodeオフセットの `owners`、 `headings`、 `bold_spans`、順序付き `dom_events`、品質フラグ、 `W_P/W_L/W_U/W_S` を含める。各DOMイベントに種類・順序・元XPath・最寄りS語位置を付ける。引用・表・コード・画像などのS外イベントも位置と参照先を持つ。
+`articles.jsonl` contains one row for each included article, with `article_id`, title, UTC publication, update, and capture timestamps, the body extraction hash, `units` and Unicode-offset `owners`, `headings`, `bold_spans`, ordered `dom_events`, quality flags, and `W_P/W_L/W_U/W_S`. Give each DOM event a kind, order, original XPath, and closest S word position. Events outside S, such as quotations, tables, code, and images, also carry positions and references.
 
-`metadata.csv` は記事ID、 `author_id`、 `author_numeric_id`、 `author_status`、 `author_known`、 `organization_id`、 `organization_slug`、 `organization_status`、JSON配列の `tags`、 `tag_status`、 `topic_primary`、 `article_type`、日時と出典を持つ。 `cohort.csv` は全候補ID、UTC公開日時・年、言語状態・採否・非採用理由を持つ。 `coverage.csv` はUTC年月格子、範囲状態とその出典、件数を持つ。
+`metadata.csv` contains article ID, `author_id`, `author_numeric_id`, `author_status`, `author_known`, `organization_id`, `organization_slug`, `organization_status`, `tags` as a JSON array, `tag_status`, `topic_primary`, `article_type`, dates, and provenance. `cohort.csv` contains every candidate ID, UTC publication timestamp and year, language state, inclusion decision, and any reason for exclusion. `coverage.csv` contains the UTC year-month grid, coverage states and their sources, and counts.

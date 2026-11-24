@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "P2-S03",
-      "title": "対象、測定仕様と著者分割を固定する",
-      "description": "対象、測定仕様と著者分割を固定する",
+      "title": "Lock the cohort, measurement specification, and author split",
+      "description": "Lock the cohort, measurement specification, and author split",
       "priority": 24,
       "status": "not_started",
       "passes": false,
@@ -20,22 +20,22 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "旧の採否、新の英語ID、60セルごとの実測数、対象外の理由を元の入力から検証できる。",
+          "criterion": "Verify the earlier inclusion decisions, newer English-language IDs, observed counts for all 60 cells, and exclusion reasons against the original inputs.",
           "met": false
         },
         {
           "id": "C02",
-          "criterion": "著者と非空完全同文による連結成分がD/Hをまたがない。未知著者、成分サイズ、セル支持を出し、近似群の越境をS04の診断へ渡す。",
+          "criterion": "Connected components based on authors and nonempty exact text matches stay within one D/H partition. Report unknown authors, component sizes, and support by cell. Pass near-duplicate groups spanning the partitions to S04 diagnostics.",
           "met": false
         },
         {
           "id": "C03",
-          "criterion": "X02と自動定義標本を分け、D/H別の枠、選択、salt、不足、本文ハッシュが固定される。",
+          "criterion": "Keep X02 and automated-definition samples separate. Lock slots, selections, salts, shortfalls, and text hashes by D/H partition.",
           "met": false
         },
         {
           "id": "C04",
-          "criterion": "旧Phase 1と異なる6指標の分母とNA、語彙境界、太字投影、重み、bootstrapの小例を確認する。",
+          "criterion": "Check small examples covering the six metrics' denominators and NA treatment where they differ from Phase 1, lexical boundaries, bold projection, weighting, and bootstrap.",
           "met": false
         }
       ],

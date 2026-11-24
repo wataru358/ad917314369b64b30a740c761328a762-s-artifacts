@@ -1,30 +1,30 @@
-# D03　DEV APIの2026年1〜10月の固定標本を取得する
+# D03 Retrieve a fixed DEV API sample for January through October 2026
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and [branch rules](../AGENT.md) before starting this leaf task.
 
-## 目的
+## Goal
 
-UTCの月別に各1,000件、計10,000件の候補IDを固定し、公開APIの原JSONと取得結果を保存する。
+Freeze 1,000 candidate IDs per UTC month for a total of 10,000 and save the raw JSON and acquisition outcomes from the public API.
 
-## 入力
+## Inputs
 
-- DEV APIの一覧と個別応答
-- 2026-01-01を含み2026-11-01を含まないUTC期間
-- ルート設定のseed、月別件数、通信上限
+- DEV API listing and detail responses
+- UTC interval from 2026-01-01 inclusive to 2026-11-01 exclusive
+- Root configuration for the seed, monthly count, and transfer limits
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream files from the upstream output_dir returned by workflow.py and the manifest.
 
-## 手順
+## Steps
 
-1. 一覧1ページを取得して5件のAPI応答の形と保存を検証する。通信は固定のHTTPSホストで行い、利用を許可された資格情報はメモリだけで扱う。
-2. 一覧をページ番号順に確定し、UTCへ変換して期間内のIDを月別に集める。重複、食い違い、下限の根拠を保存する。
-3. 下限到達と候補の充足を検査し、seedのハッシュ順で毎月1,000 IDを選ぶ。1月から10月までの順で月を交互に取り出し、計画位置を固定する。
-4. 先頭5件の個別取得と照合を終えてから、残りを小分けで取得する。予算と待機期限を守り、保存済み原JSONを再利用する。
-5. 全IDの取得結果と、採否前の月別件数を照合する。台帳と原JSONのハッシュを確定し、検証と引継ぎを記録する。
+1. Retrieve one listing page and verify the format and storage of five API detail responses. Use the fixed HTTPS host and keep authorized credentials in memory only.
+2. Commit listing pages in page-number order, convert timestamps to UTC, and collect in-window IDs by month. Keep a record of duplicates, discrepancies, and evidence of reaching the lower date bound.
+3. Verify that the scan reached the lower bound and that each month has enough candidates. Select 1,000 IDs per month in seeded hash order. Cycle through the months from January to October to assign fixed plan positions.
+4. After retrieving and checking the first five planned detail responses, process the rest in chunks. Observe the budget and wait deadlines and reuse saved raw JSON.
+5. Reconcile retrieval outcomes for every ID and the monthly counts before eligibility screening. Freeze the ledger and raw JSON hashes and record the verification and handoff.
 
-## 必要な出力
+## Required outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save everything in the output_dir returned by start.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -34,24 +34,24 @@ UTCの月別に各1,000件、計10,000件の候補IDを固定し、公開APIの�
 - `responses.jsonl`
 - `requests.jsonl`
 
-## 完了条件
+## Acceptance criteria
 
-- C01　5件の接続確認結果があり、一覧ページ番号と最古行から対象期間の下限到達を確認できる。保存済みの一覧ページは1から連続し、オフセットページングの限界を明記している。
-- C02　計画はseedのハッシュ順から再計算でき、UTC1〜10月が各1,000件、合計10,000の一意なID。タグと言語属性で絞っていない。
-- C03　計画の先頭5件の保存・読戻しの記録がある。全計画IDにsaved、empty、not_found、failedの各結果が対応する。未処理IDと差し替えIDがない。
-- C04　200の正常な個別応答は、空本文を含めて保存し、応答IDとハッシュを照合できる。失敗は理由付きで、月別内訳と原JSONに資格情報がないことを独立検証担当が確かめている。
+- C01 The connection probe records five results. The listing page number and oldest row establish that the scan reached the lower date bound. Saved listing pages are consecutive from page 1, and the report describes the limitations of offset pagination.
+- C02 The plan can be reproduced from the seeded hash order and contains 1,000 unique IDs per UTC month from January through October, for 10,000 in total. Selection uses the full eligible set regardless of tags or language attributes.
+- C03 The first five planned responses have been saved and read back. Every planned ID has a saved, empty, not_found, or failed outcome. All original planned IDs are accounted for.
+- C04 Valid HTTP 200 detail responses are saved, including empty bodies, with verifiable response IDs and hashes. Failures carry reasons. An independent reviewer verifies the monthly breakdown and checks the raw JSON for credentials.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Have an independent reviewer verify the saved artifacts and definitions before completion. Check the receipt criteria, artifacts, and hashes, then run workflow.py finish from the root. Completion covers the full task.
 
-## 参照する固定規則
+## Reference specifications
 
-- [download-spec.md](../download-spec.md#共通の保存と再開)
-- [download-spec.md](../download-spec.md#d03で2026年の各月1000件を固定する)
+- [download-spec.md](../download-spec.md#storage-and-resumption)
+- [download-spec.md](../download-spec.md#d03-freeze-1000-records-per-month-in-2026)
 
-## 混同しないこと
+## Notes
 
-- オフセットページの下限到達から一覧全体の網羅性は分からない。
-- APIが返す本文は取得時の版。HTTP 200、本文非空、英語採否はそれぞれ別の結果。
-- 月の不足を別月で埋めず、失敗したIDを別IDと交換しない。
+- Reaching the lower date bound through offset pages leaves overall listing coverage unknown.
+- The API body reflects the article at retrieval time. Record HTTP 200, body availability, and English-language eligibility as distinct outcomes.
+- Keep the original monthly quotas and IDs even when a month is short or an ID fails.
 
-引継ぎは [download-handoff.md](download-handoff.md)。状態は[status.json](status.json)。
+See [download-handoff.md](download-handoff.md) for the handoff and [status.json](status.json) for status.

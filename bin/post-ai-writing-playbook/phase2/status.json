@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "P2-S01",
-      "title": "比較と収録の実行計画を固定する",
-      "description": "比較と収録の実行計画を固定する",
+      "title": "Lock the comparison and corpus intake plan",
+      "description": "Lock the comparison and corpus intake plan",
       "priority": 22,
       "status": "not_started",
       "passes": false,
@@ -21,7 +21,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "The leaf task is complete with evidence for all its criteria and independent verification.",
           "met": false
         }
       ],
@@ -30,8 +30,8 @@
     },
     {
       "id": "P2-S02",
-      "title": "新集合の全文採否を固定する",
-      "description": "新集合の全文採否を固定する",
+      "title": "Lock full-text inclusion decisions for the new corpus",
+      "description": "Lock full-text inclusion decisions for the new corpus",
       "priority": 23,
       "status": "not_started",
       "passes": false,
@@ -41,7 +41,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "The leaf task is complete with evidence for all its criteria and independent verification.",
           "met": false
         }
       ],
@@ -50,8 +50,8 @@
     },
     {
       "id": "P2-S03",
-      "title": "対象、測定仕様と著者分割を固定する",
-      "description": "対象、測定仕様と著者分割を固定する",
+      "title": "Lock the cohort, measurement specification, and author split",
+      "description": "Lock the cohort, measurement specification, and author split",
       "priority": 24,
       "status": "not_started",
       "passes": false,
@@ -61,7 +61,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "The leaf task is complete with evidence for all its criteria and independent verification.",
           "met": false
         }
       ],
@@ -70,8 +70,8 @@
     },
     {
       "id": "P2-S04",
-      "title": "固定仕様で計算と独立判定を実行する",
-      "description": "固定仕様で計算と独立判定を実行する",
+      "title": "Run the calculations and independent assessments against the fixed specification",
+      "description": "Run the calculations and independent assessments against the fixed specification",
       "priority": 25,
       "status": "not_started",
       "passes": false,
@@ -81,7 +81,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "The leaf task is complete with evidence for all its criteria and independent verification.",
           "met": false
         }
       ],
@@ -90,8 +90,8 @@
     },
     {
       "id": "P2-S05",
-      "title": "18項目の算術と主張の範囲を検証する",
-      "description": "18項目の算術と主張の範囲を検証する",
+      "title": "Verify the arithmetic and scope of claims for 18 items",
+      "description": "Verify the arithmetic and scope of claims for 18 items",
       "priority": 26,
       "status": "not_started",
       "passes": false,
@@ -101,7 +101,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "The leaf task is complete with evidence for all its criteria and independent verification.",
           "met": false
         }
       ],
@@ -110,8 +110,8 @@
     },
     {
       "id": "P2-S06",
-      "title": "比較結果と追加4資料をまとめる",
-      "description": "比較結果と追加4資料をまとめる",
+      "title": "Compile the comparisons and four supplementary materials",
+      "description": "Compile the comparisons and four supplementary materials",
       "priority": 27,
       "status": "not_started",
       "passes": false,
@@ -121,7 +121,7 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "criterion": "The leaf task is complete with evidence for all its criteria and independent verification.",
           "met": false
         }
       ],

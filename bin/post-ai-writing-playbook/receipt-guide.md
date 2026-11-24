@@ -1,35 +1,35 @@
-# 完了を記録するreceipt
+# Record completion with a receipt
 
-startが返したoutput_dirに、必要な全成果物とreceipt.jsonを置く。criteriaのIDは末端のstatus.jsonにあるC01からの順序を使う。下記の値・ID・hash・基準数は実際のものに置き換える。架空の担当・終了コード・hashを書かない。
+Place all required artifacts and `receipt.json` in the `output_dir` returned by `start`. Use the criterion IDs in the leaf's `status.json`, starting at C01. Replace the example values, IDs, hashes, and criterion count with the actual ones. Record the reviewer, exit codes, and hashes from the work performed.
 
 ```json
 {
   "task_id": "D01",
-  "run_id": "実際のrun_id",
-  "attempt": "startが返したattempt",
+  "run_id": "actual run ID",
+  "attempt": "attempt returned by start",
   "scope": "full",
   "verification": {
     "exit_code": 0,
-    "reviewer": "実際に独立確認した別担当ID",
-    "summary": "保存元表と出力を別実装で照合した。詳細はverification.json"
+    "reviewer": "ID of the independent reviewer who performed the check",
+    "summary": "Checked the saved source table against the output using a separate implementation. See verification.json for details."
   },
   "criteria": [
     {"id": "C01", "passed": true, "evidence": ["report.md", "verification.json"]}
   ],
   "artifacts": [
-    {"path": "report.md", "sha256": "実際の64桁SHA-256"},
-    {"path": "manifest.json", "sha256": "実際の64桁SHA-256"},
-    {"path": "verification.json", "sha256": "実際の64桁SHA-256"}
+    {"path": "report.md", "sha256": "actual 64-character SHA-256 hash"},
+    {"path": "manifest.json", "sha256": "actual 64-character SHA-256 hash"},
+    {"path": "verification.json", "sha256": "actual 64-character SHA-256 hash"}
   ]
 }
 ```
 
-ファイルのpathはoutput_dirからの相対パス。親ディレクトリ・別attemptへ出るパスは拒否される。outputsに列挙した全ファイルをartifactsへ入れる。可変数のrawファイルや大きい出力はmanifestへ相対パス・サイズ・hashを記録し、その照合結果をverification.jsonへ残す。全corpusの大きいファイルを毎回hashし直すのではなく、検証済みの保存単位とmanifestで固定する。
+Each `path` is relative to `output_dir`. Paths that reach a parent directory or another attempt are rejected. Include every file listed in `outputs` under `artifacts`. For a variable number of raw files or large outputs, record relative paths, sizes, and hashes in the manifest and save the verification results in `verification.json`. Freeze the corpus using verified storage units and the manifest to avoid rehashing every large file each time.
 
-CLIが確かめるのは、ID・attempt・full範囲・基準数・根拠の所在・hash・終了コード・別確認者の記録。確認者が実際に作業したか、統計の定義が正しいかは自動保証しない。verifierコード、コマンド、stdout/stderrと終了コード、対象数・欠測・不一致を必ず残す。未支持を0や変化なしで埋めない。
+The CLI checks IDs, attempt identity, full scope, criterion count, evidence locations, hashes, exit status, and the independent reviewer record. Establish that the reviewer performed the checks and that the statistical definitions are valid through the review itself. Keep the verifier code, commands, stdout and stderr, exit status, counts, missing values, and mismatches. Preserve unsupported results as such.
 
 ```bash
-python3 workflow.py finish D01 --evidence runs/実際のrun_id/download/D01/実際のattempt/receipt.json
+python3 workflow.py finish D01 --evidence runs/ACTUAL_RUN_ID/download/D01/ACTUAL_ATTEMPT/receipt.json
 ```
 
-証拠の改変は次のvalidateでも検出する。親の集約が中断で古くなった場合はsyncで直し、葉の完了を手で捏造しない。
+The next `validate` also detects changes to evidence. If an interruption leaves parent status stale, repair it with `sync` and derive leaf completion from the receipts.

@@ -9,8 +9,8 @@
   "user_stories": [
     {
       "id": "A07",
-      "title": "経験談と具体的な検証記述",
-      "description": "経験談と具体的な検証記述",
+      "title": "Personal Experience and Concrete Verification Details",
+      "description": "Personal Experience and Concrete Verification Details",
       "priority": 14,
       "status": "not_started",
       "passes": false,
@@ -21,17 +21,17 @@
       "acceptance_criteria": [
         {
           "id": "C01",
-          "criterion": "固定校正と固定評価は不交差。規則凍結後に評価記事を全文確認し、全件に根拠付き状態と範囲がある。",
+          "criterion": "The fixed calibration and evaluation samples are disjoint. Every evaluation article is read in full after the rules are frozen, and each article has an evidence-backed status and span.",
           "met": false
         },
         {
           "id": "C02",
-          "criterion": "再評価は固定subsetを別セッションで行い、初回と再評価と裁定を保つ。",
+          "criterion": "The fixed subset is reevaluated in a separate session. The initial review, reevaluation, and adjudication are retained.",
           "met": false
         },
         {
           "id": "C03",
-          "criterion": "全量代理、内容標本、S/P分母、判断不能範囲、支持不足を区別できる。",
+          "criterion": "Corpus-wide proxies, sampled content, S and P denominators, indeterminate cases, and insufficient support are distinguishable.",
           "met": false
         }
       ],

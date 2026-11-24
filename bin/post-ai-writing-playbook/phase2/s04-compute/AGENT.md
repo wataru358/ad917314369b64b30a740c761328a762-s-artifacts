@@ -1,30 +1,30 @@
-# P2-S04　固定仕様で計算と独立判定を実行する
+# P2-S04 Run the calculations and independent assessments against the fixed specification
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and [branch rules](../AGENT.md) before starting this task.
 
-## 目的
+## Objective
 
-対象を変えずに基本6指標、語彙、X01〜X03、C01を計算し、支持・不確かさ・検証を保存する。
+Calculate the six core metrics, vocabulary, X01–X03, and C01 on the fixed cohort. Save support, uncertainty, and verification evidence.
 
-## 入力
+## Inputs
 
-- S03が封印した対象、設定、D/H、標本とテスト
-- S03のmanifestが指す原入力と固定抽出・語文実装
+- Cohort, settings, D/H assignments, samples, and tests sealed by S03
+- Original inputs and fixed extraction, word, and sentence implementations referenced by the S03 manifest
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream files using the upstream output_dir and manifest returned by workflow.py. Use paths resolved from the current run instead of absolute paths from earlier conversations.
 
-## 手順
+## Steps
 
-1. S03のハッシュと合成例を検証する。新データへ旧の語・文規則と太字投影を適用し、旧の規範中間値を再利用する。P文とP+Lの分母を区別し、M01〜M06の数値・分子・分母・理由・位置を各記事に記録する。
-2. DだけでV01の同じ期間20出現・10著者・最大占有率0.20と順位、V02の旧R≤1%・新R≥2%・新20著者・占有率≤0.10・新F≥0.05/1000を適用する。V01上限200、V02上限100。V03の固定5系列は検索式をそのまま使う。分類、X01辞書、妥当性標本を封印後、Hで全候補を確認する。
-3. X01ではDで候補5-gramを分類する。主辞書は一般説明で除外フラグなし。H同期間で本人以外の2著者以上が使う一致のword位置unionをW_Bで割る。X03は最初と最後の各50語で5+8表現、主は末尾。見出しと短文重なり、共有signatureは補助に残す。
-4. S03のblind IDで独立AIの2系統へX02と別の自動定義標本を割り付ける。担当、packet、根拠、原回答を保存し、相互の開示前に封印する。E/Gは文ごとに別ラベル。不一致や判断不能、語率の上下限、一致率とκ、必要セルを記録する。参照のない検証は未検証とする。
-5. F/R/A、D/Hの件数、NA、未知著者の別探索、年・月の全表を作る。主値、感度、近似同文群、話題支持と除外質量、200語窓、タグ除外を区別する。V01/V02の同じ語の行は保持し、BHは仮説unionに一度だけ適用する。
-6. 固定seed PCG64で著者クラスタの再抽出を行う。月と旧年の重み、C01の各反復での回帰とプールSD、外挿backtest、各補正の対象を記録する。比較一覧、算術・区間の独立readback、再実行コマンドを保存する。
+1. Verify the S03 hashes and synthetic fixtures. Apply the earlier word, sentence, and bold projection rules to the new data and reuse the canonical intermediate values for the earlier data. Keep denominators for P sentences and P+L distinct. Record each article's M01–M06 values, numerators, denominators, reasons, and positions.
+2. Use only D to apply V01's same-period rules of 20 occurrences, 10 authors, a maximum author share of 0.20, and fixed ranking. Apply V02's rules of earlier R≤1%, newer R≥2%, 20 newer authors, share≤0.10, and newer F≥0.05/1000. Cap V01 at 200 and V02 at 100. Apply the fixed V03 queries to all five series. Seal the classifications, X01 dictionary, and validation sample before checking all candidates on H.
+3. Classify candidate X01 5-grams on D. The primary dictionary includes general explanation entries with no exclusion flags. Within each H period, divide the union of matching word positions for phrases used by at least two other authors by W_B. For X03, test the fixed 5 opening and 8 closing expressions in the first and last 50 words respectively, with the close as primary. Keep headings, overlaps in short articles, and shared signatures as supplementary outputs.
+4. Use the S03 blind IDs to assign X02 and the separate automated-definition sample to two independent AI assessment streams. Save reviewer, packet, evidence, and original response, and seal both streams before either sees the other. Label E and G separately for each sentence. Record disagreements, indeterminate cases, word-rate bounds, agreement and κ, and required cells. Mark checks without a reference as unverified.
+5. Produce F/R/A, D/H counts, NA, separate exploration for unknown authors, and complete yearly and monthly tables. Distinguish primary values, sensitivity estimates, near-duplicate groups, topic support and excluded mass, 200-word windows, and tag exclusions. Keep separate V01 and V02 rows for shared terms and apply BH once to the union of hypotheses.
+6. Resample author clusters with PCG64 and the fixed seed. Record the monthly and earlier-year weights, per-replicate C01 regression and pooled SD, extrapolation backtests, and the family covered by each correction. Save the comparison index, independent arithmetic and interval readback, and rerun commands.
 
-## 必要な出力
+## Required outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs under the output_dir returned by start.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -36,25 +36,25 @@
 - `diagnostics.json`
 - `readback.json`
 
-## 完了条件
+## Completion criteria
 
-- C01　元データ、設定、コード、環境、D/H、標本、辞書をhashで追跡でき、Dの選択と分類を封印してからHを開いている。
-- C02　Mの6指標をすべての記事に対応させる。V01/V02の全候補、V03の固定5系列、X01〜X03、C01の計算と支持、区間、失敗理由が出力される。
-- C03　X02の独立AI判定2系統と自動定義の確認記録があり、陽性span、手数え、欠損、unknownを検証できる。標本支持不足の枠は明示される。
-- C04　5000反復、4750有効条件、Holm/BH、0分母、必要月と各固定感度の扱いを独立検算で再現する。比較の全キーを列挙し、網羅性と元値を確かめる。
+- C01 Trace original data, settings, code, environment, D/H, samples, and dictionaries by hash. Seal D selections and classifications before opening H.
+- C02 Map the six M metrics to every article. Output calculations, support, intervals, and failure reasons for all V01/V02 candidates, the five fixed V03 series, X01–X03, and C01.
+- C03 Retain two independent AI assessments for X02 and the automated-definition verification records. Positive spans, manual counts, missing values, and unknowns are verifiable. Identify slots with insufficient sample support.
+- C04 Independently reproduce the handling of 5,000 replicates, the 4,750 valid-replicate requirement, Holm/BH, zero denominators, required months, and each fixed sensitivity. List all comparison keys and check coverage and original values.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before completion, have a separate reviewer independently check the saved outputs and definitions. Verify the receipt criteria, artifacts, and hashes, then apply the receipt with workflow.py finish from the root. Completion requires the full work after the pilot.
 
-## 参照する固定規則
+## Fixed reference rules
 
 - [measurement-spec.md](../measurement-spec.md)
 - [settings.json](../settings.json)
 - [comparisons.md](../comparisons.md)
 
-## 混同しないこと
+## Interpretation
 
-- 結果が弱くても年・月、候補、標本、閾値を選び直さない。
-- 精度基準の未達と処理失敗を区別する。計算照合と内容妥当性に別の証拠が要る。
-- C01は旧4年の年平均の記述外挿。著者ブートストラップは年次構造の変化を測らない。
+- Keep years, months, candidates, samples, and thresholds fixed even when results are weak.
+- Record failures to meet accuracy thresholds and processing failures separately. Use separate evidence for computational checks and content validity.
+- C01 is a descriptive extrapolation of four earlier annual means. The author bootstrap quantifies variation across author clusters, leaving changes in year-level structure outside its scope.
 
-引継ぎは [phase2-handoff.md](phase2-handoff.md)。状態は[status.json](status.json)。
+See [phase2-handoff.md](phase2-handoff.md) for the handoff and [status.json](status.json) for status.

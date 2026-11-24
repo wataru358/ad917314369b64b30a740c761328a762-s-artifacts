@@ -1,11 +1,11 @@
-# D01 の引継ぎ
+# D01 handoff
 
-初期状態は未着手。過去の研究の完了を引き継いだものではない。
+This task starts as not_started for the new run.
 
-最初の操作は、この末端のAGENT.mdとstatus.jsonを読み、ルートで `python3 workflow.py start D01 --owner <担当ID>` を実行すること。依存が未完了なら先行作業へ戻る。
+Start by reading this leaf's AGENT.md and status.json, then run `python3 workflow.py start D01 --owner <owner-ID>` from the root. If a dependency is incomplete, return to that task first.
 
-中断時はmanifest.paths.gzのハッシュと最初の未処理キーを残す。完了後はD02へcandidates.jsonlとmanifest.jsonを渡す。
+On interruption, record the manifest.paths.gz hash and the first unprocessed key. When complete, hand candidates.jsonl and manifest.json to D02.
 
-## 再開記録
+## Resumption log
 
-実行した担当がここへ追記する。担当ID、run_id、attempt、出力先、固定入力とhash、checkpoint、完了した操作、未完了、阻害、次の一コマンドを残す。同じattemptへ戻るときは進捗を消さず追記する。
+The assigned agent appends the owner ID, run_id, attempt, output location, frozen inputs and hashes, checkpoint, completed and pending operations, blockers, and the next command here. Keep previous entries when returning to the same attempt.

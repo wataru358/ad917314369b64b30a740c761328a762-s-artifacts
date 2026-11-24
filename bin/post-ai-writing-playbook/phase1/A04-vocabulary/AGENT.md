@@ -1,29 +1,29 @@
-# A04　語彙の発見と検証
+# A04 Vocabulary Discovery and Validation
 
-[ルート規則](../../AGENT.md)と[枝の規則](../AGENT.md)を読んでから、この末端を進める。
+Read the [root rules](../../AGENT.md) and the [branch rules](../AGENT.md) before starting this task.
 
-## 目的
+## Purpose
 
-著者と完全一致Pをまたがせず、固定語句候補の年代差を再検証する。
+Validate changes in the fixed candidate phrases across periods, keeping authors and exact P duplicates on one side of the split.
 
-## 入力
+## Inputs
 
-- T03対象
-- T02元P文・所有単位・token、L/H、MATTR、metadata
+- T03 cohort
+- T02 original P sentences, owner units, tokens, L/H, MATTR, and metadata
 
-上流の実ファイルはworkflow.pyが返すupstreamのoutput_dirとmanifestから解決する。旧チャットの絶対パスを入力にしない。
+Resolve upstream input files from the `output_dir` and manifest that `workflow.py` returns for each dependency. Use those locations for inputs in this run.
 
-## 手順
+## Steps
 
-1. 非空Pハッシュと既知著者の連結成分を作り、固定seedハッシュで分ける。
-2. 同梱条件で1〜5語の全候補を発見群内で計数し、増減・以前はまれ・固定監視語を凍結する。
-3. 検証群を開き、候補の差・比・方向・再到達と成分cluster区間を計算する。P/L/Hと群を別にする。
-4. 著者への広がり、話題/語数帯、年別MATTR、編集時点とinlineコード境界の限界を保存する。
-5. 独立に漏れ、選定順位、分母、語境界と検証行を照合する。
+1. Build connected components from nonempty P hashes and known authors, and split the components by a fixed-seed hash.
+2. Count all one- to five-word candidates in the discovery split according to the bundled rules. Freeze lists of increases, decreases, previously rare terms, and prespecified watch terms.
+3. Open the validation split and calculate differences, ratios, directions, threshold attainment, and component-cluster intervals for each candidate. Keep P, L, and H and the two splits separate.
+4. Save results on author coverage, topic and word-count bands, annual MATTR, and the limitations of edit timestamps and inline code boundaries.
+5. Independently check for leakage and verify selection ranks, denominators, word boundaries, and validation rows.
 
-## 必要な出力
+## Required Outputs
 
-すべてstartが返すoutput_dirの中へ保存する。
+Save all outputs in the `output_dir` returned by `start`.
 - `report.md`
 - `manifest.json`
 - `verification.json`
@@ -36,24 +36,24 @@
 - `mattr.csv`
 - `vocabulary-audit.json`
 
-## 完了条件
+## Completion Criteria
 
-- C01　発見側と検証側の既知著者および完全一致の非空Pハッシュは交差0。
-- C02　候補hashは検証結果を開く前に固定され、全採否と未再現を保持する。
-- C03　元単位・文・非語境界、0語P分母、レア判定、監視語、MATTR窓不足を別実装で照合できる。
+- C01 Known authors and exact nonempty P hashes have zero overlap between the discovery and validation splits.
+- C02 The candidate hash is frozen before validation results are opened, and every selection decision and failure to replicate is retained.
+- C03 An independent implementation can check original units, sentence and nonword boundaries, the denominator for zero-word P, rarity decisions, watch terms, and insufficient MATTR windows.
 
-完了前に、別担当が保存物と定義を独立確認する。receiptの基準・成果物・hashを確認し、ルートからworkflow.py finishで反映する。pilotだけでは完了しない。
+Before marking this task complete, have another reviewer independently check the saved outputs and definitions. Verify the receipt criteria, artifacts, and hashes, then record completion with `workflow.py finish` from the project root. Completion requires the full run.
 
-## 参照する固定規則
+## Frozen Rules
 
 - [measurement-spec.md](../measurement-spec.md)
 - [analysis-methods.md](../analysis-methods.md)
 - [a04-settings.json](../references/a04-settings.json)
 
-## 混同しないこと
+## Interpretation
 
-- 点差の同方向は有意差ではない。
-- 候補数を埋めるために閾値を下げない。
-- P完全一致を近似重複へ外挿しない。
+- Report agreement in the direction of point estimates separately from statistical significance.
+- Keep the prespecified thresholds when fewer candidates qualify.
+- Limit the exact-duplicate conclusion to exact P matches.
 
-引継ぎは [phase1-handoff.md](phase1-handoff.md)。状態は[status.json](status.json)。
+See [phase1-handoff.md](phase1-handoff.md) for the handoff and [status.json](status.json) for the current status.
