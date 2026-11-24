@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "A03",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "A03",
+      "title": "リスト・太字・見出し",
+      "description": "リスト・太字・見出し",
+      "priority": 10,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "M05/M06の年等重み点差・区間、および構造の有無と条件付き強度が再計算できる。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "各領域のS語・L語・太字語・太字区間のカウントが一致する。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "空領域、S=0、構造なし、投影失敗と例示の役割が区別される。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

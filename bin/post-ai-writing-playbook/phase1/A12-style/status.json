@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "A12",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "A12",
+      "title": "文体距離と分布の偏り",
+      "description": "文体距離と分布の偏り",
+      "priority": 19,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03",
+        "A01",
+        "A02",
+        "A03",
+        "A05",
+        "A09"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "基準期年等重みCDF、分位と同点が再現できる。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "各組の完全ケース・共通層・固定重み、別著者のseed付きペアIDと距離を照合できる。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "原尺度、端値、未知種別、対象率、著者等重み、同文診断とペア依存を明記する。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

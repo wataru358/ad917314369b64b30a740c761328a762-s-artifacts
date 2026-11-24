@@ -1,0 +1,114 @@
+{
+  "version": "dev-writing-structure-v1",
+  "scope": "A06 only; fixed 38980 English articles; no minimum words, no exclusions or deduplication",
+  "baseline_years": [2018, 2019, 2020, 2021],
+  "comparison_years": [2023, 2024],
+  "transition_year": 2022,
+  "partial_year": 2025,
+  "heading": {
+    "unicode_normalization": "NFKC + casefold + curved apostrophe U+2019 to ASCII",
+    "edge_decoration": "^[^a-z0-9]+|[^a-z0-9]+$",
+    "number_prefix": "^(?:(?:step|part|chapter)\\s+\\d+(?:\\.\\d+)*\\s*[:.)\\]-]?\\s*|\\d+(?:\\.\\d+)*[.):\\]-]?\\s+|[ivxlcdm]+[.)]\\s+)",
+    "aliases": {
+      "intro": ["introduction", "overview", "background", "project overview"],
+      "prerequisites": [
+        "prerequisites",
+        "prerequisite",
+        "requirements",
+        "before you begin",
+        "what you'll need",
+        "what you need"
+      ],
+      "implementation": [
+        "implementation",
+        "steps",
+        "step by step",
+        "step-by-step",
+        "setup",
+        "set up",
+        "installation",
+        "getting started",
+        "main steps",
+        "the code",
+        "the approach"
+      ],
+      "example": ["example", "examples", "demo", "demonstration", "usage", "usage examples"],
+      "closing": [
+        "conclusion",
+        "conclusions",
+        "summary",
+        "final thoughts",
+        "key takeaways",
+        "wrapping up",
+        "wrap up",
+        "recap",
+        "closing thoughts"
+      ]
+    },
+    "match": "exact normalized heading or text before first colon; other preserved; all h1-h6 including widget headings already retained by T02",
+    "step_prefix": "^step\\s+\\d+(?:\\.\\d+)*(?:\\s|[:.)\\]-]|$)"
+  },
+  "calibration": {
+    "fold": "A04 discovery only",
+    "selection": "six per proposed recognized class,30 other; min hash42:A06-calibration:article:heading; year and ID hidden; not representative",
+    "role": "single operator lexical-function annotation; no population accuracy claim"
+  },
+  "sequence": {
+    "primary": "all headings in order, repeated functions and other retained; no_heading separate",
+    "auxiliary": "recognized-only sequence, no_recognized_heading distinct from no_heading",
+    "top10": "annual adaptive top10 frequency; all/headed and heading count bands separately; separately frozen main-year discovery top10 evaluated in holdout",
+    "heading_bands": ["0", "1", "2-3", "4-6", "7+"],
+    "resampling": {
+      "replicates": 2000,
+      "seed": 42,
+      "mode": "without replacement per year to min-year article n, independently within each scope/heading band; mean and percentile95 range of statistic, not population CI"
+    }
+  },
+  "positions": {
+    "domain": "saved ASCII S=P+L+U words in clean DOM order; H text excluded",
+    "pre_heading": "S words strictly before first saved heading; no heading=>NA, headed with zero S=>0 raw words / NA share",
+    "closing": "last heading classified closing; section ends before next heading of same or higher level, including nested subsections; not necessarily last semantic section",
+    "closing_zero_absent": "no closing heading=>0 words; zero-absent share W_S=0=>NA",
+    "closing_conditional": "no closing heading=>NA, present zero words=>0; conditional mean and coverage separately"
+  },
+  "edges": {
+    "domain": "saved P word tokens; first50 and last50 or all if fewer; overlap max(0,2*min(50,W_P)-W_P)",
+    "n": [2, 3, 4, 5],
+    "boundaries": "owner,source unit,sentence,nonword token,window boundary; punctuation not separate barrier; extracted adjacency may cross removed inline code",
+    "fold": "reuse immutable A04 author/exact nonempty P components; never reassign",
+    "discovery": {
+      "min_articles": 20,
+      "min_authors": 10,
+      "rank": "annual-equal article presence difference, positive and negative separately; descending absolute delta then n ascending and lexical term",
+      "per_direction_per_domain": 15,
+      "main_years": [2018, 2019, 2020, 2021, 2023, 2024],
+      "eligibility": "pooled main six years, discovery only; zero P retained in prevalence denominator",
+      "zero_or_fewer": "no threshold relaxation; keep zero eligible if applicable"
+    },
+    "holdout": "freeze candidate IDs and terms before reading holdout edge gram counts; same/opposite/zero and missing separately; no reselection",
+    "diagnostics": "known exact P hashes, top1/top5 authors and component occurrence share; series metadata observed when available, no inferential series classifier"
+  },
+  "bootstrap": {
+    "replicates": 2000,
+    "seed": 42,
+    "min_clusters_per_main_year": 30,
+    "min_valid_replicates": 1900,
+    "coverage_threshold": 0.9,
+    "interval": "percentile95 linear; all known authors across years for structural proxies, holdout A04 components for frozen phrase prevalence; exploratory non-simultaneous",
+    "structural_metrics": [
+      "heading_presence",
+      "intro_presence",
+      "closing_presence",
+      "before_heading_share",
+      "closing_share_zero_absent",
+      "closing_words_conditional"
+    ],
+    "p_values": "not_run"
+  },
+  "quality": "preserve unknown/widget headings, exact duplicates and short texts; no quality/AI/causal inference",
+  "compute": {
+    "memory_limit": "2GB",
+    "threads": 1,
+    "temp_limit": "8GB"
+  }
+}

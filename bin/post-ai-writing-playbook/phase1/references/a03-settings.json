@@ -1,0 +1,49 @@
+{
+  "version": "dev-writing-formatting-v1",
+  "scope": "A03 only; fixed 38980 English articles, no minimum words, no duplicate exclusions",
+  "baseline_years": [2018, 2019, 2020, 2021],
+  "comparison_years": [2023, 2024],
+  "transition_year": 2022,
+  "partial_year": 2025,
+  "same_month_auxiliary": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+  "primary": ["M05", "M06"],
+  "unit": "one article, equal within year; contrast equal mean of annual means, comparison minus baseline",
+  "M05": "reuse sealed W_L/W_S; W_S=0 => no_prose NA; positive S and no L => 0; report difference in percentage points",
+  "M06": "reuse sealed 1000*bold_intervals_S/W_S; W_S=0 => no_prose NA; projection failure => projection_error NA; no bold with positive S => 0",
+  "bootstrap": {
+    "replicates": 2000,
+    "seed": 42,
+    "unit": "all known single numeric author IDs sampled together across 2018-2025, all articles retained",
+    "interval": "percentile 95%, linear quantiles",
+    "min_authors_per_main_year": 30,
+    "min_coverage": 0.9,
+    "p_values": "not_run; no optional six-primary tests or Holm adjustment; secondary intervals not simultaneous"
+  },
+  "quantiles": "linear, observed zeros retained, metric-specific NA excluded",
+  "list_DOM": "count all ul/ol blocks and li nodes in saved clean DOM, including zero-word/non-prose items; allocate saved L words to nearest li exactly once (nested li and p inside li not double counted); mean item words includes zero-word li, no li => NA; list presence DOM and positive L-word presence separate",
+  "bold": "saved T02 spans only, per prose unit; nested/adjacent bold handling unchanged; words counted once if overlapping one or more spans; no CSS inference",
+  "headings": "all saved h1-h6; ASCII heading words via fixed tokenizer; H2/H3 density per S words; question is ASCII question-mark occurrence proxy, not grammatical classification; emoji is fixed T02 codepoint-range proxy, not visible grapheme count",
+  "heading_number_rule": "^(?:\\d+(?:\\.\\d+)*[.)\\]:-]?\\s+|(?:step|part|chapter)\\s+\\d+\\b)",
+  "position": {
+    "order": "saved S word tokens sorted by unit_index,unit_start; midpoint=(rank+0.5)/W_S",
+    "half": "first_half <0.5, last_half >=0.5",
+    "quintile": "first20 <0.2; middle60 [0.2,0.8); last20 >=0.8",
+    "list": "word membership, not li event count; item may span regions",
+    "bold_words": "one count per S word overlapping saved bold spans",
+    "bold_events": "each saved span anchored at first overlapping word; counted once even if span crosses a region",
+    "summary": "article-equal region rates and separately labelled pooled word-weighted rates; empty region NA; W_S=0 retains all rows with NA; position summaries descriptive, no position CI"
+  },
+  "audit": {
+    "strata": ["outline_candidate", "unknown_structure", "removed_TOC"],
+    "selection": "one available article per year and stratum by SHA256('42:A03:'+stratum+':'+article_id), duplicates across strata retained with role",
+    "scope": "not blinded; first two relevant flags/exclusions, first 6 list items and headings, first 6 saved bold spans with context; at most 700 chars of saved clean DOM; raw/clean markers retained; not population accuracy"
+  },
+  "V01_deferred": [
+    "quality-flag and unflagged code-in-P influence",
+    "length and topic matched comparisons",
+    "alternative prose domains",
+    "author-equal and continuing-author comparisons"
+  ],
+  "A06_deferred": "Conclusion/section-semantic attribution and template structure; no A06 work in A03",
+  "heading_number_rule_note": "Case-insensitive; leading year-like numbers included; no semantic section classification"
+}

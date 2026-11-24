@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "V01",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "V01",
+      "title": "条件を変えた再分析",
+      "description": "条件を変えた再分析",
+      "priority": 20,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08",
+        "A09",
+        "A10",
+        "A11",
+        "A12"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "予定の変種×六主指標の全セルが計算値または理由付き状態を持つ。必須未処理はない。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "原比較との差・n・欠測・支持を別計算で照合し、定義上のゼロと反転を区別する。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "A04境界・重複の未測定、A11・A12探索、図の反例と制約を保存する。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

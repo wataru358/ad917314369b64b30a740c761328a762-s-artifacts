@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "download",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": "2026-11-24T08:48:20.313779+00:00",
+  "user_stories": [
+    {
+      "id": "D01",
+      "title": "Common CrawlのDEV候補を固定する",
+      "description": "Common CrawlのDEV候補を固定する",
+      "priority": 1,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "cc-index/status.json"
+    },
+    {
+      "id": "D02",
+      "title": "Common CrawlのWARCと生HTMLを保存する",
+      "description": "Common CrawlのWARCと生HTMLを保存する",
+      "priority": 2,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "D01"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "cc-html/status.json"
+    },
+    {
+      "id": "D03",
+      "title": "DEV APIの2026年1〜10月の固定標本を取得する",
+      "description": "DEV APIの2026年1〜10月の固定標本を取得する",
+      "priority": 3,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "dev-api-2026/status.json"
+    }
+  ]
+}

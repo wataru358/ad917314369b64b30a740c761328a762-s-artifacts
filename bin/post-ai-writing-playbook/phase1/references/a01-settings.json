@@ -1,0 +1,41 @@
+{
+  "version": "dev-writing-length-v1",
+  "scope": "A01 only; fixed T01 adopted English cohort; no minimum words or duplicate exclusions",
+  "baseline_years": [2018, 2019, 2020, 2021],
+  "comparison_years": [2023, 2024],
+  "transition_year": 2022,
+  "partial_year": 2025,
+  "same_month_auxiliary": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+  "primary": "M01: mean(log1p(W_P)) in each year; equal mean of comparison years minus equal mean of baseline years",
+  "raw_comparisons": "raw means, medians, quantiles and band shares retained; pooled article comparison supplementary",
+  "word_bands": [
+    ["0", 0, 0],
+    ["1-49", 1, 49],
+    ["50-99", 50, 99],
+    ["100-299", 100, 299],
+    ["300-999", 300, 999],
+    ["1000+", 1000, null]
+  ],
+  "bootstrap": {
+    "replicates": 2000,
+    "seed": 42,
+    "unit": "single numeric author IDs sampled with replacement across all 2018-2025 years together",
+    "interval": "percentile 95%, linear quantiles",
+    "eligibility": "at least 30 known authors per comparison year; known-author coverage >=90%; display all-article and known-author point estimates separately",
+    "p_values": "not run; optional six-metric testing/adjustment not performed in A01"
+  },
+  "paragraphs": {
+    "unit": "saved P owner, fragments joined under the fixed segmentation rule",
+    "article_median": "median owner word count within each article; no P => NA, zero-word P retained",
+    "pooled_distribution": "each P owner weight 1",
+    "article_equal_distribution": "each article with P weight 1, divided across its owners",
+    "weighted_quantiles": "inverse empirical CDF, min value with cumulative weight >=p*total; use same definition for pooled and article-equal; floating tolerance 1e-10 relative to total weight"
+  },
+  "long_audit": {
+    "candidate_rule": "top ceil(1%*articles_in_year) separately by W_P and W_S, descending words then article_id; union by article_id",
+    "sample_per_year": 2,
+    "selection": "SHA256('42:A01-long:'+article_id)",
+    "blinding": "year, comparison group and article ID hidden; dates in original text retained",
+    "scope": "structure, systematic first/middle/last excerpts and code-candidate paragraphs; not full article semantic audit; no sample-based population error rate"
+  }
+}

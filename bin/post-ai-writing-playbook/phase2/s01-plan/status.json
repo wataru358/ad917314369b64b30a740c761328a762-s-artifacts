@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "P2-S01",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "P2-S01",
+      "title": "比較と収録の実行計画を固定する",
+      "description": "比較と収録の実行計画を固定する",
+      "priority": 22,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "R01",
+        "D03"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "R01とD03のreceipt、入力パス、ハッシュ、必要列、結合キーを照合し、全入力と例外を列挙する。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "主対象、全60年月セル、重み、D/H、盲検、比較、検証、資料の順序と定義版を固定する。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "抽出・言語pilotの選択、閲覧順、標本不足、全量との違いを記録する。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

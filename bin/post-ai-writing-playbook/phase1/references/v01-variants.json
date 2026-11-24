@@ -1,0 +1,171 @@
+{
+  "version": "V01-analysis-v1",
+  "fixed_before_execution": true,
+  "metrics": {
+    "M01": "log1p(P words)",
+    "M02": "words per positive sentence",
+    "M03": "sentence length CV",
+    "M04": "P commas per 1000 P words",
+    "M05": "L words / S words, percentage points",
+    "M06": "S bold events per 1000 S words"
+  },
+  "main_baseline_years": [
+    2018,
+    2019,
+    2020,
+    2021
+  ],
+  "main_comparison_years": [
+    2023,
+    2024
+  ],
+  "estimator": "equal mean of annual article means in comparison minus baseline",
+  "interval": {
+    "unit": "known author across all years",
+    "seed": 42,
+    "replicates": 2000,
+    "percentile": [
+      2.5,
+      97.5
+    ],
+    "minimum_known_authors_per_year": 30,
+    "coverage_threshold": 0.9
+  },
+  "one_condition_at_a_time": true,
+  "conditions": [
+    {
+      "id": "C01",
+      "name": "text_scope",
+      "variants": [
+        "P_only",
+        "S_all",
+        "P_plus_U"
+      ]
+    },
+    {
+      "id": "C02",
+      "name": "sentence_boundary",
+      "variants": [
+        "main",
+        "exclude_terminal_fragments",
+        "CV_at_least_5_sentences"
+      ]
+    },
+    {
+      "id": "C03",
+      "name": "word_count",
+      "variants": [
+        "main_ASCII",
+        "Unicode_and_alphanumeric_identifiers"
+      ]
+    },
+    {
+      "id": "C04",
+      "name": "common_strata",
+      "variants": [
+        "all",
+        "within_word_band",
+        "common_topic"
+      ]
+    },
+    {
+      "id": "C05",
+      "name": "language_boundary",
+      "variants": [
+        "english",
+        "include_english_dominant_mixed"
+      ]
+    },
+    {
+      "id": "C06",
+      "name": "quality_false_negative",
+      "variants": [
+        "all",
+        "outline_candidates",
+        "untagged_code_candidates",
+        "unknown_structure_candidates",
+        "DOM_outer_card_candidates"
+      ]
+    },
+    {
+      "id": "C07",
+      "name": "AI_topic_type_organization",
+      "variants": [
+        "all",
+        "AI_topic_yes",
+        "AI_topic_no",
+        "article_type",
+        "known_organization"
+      ]
+    },
+    {
+      "id": "C08",
+      "name": "author_weight",
+      "variants": [
+        "article_equal",
+        "author_equal",
+        "continuing_authors"
+      ]
+    },
+    {
+      "id": "C09",
+      "name": "extremes",
+      "variants": [
+        "mean",
+        "median",
+        "winsorize_1_percent"
+      ]
+    },
+    {
+      "id": "C10",
+      "name": "baseline_period",
+      "variants": [
+        "2018_2021",
+        "2018_2022_Jan_Oct_aligned",
+        "2019_2021"
+      ]
+    },
+    {
+      "id": "C11",
+      "name": "partial_year",
+      "variants": [
+        "exclude_2025",
+        "include_2025_same_months"
+      ]
+    },
+    {
+      "id": "C12",
+      "name": "publication_save_update",
+      "variants": [
+        "lag_strata",
+        "updated_known",
+        "updated_unknown",
+        "update_before_publication",
+        "update_after_publication"
+      ]
+    },
+    {
+      "id": "C13",
+      "name": "exact_duplicate_contribution",
+      "variants": [
+        "keep_all",
+        "duplicate_group_contribution"
+      ]
+    },
+    {
+      "id": "C14",
+      "name": "interval_cluster",
+      "variants": [
+        "author",
+        "exact_P_author_component"
+      ]
+    }
+  ],
+  "supplemental": [
+    "A04_inline_code_boundary_2_to_5gram",
+    "A04_near_duplicate_leakage",
+    "A11_exploration_table_after_parent_completion",
+    "A12_exploration_table",
+    "large_deviation_fixed_HTML_readback"
+  ]
+}

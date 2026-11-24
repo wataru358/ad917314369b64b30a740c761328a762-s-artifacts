@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "P2-S05",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "P2-S05",
+      "title": "18項目の算術と主張の範囲を検証する",
+      "description": "18項目の算術と主張の範囲を検証する",
+      "priority": 26,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "P2-S04"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "M6、V01/V02とV03の5系列、X01、X02 E/G、X03、C01の18判断が重複なくあり、全比較キーと固定感度へたどれる。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "各判断の数値、分母、不確かさ、内容検証、代替説明、許容文がそろう。NAとunknownの両方に理由が読める。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "X02の固定標本差・unknown範囲、V02条件未達、品質24比較、C01の6指標とbacktestが脱落しない。",
+          "met": false
+        },
+        {
+          "id": "C04",
+          "criterion": "独立担当が保存値と記述を照合し、指摘・修正・再検証を保存する。終了は全項目を確認し判断を残したことを示す。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

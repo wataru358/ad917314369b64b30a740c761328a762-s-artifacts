@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "A07",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "A07",
+      "title": "経験談と具体的な検証記述",
+      "description": "経験談と具体的な検証記述",
+      "priority": 14,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03",
+        "A05"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "固定校正と固定評価は不交差。規則凍結後に評価記事を全文確認し、全件に根拠付き状態と範囲がある。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "再評価は固定subsetを別セッションで行い、初回と再評価と裁定を保つ。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "全量代理、内容標本、S/P分母、判断不能範囲、支持不足を区別できる。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

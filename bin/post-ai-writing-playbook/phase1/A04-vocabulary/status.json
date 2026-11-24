@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "A04",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "A04",
+      "title": "語彙の発見と検証",
+      "description": "語彙の発見と検証",
+      "priority": 11,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "発見側と検証側の既知著者および完全一致の非空Pハッシュは交差0。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "候補hashは検証結果を開く前に固定され、全採否と未再現を保持する。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "元単位・文・非語境界、0語P分母、レア判定、監視語、MATTR窓不足を別実装で照合できる。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

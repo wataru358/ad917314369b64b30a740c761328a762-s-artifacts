@@ -1,0 +1,361 @@
+{
+  "version": "p2-measurement-v1",
+  "stage": "P2-S03",
+  "results_not_opened_in_S03": true,
+  "normative_spec": "phase2/measurement-spec.md",
+  "old_run": "${R01_OUTPUT}/phase2-inputs.json",
+  "new_final": "${P2_S02_OUTPUT}/english.jsonl",
+  "output_root": "${P2_S04_OUTPUT}",
+  "cohort": {
+    "old_years": [
+      2018,
+      2019,
+      2020,
+      2021,
+      2022
+    ],
+    "new_year": 2026,
+    "months": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "month_weight": "equal",
+    "old_year_weight": "equal",
+    "missing_cell": "NA_no_renormalization",
+    "primary_key": "route:source_article_id",
+    "known_author_key": "dev:user:<numeric_id>",
+    "unknown_author_cluster": "unknown:route:id"
+  },
+  "body": {
+    "P": "paragraph",
+    "L": "list",
+    "U": "other_saved_prose",
+    "S": [
+      "P",
+      "L",
+      "U"
+    ],
+    "metrics_lexical_body": [
+      "P",
+      "L"
+    ],
+    "word_kind": "word",
+    "case": "lower_for_lexical_matching",
+    "stemming": false,
+    "phrase_gap": "whitespace_only",
+    "sentence_denominator": "positive_word_P_sentences",
+    "segmentation_source": "${T02_OUTPUT}/segmentation.py"
+  },
+  "metrics": {
+    "P2-M01": {
+      "formula": "sum(w_j)/n",
+      "unit": "words/sentence",
+      "na": "n=0"
+    },
+    "P2-M02": {
+      "formula": "sqrt(sum((w_j-mean)^2)/n)/mean",
+      "unit": "CV",
+      "na": "n<2 or mean=0"
+    },
+    "P2-M03": {
+      "formula": "C/n",
+      "unit": "commas/sentence",
+      "na": "n=0"
+    },
+    "P2-M04": {
+      "formula": "W_P",
+      "unit": "words/article",
+      "na": "structural_unavailable",
+      "zero_P": "0"
+    },
+    "P2-M05": {
+      "formula": "W_L/(W_P+W_L)",
+      "unit": "fraction",
+      "na": "W_P+W_L=0"
+    },
+    "P2-M06": {
+      "formula": "1000*B/(W_P+W_L)",
+      "unit": "bold_spans/1000_words",
+      "na": "W_P+W_L=0 or projection_mismatch"
+    }
+  },
+  "split": {
+    "seed": 42,
+    "salt": "p2-s03-v1:42:author:",
+    "method": "sha256_integer_mod_2",
+    "discovery": 0,
+    "confirmation": 1,
+    "unknown_author": "exploratory_only",
+    "unit": "connected_component_of_authors_linked_by_exact_nonempty_word_sequence",
+    "exact_duplicate_components": true,
+    "representative": "minimum_lexicographic_author_key"
+  },
+  "vocabulary": {
+    "ngrams": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "frequency_unit": 1000,
+    "zero_baseline_ratio": null,
+    "V01": {
+      "min_occurrences": 20,
+      "min_authors": 10,
+      "max_author_share": 0.2,
+      "max_candidates": 200,
+      "ranking_pseudocount": 0.01,
+      "eligibility_logic": "exists same period p: count_p>=20 AND authors_p>=10 AND Q_p<=0.20"
+    },
+    "V02": {
+      "old_max_article_rate": 0.01,
+      "new_min_article_rate": 0.02,
+      "new_min_authors": 20,
+      "new_max_author_share": 0.1,
+      "new_min_per1000": 0.05,
+      "max_candidates": 100
+    },
+    "V03": {
+      "delve": [
+        "delve",
+        "delves",
+        "delved",
+        "delving"
+      ],
+      "lets": "let's + at least one word in sentence",
+      "worth": "it's worth noting",
+      "not_just": {
+        "prefix": [
+          "not",
+          "just"
+        ],
+        "gap_min": 1,
+        "gap_max": 20,
+        "bridge": "but",
+        "optional": "also",
+        "min_tail_words": 1,
+        "choose": "shortest_match_per_start"
+      },
+      "takeaway": "the key takeaway"
+    }
+  },
+  "length_sensitivity": {
+    "words": 200,
+    "minimum_words": 200,
+    "salt": "p2-s03-v1:42:window:",
+    "offset": "sha256_integer_mod_(W_B-199)",
+    "positions": [
+      "hash",
+      "first",
+      "last"
+    ]
+  },
+  "topic": {
+    "map": "${T02_OUTPUT}/topic-map.json",
+    "minimum_cell_articles": 10,
+    "unmapped": "other",
+    "missing": "missing",
+    "ai_tags": [
+      "ai",
+      "machinelearning",
+      "deeplearning",
+      "llm",
+      "llms",
+      "chatgpt",
+      "genai",
+      "artificialintelligence"
+    ]
+  },
+  "duplicates": {
+    "keep_primary": true,
+    "exact": "sha256_normalized_word_sequence",
+    "near_min_words": 100,
+    "near_ngram": 5,
+    "jaccard_min": 0.9,
+    "group": "connected_components",
+    "sensitivity_weight": "1/group_size",
+    "group_size_scope": "all_years_and_months_within_analysis_fold; unsplit_for_M",
+    "cell_mean": "sum((1/g_i)*x_i)/sum(1/g_i)",
+    "lexical_frequency": "1000*sum((1/g_i)*c_i)/sum((1/g_i)*W_i)",
+    "freeze_candidates": true,
+    "within_folds_for_lexical": true
+  },
+  "X01": {
+    "ngram": 5,
+    "discovery_min_authors": 10,
+    "discovery_max_author_share": 0.1,
+    "confirmation_min_other_authors": 2,
+    "minimum_words": 5,
+    "main_dictionary": "general_explanation_without_technical_quote_signature_promotion_flags",
+    "eligibility_logic": "exists same period p: authors_p>=10 AND Q_p<=0.10"
+  },
+  "X02": {
+    "labels": [
+      "E",
+      "G"
+    ],
+    "calibration_old_per_year_month": 2,
+    "calibration_new_per_month": 10,
+    "confirmation_old_per_year_month": 12,
+    "confirmation_new_per_month": 30,
+    "salt": "p2-s03-v1:42:x02:",
+    "agreement_min": 0.8,
+    "kappa_min": 0.6,
+    "full_corpus_classifier": false,
+    "zero_W_B": "NA_all_article_values",
+    "word_rate_bounds": {
+      "lower": "|positive_word_positions|/W_B",
+      "upper": "|positive_word_positions union unknown_word_positions|/W_B",
+      "point": "NA_if_any_unknown_sentence_else_lower",
+      "E_G_overlap": "count_once_in_each_label; union_for_combined_rate"
+    },
+    "planned_confirmation_author_cells": 900,
+    "agreement_streams": "independent_ai_contexts",
+    "combine": "same_label_else_unknown"
+  },
+  "X03": {
+    "window_words": 50,
+    "joint_min_words": 100,
+    "opening": [
+      "in this post",
+      "in this article",
+      "in this tutorial",
+      "let's explore",
+      "let's dive"
+    ],
+    "closing": [
+      "in conclusion",
+      "to sum up",
+      "in summary",
+      "thanks for reading",
+      "thank you for reading",
+      "let me know",
+      "leave a comment",
+      "follow me"
+    ],
+    "headings": [
+      "introduction",
+      "overview",
+      "conclusion",
+      "summary",
+      "final thoughts"
+    ],
+    "confirmation_min_other_authors": 2,
+    "primary": "any_closing_match"
+  },
+  "validation": {
+    "salt": "p2-s03-v1:42:validation",
+    "calibration_per_route": 50,
+    "confirmation_per_route": 100,
+    "exclude_X02_articles": true,
+    "min_positives": 20,
+    "min_negatives": 20,
+    "precision_min": 0.9,
+    "recall_min": 0.9,
+    "independent_raters": 2,
+    "never_relabel_language": true
+  },
+  "uncertainty": {
+    "cluster": "author_union_across_years",
+    "rng": "numpy.random.Generator(numpy.random.PCG64(42))",
+    "seed": 42,
+    "replicates": 5000,
+    "min_valid": 4750,
+    "interval": [
+      0.025,
+      0.975
+    ],
+    "quantile_method": "linear",
+    "multiplicity": {
+      "M": "Holm_6",
+      "V01_V02": "BH_union_fixed_H_candidates",
+      "V03": "Holm_5",
+      "X": "Holm_4",
+      "C01": "descriptive_no_test"
+    },
+    "p_value": "(1+count(abs(delta_b-delta_hat)>=abs(delta_hat)))/(B_valid+1)",
+    "sampling_call": "rng.integers(0,K,size=K,dtype=np.int64)",
+    "author_order": "UTF8_lexicographic"
+  },
+  "C01": {
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022
+    ],
+    "year_weights": "equal",
+    "target": 2026,
+    "scale": "raw",
+    "pre_sd": "pooled_valid_article_sample_sd_ddof1",
+    "zero_sd": "NA",
+    "missing_year_or_month": "NA",
+    "clip_reference": false,
+    "refit_in_each_bootstrap": true,
+    "reference_lines": [
+      0.2,
+      0.5,
+      0.8
+    ],
+    "sensitivity": [
+      "add_2018_with_matching_sd",
+      "leave_one_year_out_with_matching_sd",
+      "slope_zero",
+      "weighted_sd",
+      "M04_log1p"
+    ],
+    "backtests": [
+      {
+        "train": [
+          2018,
+          2019,
+          2020
+        ],
+        "predict": 2021
+      },
+      {
+        "train": [
+          2018,
+          2019,
+          2020,
+          2021
+        ],
+        "predict": 2022
+      }
+    ]
+  },
+  "sensitivity_design": {
+    "one_factor_at_a_time": true,
+    "joint": [
+      "hash_200_words_and_topic_standardization_for_V_and_X01"
+    ],
+    "M_W_B_strata": [
+      [
+        0,
+        199
+      ],
+      [
+        200,
+        499
+      ],
+      [
+        500,
+        999
+      ],
+      [
+        1000,
+        null
+      ]
+    ]
+  },
+  "path_resolution": "Package-relative normative_spec. Resolve dependency placeholders from verified receipt output directories and R01 index. Resolve P2_S04_OUTPUT from start/resume. No shell expansion."
+}

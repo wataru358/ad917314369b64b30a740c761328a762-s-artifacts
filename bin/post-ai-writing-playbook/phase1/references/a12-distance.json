@@ -1,0 +1,26 @@
+{
+  "version": "A12-analysis-v1",
+  "frozen_before_result": true,
+  "input_run": "20261030T075140Z-99fc69fcc076",
+  "cohort": "38,980 fixed English articles, 2018-2025; retain duplicate articles",
+  "main_comparison_years": [2018, 2019, 2020, 2021, 2023, 2024],
+  "descriptive_only_years": [2022, 2025],
+  "baseline_years": [2018, 2019, 2020, 2021],
+  "quantile_metric_values": "A09 saved metric-inputs analysis_value, valid=true, finite; M01 is log1p(W_P), M05 is percentage points; annual percentiles are unweighted inverse empirical CDF; no-use is exactly zero among valid articles; NA is all minus valid",
+  "baseline_quantiles": "year-equal weighted empirical CDF with each valid article in each 2018-2021 year weighted 1/(4*N_valid_year); inverse CDF at p10 and p90; strict below/above and boundary ties separately",
+  "feature_groups": {
+    "formatting": ["M05_list_word_share", "M06_bold_event_density", "heading_density"],
+    "voice": ["M02_mean_sentence_words", "M03_sentence_CV", "first_singular_per1000", "contractions_per1000"]
+  },
+  "feature_values": "Saved A03/A02/A05 article-metric-status state=ok, value finite. M05 fraction and M06 density use saved values unchanged. A05 densities are per 1000 P words. No text or segmenter recomputation.",
+  "feature_reference": "For each group, use articles complete on every group feature in 2018-2021. Each year has mass 1/4. For each feature, map x to weighted midrank P(X<x)+P(X=x)/2. Values outside the baseline use 0 or 1; exclude constant baseline columns from distance and record them. Do not refit by later year.",
+  "stratum": ["A09 topic_primary", "A09 W_P_band", "metadata-v2 article_type"],
+  "pair_population": "Group complete-case articles with A09 stable_known single author ID, valid stratum, year 2018-2025. Within each year and stratum compare distinct article IDs with different authors, with IDs ordered ascending.",
+  "common_support": "A stratum is shared if each main year has at least 30 complete-case known-author articles and at least 10 distinct authors. Fixed stratum weight is the mean of four baseline annual stratum shares among all group-complete known-author articles, renormalized over shared strata. Descriptive years use the same support and weights when estimable.",
+  "pair_sample": "Uniform without replacement from all eligible ordered-by-ID cross-author article pairs in each year-stratum; min(10000, eligible pairs), Python random.Random(42) separately seeded with year and canonical stratum via SHA256; save every selected ID pair and candidate pair count. This is deterministic and does not treat pairs as independent observations.",
+  "pair_distance": "Mean absolute difference of active feature fixed midranks within each pair. Year result is fixed-weight mean of stratum sample means; groups never combined.",
+  "author_equal_secondary": "For each year-stratum, uniformly sample up to 10000 distinct unordered author pairs, then independently select one complete-case article uniformly per author, seeded 42 separately; same fixed stratum weights. Save pair IDs. This is a secondary estimate, not a CI.",
+  "exact_sentence": "Use saved features.sqlite owners.text and sentences owner offsets only to hash exact saved sentence slices. Do not read source article or rerun segmenter. Empty slices omitted; report sampled pairs sharing at least one SHA256 digest and their mean distances.",
+  "outputs": "CSV main tables, fixed reference JSON/CSV, article and pair ID tables, English-labelled SVG figures, Japanese report, code and command receipts; sparse strata and missing values retained with reasons",
+  "scope": "A09 topic and word-band standardization differs because A12 adds article type and complete-case known-author pair eligibility. A09 article type was not in its primary adjustment. No AI attribution, causal claim, pair-independent CI or bootstrap. Article type validation remains coarse (33/80)."
+}

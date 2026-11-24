@@ -1,0 +1,33 @@
+# A08準備版v2：保存DOMのコードと周辺散文を測る
+
+初版規則とschema、pilot台帳は初回処理前に固定した。実資料でhighlightクラスを未認識としていた欠落が分かったため、v1成果物を保持し、v2規則を再測定前に固定する。記事の選択・分母・年別非閲覧は維持する。元runの初期診断は固定12記事。再実行時は診断を通した後に、同じ規則で全採用記事を計数し集計する。近接した散文を意味上の説明と認定せず、実行・正しさ・質も判断しない。
+
+## コードを一度ずつ数える
+
+掃除後payload.body_htmlをUTF-8明示のlxml HTML parserで読む。原HTMLの抽出器を呼ばず、保存済みDOMだけから別の派生表を作る。最外preを一つのblockとして数え、その内側の全codeは個別計上しない。pre外の最外codeをinlineとし、inline内のcodeも重複させない。preだけのブロックも対象。空要素も一件。code外のkbd/sampや見た目だけのコードはコード量へ加えない。
+
+文字列は要素自身のitertextを順に連結し、自身のtailを除く。HTML entityはparser復号後、Unicodeコードポイントで数える。正規化・strip・行末追加はしない。brは文字を挿入しないため実改行だけを行境界にする。文字数=len(text)、非空白文字数=sum(not c.isspace())、非空行数=sum(bool(line.strip()) for line in text.splitlines())。空文字はempty、空白だけはwhitespace_only、その他はnonempty。いずれも存在ありで数値0を保持する。
+
+preとその子孫codeのclass属性を位置とともに保存する。language-X/lang-Xと、preのclassにhighlightがある場合の残りのclassトークンを明示された構文強調ラベルとして保存する。たとえばhighlight shellのshell、highlight plaintextのplaintextは保存HTMLの明示ラベルであり、本文から推定した言語ではない。ラベルは原表記のまま保持し、plaintextを特定プログラミング言語に変換しない。候補なしはlanguage_state=unknown、候補が一種類ならexplicit、複数ならexplicit_conflict。classなし/言語用classなしを分け、推定や代表言語の補完をしない。空文字・不明言語・コード0・入力欠測を混同しない。
+
+## 二つの比は別の単位で扱う
+
+block_chars_per_S_word=blockの文字数合計/W_S。W_Sは封印済みfeaturesのASCII英語語数で、owners.word_countとtokens(kind=word)を照合する。inlineは分子に含めず別列。コード文字数を英単語数と同じ単位としない。W_S=0は値null・状態NA・理由S0で、コード0/W_S>0は0。
+
+code_nonwhite_share=(block+inlineの非空白文字数)/(掃除後DOMの全可視テキストの非空白文字数)。分子はpreおよびその外のcodeの互いに重ならない和。見出し・リスト・引用・表にあるinlineも含める。分母はroot.itertextの連結からUnicode空白を除いた文字数。掃除済みDOM内の見出し・引用・表・コードも含め、除去済みUI・属性・altは含めない。script/style/template/noscriptまたはhidden/aria-hidden=trueが保存DOMに残る場合はvisible_scope_errorとして構造比をNAにする。CSSによる可視性は測らない。DOM分母0はempty_visible_DOMでNA。DOM入力なし/構文対応失敗はmissing_body_html/projection_errorでNAとし0へ変換しない。pilotでは対応失敗を黙って進めず検証失敗にする。
+
+## 保存散文とDOM順を対応させる
+
+既存の除外要素・ブロック・unsupported widget規則を読み取り専用で参照し、DOMの散文投影と保存prose_unitsのkind/text/順序を完全照合する。原文の再抽出・語数の再生成は行わない。単位にはclean XPathとsource XPath、unit_index、owner_id、P/L/U、保存tokensから得るW_unit、DOM開始/終了順を残す。同じ所有p/liが分かれた単位は結合せず別の位置として扱う。W_unit合計=W_S、owner別合計=owners.word_countを確認する。
+
+全h1〜h6（空見出しも含む）を新しい節の境界とし、レベルを問わず境界を越えない。先頭はsection 0、各見出しで+1。T02の見出しのlocal_path、level、textと照合する。A06が合格した後に、A11で双方の見出し順と先行S語を照合する。
+
+各blockの前後で、同じ節に完全に収まる保存散文単位のうちDOM順で最寄りの一単位を選ぶ。inlineには前後対応を作らない。連続blockを越えて同じ散文に対応してよく、途中コード件数・同一unit/ownerの利用回数を残す。前後のW_unitを説明語数という意味評価にはしない。重複合計を記事の総説明語数とせず、記事のW_Sを分母として維持する。
+
+対応なしはheading_boundary、no_prose_to_document_edge、overlapping_saved_unitを区別する。保存単位がblock/見出しをまたぐ場合、全単位を片側へ置かずoverlapping_saved_unitとする。見出しで遮られた側と文書端まで散文がない側を分ける。数値0語の散文単位が存在する場合はmatchedでW_unit=0。対応なしはW_unit=nullであり0でない。
+
+タグなしコード候補はT02点検の原位置と保存P/L/Uへの混入を調べ、A08主計数には加えない。真のタグなし候補とタグ付き誤警告を分けてV01へ渡す。上流値は直さない。
+
+## 実資料と対照例の役割を分ける
+
+pilotは既存T02構造点検6記事を先に置き、保存特徴量でcode0/S0/inline/blockの最初のhash順位を追加し、同順位で12記事まで補う。台帳固定後に測定する。最大24を超えず、処理後に記事を入れ替えない。コードなし、pre/code入れ子、inline、言語クラスなし、見出し境界、連続コード、S0、タグなし候補を原位置で点検する。空code等の実例がなければ未充足と記し、別の合成対照例を置く。対照例を実記事の達成数に含めない。

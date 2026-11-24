@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "P2-S03",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "P2-S03",
+      "title": "対象、測定仕様と著者分割を固定する",
+      "description": "対象、測定仕様と著者分割を固定する",
+      "priority": 24,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "P2-S02"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "旧の採否、新の英語ID、60セルごとの実測数、対象外の理由を元の入力から検証できる。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "著者と非空完全同文による連結成分がD/Hをまたがない。未知著者、成分サイズ、セル支持を出し、近似群の越境をS04の診断へ渡す。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "X02と自動定義標本を分け、D/H別の枠、選択、salt、不足、本文ハッシュが固定される。",
+          "met": false
+        },
+        {
+          "id": "C04",
+          "criterion": "旧Phase 1と異なる6指標の分母とNA、語彙境界、太字投影、重み、bootstrapの小例を確認する。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

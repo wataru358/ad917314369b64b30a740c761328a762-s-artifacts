@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "A08",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "A08",
+      "title": "コードと近接散文",
+      "description": "コードと近接散文",
+      "priority": 15,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "ブロックとinlineの二重計数がなく、元順序と前後対応、状態ごとの分母を復元できる。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "12例の固定診断があり、0と非対応と投影失敗を判別する。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "全22指標の集計と指定12の区間、層別の不成立が残る。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

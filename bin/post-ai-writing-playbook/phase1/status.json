@@ -1,0 +1,415 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "phase1",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": "2026-11-24T08:48:20.315769+00:00",
+  "user_stories": [
+    {
+      "id": "T00",
+      "title": "入力と実行条件を固定",
+      "description": "入力と実行条件を固定",
+      "priority": 4,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "D02"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "T00-freeze/status.json"
+    },
+    {
+      "id": "T01",
+      "title": "本文言語判定と英語集合",
+      "description": "本文言語判定と英語集合",
+      "priority": 5,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T00"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "T01-english/status.json"
+    },
+    {
+      "id": "T02",
+      "title": "分割・特徴量・メタデータ",
+      "description": "分割・特徴量・メタデータ",
+      "priority": 6,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T01"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "T02-features/status.json"
+    },
+    {
+      "id": "T03",
+      "title": "対象統計と収録範囲",
+      "description": "対象統計と収録範囲",
+      "priority": 7,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T02"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "T03-overview/status.json"
+    },
+    {
+      "id": "A01",
+      "title": "記事と段落の長さ",
+      "description": "記事と段落の長さ",
+      "priority": 8,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "A01-length/status.json"
+    },
+    {
+      "id": "A02",
+      "title": "文のリズムと句読法",
+      "description": "文のリズムと句読法",
+      "priority": 9,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "A02-rhythm/status.json"
+    },
+    {
+      "id": "A03",
+      "title": "リスト・太字・見出し",
+      "description": "リスト・太字・見出し",
+      "priority": 10,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "A03-format/status.json"
+    },
+    {
+      "id": "A04",
+      "title": "語彙の発見と検証",
+      "description": "語彙の発見と検証",
+      "priority": 11,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "A04-vocabulary/status.json"
+    },
+    {
+      "id": "A05",
+      "title": "書き手の声と呼びかけ",
+      "description": "書き手の声と呼びかけ",
+      "priority": 12,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "A05-voice/status.json"
+    },
+    {
+      "id": "A06",
+      "title": "見出しと冒頭・末尾",
+      "description": "見出しと冒頭・末尾",
+      "priority": 13,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03",
+        "A04"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "A06-structure/status.json"
+    },
+    {
+      "id": "A07",
+      "title": "経験談と具体的な検証記述",
+      "description": "経験談と具体的な検証記述",
+      "priority": 14,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03",
+        "A05"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "A07-evidence/status.json"
+    },
+    {
+      "id": "A08",
+      "title": "コードと近接散文",
+      "description": "コードと近接散文",
+      "priority": 15,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "A08-code/status.json"
+    },
+    {
+      "id": "A09",
+      "title": "話題と書き手の入れ替わり",
+      "description": "話題と書き手の入れ替わり",
+      "priority": 16,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "A09-composition/status.json"
+    },
+    {
+      "id": "A10",
+      "title": "変化が始まった時期",
+      "description": "変化が始まった時期",
+      "priority": 17,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "A01",
+        "A02",
+        "A03",
+        "A09"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "A10-time/status.json"
+    },
+    {
+      "id": "A11",
+      "title": "具体的な材料までの位置",
+      "description": "具体的な材料までの位置",
+      "priority": 18,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "A11-position/status.json"
+    },
+    {
+      "id": "A12",
+      "title": "文体距離と分布の偏り",
+      "description": "文体距離と分布の偏り",
+      "priority": 19,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03",
+        "A01",
+        "A02",
+        "A03",
+        "A05",
+        "A09"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "A12-style/status.json"
+    },
+    {
+      "id": "V01",
+      "title": "条件を変えた再分析",
+      "description": "条件を変えた再分析",
+      "priority": 20,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08",
+        "A09",
+        "A10",
+        "A11",
+        "A12"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "V01-sensitivity/status.json"
+    },
+    {
+      "id": "R01",
+      "title": "日本語の執筆材料",
+      "description": "日本語の執筆材料",
+      "priority": 21,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03",
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08",
+        "A09",
+        "A10",
+        "A11",
+        "A12",
+        "V01"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "R01-editorial/status.json"
+    }
+  ]
+}

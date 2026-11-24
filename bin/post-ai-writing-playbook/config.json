@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "profile": "full",
+  "run_id": null,
+  "reproduction_level": "method_replay",
+  "corpus": {
+    "cc_crawl": "CC-MAIN-2025-43",
+    "api_year": 2026,
+    "months": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "api_per_month": 1000,
+    "seed": 42
+  },
+  "limits": {
+    "max_requests_per_chunk": 1000,
+    "max_bytes_per_chunk": 1073741824,
+    "max_wall_seconds_per_chunk": 600,
+    "retries": 3,
+    "concurrency": 2
+  },
+  "pilot": {
+    "cc_records": 5,
+    "api_per_month": 1
+  },
+  "runtime": {
+    "python": "3.11+",
+    "state_cli_platform": "macOS or Linux (fcntl)",
+    "external_dependencies": "create isolated environment and lock actual versions when implementing analysis"
+  },
+  "optional_followups": false,
+  "notes": [
+    "This file configures a new run, not the completed historical study.",
+    "Pilot is a quality probe inside a full task; it cannot finish a full-task receipt.",
+    "Live corpus, stable IDs and actual model versions may differ. Exact historical equality needs verified original snapshots and legacy ID mapping."
+  ]
+}

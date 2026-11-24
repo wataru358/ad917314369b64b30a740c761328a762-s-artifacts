@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "A06",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "A06",
+      "title": "見出しと冒頭・末尾",
+      "description": "見出しと冒頭・末尾",
+      "priority": 13,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03",
+        "A04"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "見出し校正・凍結・評価の順序があり、見出しなし・辞書認識なしと集中度が再計算できる。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "まとめ存在、条件付き節長、S位置が各々の分母で読める。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "冒頭末尾候補が検証前に固定され、全候補の検証結果と群漏れが照合される。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

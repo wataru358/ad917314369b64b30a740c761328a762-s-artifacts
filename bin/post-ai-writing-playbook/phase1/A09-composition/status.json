@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "A09",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "A09",
+      "title": "話題と書き手の入れ替わり",
+      "description": "話題と書き手の入れ替わり",
+      "priority": 16,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "指標ごとに六年の支持、共通範囲、固定重み、ESS、除外率を照合できる。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "同一対象の無調整と固定構成、既知著者等重み、本人内の点差・選択率を区別する。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "分解恒等式、各探索の適用範囲、タグ/本文AI語句と未知の判定を検証できる。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

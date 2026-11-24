@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "root",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": "2026-11-24T08:48:20.317857+00:00",
+  "user_stories": [
+    {
+      "id": "download",
+      "title": "downloadの全末端を完了する",
+      "description": "downloadの全末端を完了する",
+      "priority": 1,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "この枝の全末端の成果物と検証が完了した。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "download/status.json"
+    },
+    {
+      "id": "phase1",
+      "title": "phase1の全末端を完了する",
+      "description": "phase1の全末端を完了する",
+      "priority": 2,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "この枝の全末端の成果物と検証が完了した。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "phase1/status.json"
+    },
+    {
+      "id": "phase2",
+      "title": "phase2の全末端を完了する",
+      "description": "phase2の全末端を完了する",
+      "priority": 3,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "この枝の全末端の成果物と検証が完了した。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "phase2/status.json"
+    }
+  ]
+}

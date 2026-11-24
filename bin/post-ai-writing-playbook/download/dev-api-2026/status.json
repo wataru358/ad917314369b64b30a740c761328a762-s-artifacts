@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "D03",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "D03",
+      "title": "DEV APIの2026年1〜10月の固定標本を取得する",
+      "description": "DEV APIの2026年1〜10月の固定標本を取得する",
+      "priority": 3,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "5件の接続確認結果があり、一覧ページ番号と最古行から対象期間の下限到達を確認できる。保存済みの一覧ページは1から連続し、オフセットページングの限界を明記している。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "計画はseedのハッシュ順から再計算でき、UTC1〜10月が各1,000件、合計10,000の一意なID。タグと言語属性で絞っていない。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "計画の先頭5件の保存・読戻しの記録がある。全計画IDにsaved、empty、not_found、failedの各結果が対応する。未処理IDと差し替えIDがない。",
+          "met": false
+        },
+        {
+          "id": "C04",
+          "criterion": "200の正常な個別応答は、空本文を含めて保存し、応答IDとハッシュを照合できる。失敗は理由付きで、月別内訳と原JSONに資格情報がないことを独立検証担当が確かめている。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

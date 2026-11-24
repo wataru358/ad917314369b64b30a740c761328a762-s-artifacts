@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "P2-S06",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "P2-S06",
+      "title": "比較結果と追加4資料をまとめる",
+      "description": "比較結果と追加4資料をまとめる",
+      "priority": 27,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "P2-S05"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "18判断と全固定候補を保持する。分母と出典のある本文・表・図・用例を索引でき、保存比較へ戻れる。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "11月16日の追加4資料を固定条件で作り、行数・対象・欠測・単位・保存値を独立に確認する。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "記事使用率と陽性内量の積、年別の未観測期間、タグ欠測とAIタグ定義が表示から確認できる。",
+          "met": false
+        },
+        {
+          "id": "C04",
+          "criterion": "HTMLの表示、検索、リンクを実物で確認し、確認できない範囲、任意の11月23日作業の有無を記録する。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

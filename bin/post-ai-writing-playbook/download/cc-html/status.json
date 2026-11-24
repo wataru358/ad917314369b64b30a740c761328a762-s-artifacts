@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "D02",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "D02",
+      "title": "Common CrawlのWARCと生HTMLを保存する",
+      "description": "Common CrawlのWARCと生HTMLを保存する",
+      "priority": 2,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "D01"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "D01の全候補に固定順の台帳行が1つずつあり、候補の補充や欠落がない。完了行はsucceededまたは理由付きfailed。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "先頭5件で範囲取得、圧縮の検証、元HTMLの保存と読戻しを確認した記録がある。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "成功時は入力位置、受信長、WARCのURL・型・内部200、HTMLとWARCのハッシュを照合できる。公開日時、クロール日時、保存日時を別項目に保持している。",
+          "met": false
+        },
+        {
+          "id": "C04",
+          "criterion": "失敗理由、試行履歴、再試行上限、待機期限が台帳に残る。件数合計と保存済みファイルのハッシュを独立検証担当が確かめている。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

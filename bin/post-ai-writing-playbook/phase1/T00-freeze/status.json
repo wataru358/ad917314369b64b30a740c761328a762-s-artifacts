@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "T00",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "T00",
+      "title": "入力と実行条件を固定",
+      "description": "入力と実行条件を固定",
+      "priority": 4,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "D02"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "候補IDは一意で、全取得状態とHTMLハッシュがD02と一致する。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "5候補probeと合成負例で取得失敗・抽出失敗・空Sを区別できる。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "全候補の抽出状態があり、不明の捨て行がない。コード・環境・設定のSHA-256を再照合できる。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

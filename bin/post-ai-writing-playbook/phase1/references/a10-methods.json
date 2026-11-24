@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "population_and_dates": {
+    "primary_population": "T01 adopted=true fixed English cohort; keep all 43240 T01 IDs in date decisions and all 233880 adopted article-metric rows in the long ledger",
+    "time_key": "published_at parsed to UTC calendar period; do not substitute CC capture, local save, or modified time",
+    "date_decision": "Retain article ID and reason for unknown or contradictory publication date and publication after known CC capture. Unknown CC capture alone is not a rejection. Keep each source timestamp and T03 flag separately.",
+    "annual_grid": "2018-2025 inclusive, all eight years; 2025 is partial",
+    "monthly_grid": "2018-01 through 2025-12 inclusive, all 96 months",
+    "quarterly_grid": "2018Q1 through 2025Q4 inclusive, all 32 quarters",
+    "eligible_complete_2025": "Use January-September months and Q1-Q3 only if T03 coverage confirms each is complete. October is partial; November-December are unobserved; Q4 is partial or unobserved and ineligible.",
+    "same_month_auxiliary": "For every comparison year use January-September only, with T03 settings and saved month coverage checked. Do not present it as a full-year series."
+  },
+  "metric_and_target_contract": {
+    "metric_valid": "A09 valid=true, state=ok, original value and saved analysis value finite; retain raw value, original denominator, state, reason, analysis value and scale; NA never becomes zero",
+    "M01": "Use saved M01_log1p as the analysis value, retaining original W_P and its NULL denominator",
+    "M05": "Retain raw W_L/W_S and saved 100-times ratio as percentage; differences are percentage points",
+    "targets": [
+      "all_english",
+      "known_author",
+      "a09_common_cells",
+      "a09_fixed_q",
+      "modified_known",
+      "cc_lag_0_365",
+      "cc_lag_over_365_to_1095",
+      "cc_lag_over_1095",
+      "cc_lag_unknown"
+    ],
+    "conditional_denominator": "Each conditional target reports its own article n and metric-valid n alongside the full-English article and metric-valid denominators. Known-author rows cannot proxy for the full cohort.",
+    "a09_cells": "Read S_m and q from frozen A09 cell weights/config, deduplicate year-repeated weights only after equality checks and sum-to-one check. Recompute membership for every A10 year including 2022 and 2025. Use A09 article-support.in_scope only for reconciliation in its original six comparison years.",
+    "fixed_q": "Use the complete positive-q S_m set every period. If any positive-q cell has zero metric-valid articles, fixed-q value is NULL; report missing-cell count, missing-q mass, each cell n and out-of-scope rate. Never renormalize q over observed cells.",
+    "cc_lag_days": {
+      "unit": "continuous days from publication instant to CC capture instant",
+      "groups": [
+        "0 <= d <= 365",
+        "365 < d <= 1095",
+        "d > 1095",
+        "unknown CC or uncomputable lag"
+      ],
+      "negative": "date rejection with reason",
+      "local_save_substitution": false
+    },
+    "modified_known": "Parseable modified_at; denominator is all date-admissible articles in the period. Unknown means unknown, not unedited."
+  },
+  "support_gate": {
+    "period_coverage": "A period must be confirmed complete by saved T03 coverage; partial and unobserved periods are diagnostic rows but unsupported, never observed zero.",
+    "monthly": {
+      "minimum_full_english_articles": 100,
+      "minimum_target_metric_valid_articles": 100,
+      "minimum_distinct_known_authors_among_target_metric_valid": 30,
+      "minimum_supported_pre": 36,
+      "minimum_supported_post": 18,
+      "long_gap": "three or more consecutive unsupported calendar months"
+    },
+    "quarterly": {
+      "minimum_full_english_articles": 200,
+      "minimum_target_metric_valid_articles": 200,
+      "minimum_distinct_known_authors_among_target_metric_valid": 50,
+      "minimum_supported_pre": 12,
+      "minimum_supported_post": 6,
+      "long_gap": "two or more consecutive unsupported calendar quarters"
+    },
+    "fixed_q_additional_condition": "The fixed-q period value must be non-NULL under the complete positive-q cell rule.",
+    "window_algorithm": [
+      "For each metric and target, compute support from counts, coverage and fixed-q cell availability only; do not inspect metric means, coefficients, BIC or residuals.",
+      "Monthly candidate consists of a contiguous calendar pre interval ending 2022-10 and a contiguous post interval starting 2023-01. Quarterly candidate ends 2022Q3 and starts 2023Q1; 2022Q4 is excluded because it mixes October with transition months.",
+      "Enumerate pre starts from 2018-01 (or 2018Q1) and post ends through the last confirmed complete period, at most 2025-09 (or 2025Q3). Candidate outer endpoints must be supported. Include all calendar periods inside each side in the diagnostic window; fit only supported periods without interpolation.",
+      "Reject a candidate unless it has the required supported pre and post counts and no long unsupported run on either side. Short unsupported runs remain absent and their true calendar positions are retained.",
+      "Choose the candidate with the most calendar periods across both sides. Break ties by more supported periods, then earlier pre start, then later post end. Record every excluded period and the reason. If no monthly candidate qualifies, evaluate quarterly with the same algorithm; otherwise retain annual descriptive analysis only."
+    ],
+    "full_history_distinction": "Preserve all eight annual, 96 monthly and 32 quarterly slots even when a shorter boundary window is selected. Label the selected window and do not call it the full 2018-2025 history.",
+    "rank_check": "After support selection, a singular model design is not_established with its rank and column count; never revise the support window based on the outcome."
+  },
+  "fixed_boundary": {
+    "boundary": "2023-01",
+    "transition_months": [
+      "2022-11",
+      "2022-12"
+    ],
+    "transition_handling": "Retain measured transition points in tables and figures, exclude them from fixed-boundary regression. Quarterly 2022Q4 is excluded from fixed-boundary regression.",
+    "design": "Intercept, actual calendar trend index, post indicator, post calendar slope and 11 month indicators or 3 quarter indicators. Count and report observed pre/post rows and rank.",
+    "interpretation": "Descriptive publication-time boundary; no treatment assignment or causal estimate."
+  },
+  "pretrend": {
+    "training": "Fixed 2018-01 through 2020-12 monthly, or 2018Q1 through 2020Q4 quarterly. Never shorten to match the main model window.",
+    "scoring": "Monthly 2021-01 through 2022-10. Quarterly 2021Q1 through 2022Q3, with October 2022 shown separately as unscored because 2022Q4 includes transition months.",
+    "eligibility": "Require every training and scoring period to be complete and supported for the metric and target. Otherwise report not_established with period IDs and counts; do not impute or move the dates.",
+    "primary_model": "OLS linear calendar trend plus seasonal month or quarter indicators, fitted on the fixed training span.",
+    "sensitivity_model": "OLS linear calendar trend without seasonal indicators on the same training and scoring periods.",
+    "constant_forecast": "Mean analysis value across the fixed training periods, repeated at each scoring period.",
+    "report": "Primary, sensitivity and constant MAE on identical scored periods, signed mean observed-minus-predicted difference and its sign for primary and sensitivity, and period counts. Flag weak extrapolation if primary MAE exceeds constant MAE or the two signed differences have opposite nonzero signs; do not call the extension counterfactual."
+  },
+  "placebos": {
+    "boundaries": [
+      "2020-01",
+      "2021-01"
+    ],
+    "data": "Pre-release periods only, ending 2022-10 monthly or 2022Q3 quarterly; report both boundaries including failure rows.",
+    "minimum_observed_each_side": {
+      "month": 18,
+      "quarter": 6
+    },
+    "design": "Same fixed-boundary level/slope and seasonal specification, with actual calendar indices, no new window chosen from coefficient results.",
+    "failure": "If side count or design rank fails, not_established with counts and NULL coefficients."
+  },
+  "unknown_breakpoint": {
+    "series": "Use the presealed eligible complete-period window and its fixed observed mask. Transition periods may enter this exploratory series when supported, because their date is under investigation; they remain excluded from the fixed-boundary regression.",
+    "candidate_dates": "All calendar period starts inside the sealed window with at least 18 observed periods strictly before and 18 at/after the candidate. Freeze the list and observed mask in S02; report all candidate BIC values.",
+    "models": "OLS intercept, calendar trend and 11 monthly or 3 quarterly seasonal indicators for zero breaks; add level, post slope and one searched discrete location for one break. Use identical observed rows for all fits.",
+    "bic": {
+      "formula": "n * ln(RSS/n) + k * ln(n)",
+      "monthly_k_zero": 13,
+      "monthly_k_one": 16,
+      "quarterly_k_zero": 5,
+      "quarterly_k_one": 8,
+      "location_counted": true,
+      "failure": "rank deficiency, nonfinite RSS or RSS <= 0 is a recorded failure, not a revised candidate"
+    },
+    "bootstrap": {
+      "kind": "noncircular moving-block residual bootstrap conditional on observed BIC winner",
+      "replicates_per_length": 1000,
+      "seed": 20261104,
+      "monthly_block_lengths": [
+        6,
+        12
+      ],
+      "quarterly_block_lengths": [
+        2,
+        4
+      ],
+      "missing_mask": "fixed at original calendar positions",
+      "source_blocks": "all length-L stretches of consecutive observed calendar periods from centered residuals; no wraparound",
+      "destination": "within each contiguous observed segment, append independently sampled source blocks and truncate only the last block to segment length; leave every absent period absent",
+      "failure": "if no complete source block of L exists, mark that L not_established before estimation; record replicate failures without replacing them",
+      "refit": "fit zero break and all sealed one-break candidates on each replica, with the same observed rows and k"
+    },
+    "reporting_rule": "Let delta=BIC_zero-min(BIC_one). If delta < 6, report unidentified, with no single date. Otherwise report the 80% and 95% date ranges conditional on a selected break plus no-break shares for both block lengths. Show a single best date only if both block lengths have no-break share <= 0.20, each conditional 80% range is at most 12 months or 4 quarters wide, and their medians differ by at most 6 months or 2 quarters. If delta >= 6 but this stability condition fails, report the union of the two 80% ranges as a range; if either no-break share exceeds 0.50, report unidentified. Never rerun the fixed-boundary test at the searched date."
+  },
+  "serial_correlation": {
+    "hac": "Calendar-lag Bartlett sandwich covariance on actual month or quarter indices. A score pair contributes at h only when calendar index difference equals h; missing and transition periods have no scores. Record finite-sample correction n/(n-k) and each lag used.",
+    "lags": {
+      "month": [
+        12,
+        6
+      ],
+      "quarter": [
+        4
+      ]
+    },
+    "checks": "On a contiguous synthetic series compare with installed statsmodels cov_hac under identical correction and lag; on a gapped synthetic series independently enumerate calendar-lag score pairs. Do not pass compressed rows with gaps to ordinary row-lag HAC.",
+    "residual_diagnostic": "Report residual correlation by actual calendar lag and pair count."
+  },
+  "unknowns_to_resolve_by_support_only": [
+    "Per-metric/target monthly or quarterly eligibility",
+    "A09 fixed-q missing-cell frequency",
+    "Completeness of each 2025 January-September month and quarter",
+    "Availability of consecutive residual source blocks",
+    "Pretrend and placebo period support"
+  ],
+  "prohibitions": [
+    "No upstream rerun or old evidence overwrite",
+    "No threshold, window, date group or candidate revision after inspecting model results",
+    "No missing-period interpolation or dynamic fixed-q cell selection",
+    "No conversion of not_run or not_implemented to not_established"
+  ],
+  "parent_clarifications": {
+    "pretrend_reference_and_validation": "Keep two separate outcomes. Fit a pre-only linear+seasonal reference on the supported pre segment selected for the main fixed boundary model and extend to the fixed post window. Show it as a reference, never counterfactual. The 2018-2020 holdout validation retains its original fixed training/scoring periods and may be not_established. If validation is unavailable or fails, label the extension unvalidated/weak and do not center strong interpretation on it. Nonseasonal linear sensitivity is fixed before results.",
+    "period_roles": "Coverage/support and transition role are separate fields. Supported transition points may enter exploratory breakpoint fits while remaining excluded from fixed-boundary fits. Do not code transition as a blanket unsupported coverage state.",
+    "fixed_q_precision": "Retain cell-valid counts, missing-q mass, annual/monthly/quarterly article-weight ESS and maximum normalized article weight. These are precision warnings without post-result clipping or gate changes.",
+    "date_policy": "Document exact contradictory-date flags and precedence before applying. Keep publication-date usability and modification-date evidence validity distinguishable. A malformed/contradictory modification timestamp must not automatically invent a new publication month. Missing CC alone is retained as unknown. Preserve all raw source dates and flags.",
+    "analysis_matrix": "Primary six-metric all_english series receives annual/same-month, fixed-boundary, pretrend reference and holdout check, both placebos, exploratory 0/1-break and block stability. All nine declared target variants receive support/annual/same-month and fixed-boundary counter-explanation feasibility/results. A09 fixed-q receives pretrend/placebo/breakpoint rows as conditional comparisons when established. Other target variants do not silently acquire all searches and replications; store planned analysis matrix before estimates. No planned primary comparison is dropped.",
+    "finite_sample_intervals": "Use two-sided 95% Student t critical value with n-k residual degrees of freedom for calendar-HAC coefficient intervals, n/(n-k) correction, actual rank and lag recorded. Label intervals exploratory and not simultaneous.",
+    "resampling_interpretation": "Conditional moving-block residual resampling measures stability under fitted model and observed time mask. Date quantile ranges are conditional selection/stability ranges, not an unconditional confidence interval for a true date."
+  }
+}

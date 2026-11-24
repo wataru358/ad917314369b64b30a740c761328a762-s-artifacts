@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "D01",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "D01",
+      "title": "Common CrawlのDEV候補を固定する",
+      "description": "Common CrawlのDEV候補を固定する",
+      "priority": 1,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "保存した圧縮一覧のSHA-256がmanifestと一致し、展開して得た対象キーと処理済み索引台帳が一対一で対応する。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "5候補の少数検証の記録があり、索引上のフィルタ、正規化したパス、保存位置を追跡できる。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "候補行はpath順で一意。IDを再計算して全行で一致し、保存位置は日時と同順位の規則で確定している。",
+          "met": false
+        },
+        {
+          "id": "C04",
+          "criterion": "ファイル別件数と全体件数が一致する。索引の全ファイルを処理済みと確認し、対象範囲と歴史上の参考件数を区別して報告している。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

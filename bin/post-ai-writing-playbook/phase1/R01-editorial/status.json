@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "R01",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "R01",
+      "title": "日本語の執筆材料",
+      "description": "日本語の執筆材料",
+      "priority": 21,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03",
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08",
+        "A09",
+        "A10",
+        "A11",
+        "A12",
+        "V01"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "六主指標の尺度、元表、記事と既知著者の点、区間対象、比較年と未実行検定の表示が一致する。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "主張と保留が元表行・分母・反例・不足へ追跡でき、既存図を実際に開いて照合した。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "Phase 2の必要入力参照がパッケージ相対パスとハッシュで解決し、必須未解決事項はない。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

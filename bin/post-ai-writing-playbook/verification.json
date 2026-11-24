@@ -1,0 +1,33 @@
+{
+  "package_verification": "PASS",
+  "research_status": "not_started",
+  "created_date": "2026-11-24",
+  "task_nodes": {
+    "root": 1,
+    "branches": 3,
+    "leaves": 27
+  },
+  "leaf_counts": {
+    "download": 3,
+    "phase1": 18,
+    "phase2": 6
+  },
+  "offline_selftest_checks": 42,
+  "tested_python_versions": [
+    "3.11.17",
+    "3.13.17"
+  ],
+  "independent_state_review": "PASS",
+  "independent_replay_docs_review": "PASS",
+  "independent_reviewed_code_hashes": {
+    "workflow.py": "d34a5955c69d63cb9baad8f590bfabb2f953108e5717b8523c81efefe0534467",
+    "selftest.py": "ad3c0b28dc4f013ab604dba27a5ace6ea87b561a38b409077912c473228706b8",
+    "START.md": "5e2b02c23de2b483cac0b502441769fbbe2f59de1349dd038637c5af4b6089a0"
+  },
+  "review_scope": "State controller and replay docs; not actual research results. Maintenance-only guard and this verification record added after reviews.",
+  "limitations": [
+    "Past numeric results are not acceptance targets.",
+    "Exact historical numerical replay needs original snapshots, legacy IDs, implementations, actual LLM versions and labels.",
+    "Artifact checks do not mechanically establish statistical correctness or reviewer honesty."
+  ]
+}

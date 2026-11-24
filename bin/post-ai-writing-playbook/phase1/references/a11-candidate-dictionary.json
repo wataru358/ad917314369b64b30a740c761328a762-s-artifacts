@@ -1,0 +1,103 @@
+{
+  "status": "draft_awaiting_independent_verification",
+  "scope": "A07 blinded calibration 32 packets only; no evaluation or full-corpus tuning",
+  "source_index": "A07/index/calibration.json",
+  "position_rule": "Report first candidate in DOM order with saved preceding S word count and total S word count. Preserve no-position as null, true zero as 0, and a zero-denominator fraction as NA.",
+  "candidates": {
+    "code_block": {
+      "source": "DOM pre/code block or equivalent saved block node",
+      "separate_from": "inline_code",
+      "annotation": "mechanical code candidate only",
+      "calibration_examples": [
+        {"ordinal": 18, "body_quote": "npx create-next-app --example cms-tina tina-contextual-editing", "limit": "Blinded packet supplies body char range but no raw DOM locator."},
+        {"ordinal": 23, "body_quote": "sudo apt install libfuse2t64", "limit": "Blinded packet supplies body char range but no raw DOM locator."}
+      ]
+    },
+    "inline_code": {
+      "source": "DOM code node outside a pre or code block",
+      "separate_from": "code_block",
+      "annotation": "mechanical code candidate only",
+      "calibration_examples": [
+        {"ordinal": 18, "body_quote": "create-next-app", "limit": "Inline token is omitted from the saved prose source unit."},
+        {"ordinal": 23, "body_quote": "libfuse2t64", "limit": "Inline token is omitted from the saved prose source unit."}
+      ]
+    },
+    "ordered_list": {
+      "source": "DOM ol containing li; retain the list node and first item locator",
+      "annotation": "mechanical numbered-list candidate, never a semantic procedure label",
+      "negative_calibration_examples": [
+        {"ordinal": 2, "reason": "The 27 numbered functions are a contents or item enumeration."},
+        {"ordinal": 5, "reason": "The numbered hosting offers are a ranking or catalog."},
+        {"ordinal": 23, "reason": "Step headings in body text do not prove a DOM ol node."}
+      ]
+    },
+    "numbered_procedure_candidate": {
+      "source": "subset of DOM ol with direct li only; retain ol node, matching li locators, and first position",
+      "fixed_rule": "Accept an ol if any direct li begins with Step followed by a digit and punctuation, or if at least two of its first three direct li begin with one of the fixed imperative cues. Strip the browser-generated list marker before checking. This remains a mechanical candidate, not a semantic procedure label.",
+      "step_prefix_pattern_case_insensitive": "^step[ \\t]+[0-9]+[.:) -]",
+      "imperative_prefix_pattern_case_insensitive": "^(?:add|build|check|click|clone|configure|connect|create|deploy|download|install|launch|move|navigate|open|replace|run|save|select|set|test|type|update|use|write)\\b",
+      "calibration_basis": [
+        {"ordinal": 19, "body_quote": "Clone the repository:"},
+        {"ordinal": 23, "body_quote": "Step 1: Install Fuse"},
+        {"ordinal": 32, "body_quote": "Click on EC2"}
+      ],
+      "negative_calibration_examples": [
+        {"ordinal": 2, "body_quote": "1. toset Function", "reason": "Numbered function names do not begin with a step cue."},
+        {"ordinal": 5, "body_quote": "1. SiteGround", "reason": "Numbered provider names do not begin with a step cue."}
+      ],
+      "limit": "Blinded packets lack raw DOM nodes, so these examples calibrate cue words only. DOM ol membership is verified later against saved source, before any semantic interpretation."
+    },
+    "number_with_unit_in_prose": {
+      "source": "all saved P/L/U prose units, represented by paragraph and list_item kinds in the 32 blinded packets; exclude code and URLs, but do not narrow to paragraph-only",
+      "fixed_grammar": "Apply range_pattern plus suffix_boundary first. Remove its matched spans, then apply value_pattern + separator_pattern + unit_pattern_case_insensitive + suffix_boundary. Reject any candidate whose half-open span overlaps a saved URL token span in the same prose unit. Allow only the listed intervening words registered and million. Keep unmatched expressions unmatched; do not add adjectives after evaluation.",
+      "value_pattern": "(?<![A-Za-z0-9_.–-])(?:0|[1-9][0-9]*)(?:,[0-9]{3})*(?:\\.[0-9]+)?",
+      "separator_pattern": "(?:[ \\t]*[-‑]?[ \\t]*)",
+      "unit_pattern_case_insensitive": "(?:milliseconds?|ms|seconds?|minutes?|hours?|days?|weeks?|months?|years?|bytes?|bits?|KB|MB|GB|TB|%|percent|(?:registered[ \\t]+)?members?|(?:million[ \\t]+)?sessions?|views?|pods?|replicas?|nodes?|lines?|functions?)",
+      "range_pattern_case_insensitive": "(?<![A-Za-z0-9_.–-])(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?[ \\t]*[-–][ \\t]*(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?[ \\t]*(?:milliseconds?|ms|seconds?|minutes?|hours?|days?|weeks?|months?|years?|bytes?|bits?|KB|MB|GB|TB)",
+      "suffix_boundary": "(?![A-Za-z0-9_])",
+      "URL_exclusion": {
+        "input": "Saved URL token spans as zero-based half-open character offsets in the same P/L/U prose unit as the numeric match.",
+        "overlap_rule": "Exclude candidate [start,end) if any saved URL token [url_start,url_end) satisfies start < url_end and url_start < end.",
+        "executable": "scan_dictionary.py:scan_numbers(text, saved_url_token_spans, dictionary)"
+      },
+      "calibration_examples": [
+        {"ordinal": 6, "body_quote": "32-byte seed phrase"},
+        {"ordinal": 9, "body_quote": "70,000 registered members", "limit": "Registered intervenes between value and unit; this exact phrase needs a documented optional adjective rule or stays unmatched."},
+        {"ordinal": 19, "body_quote": "20-30 minutes", "limit": "The range grammar returns the full range; do not silently use its endpoint as the value."},
+        {"ordinal": 19, "body_quote": "2GB file size limit"},
+        {"ordinal": 21, "body_quote": "10 minutes"},
+        {"ordinal": 32, "body_quote": "1 minute and 3 seconds"}
+      ],
+      "acceptance_cases": [
+        {"text": "0ms", "candidate": true, "basis": "S02 independent audit confirmed a true numeric zero plus unit; this is a syntax check, not a newly observed calibration article."},
+        {"text": "0 seconds", "candidate": true, "basis": "Zero is an observed numeric value when followed by a unit."},
+        {"text": "2GB", "candidate": true, "basis": "Compact value plus unit."},
+        {"text": "20-30 minutes", "candidate": true, "basis": "The full range is one candidate."},
+        {"text": "70,000 registered members", "candidate": true, "basis": "The registered intervening word is fixed."},
+        {"text": "no numeric unit exists", "candidate": false, "basis": "Absence remains null, never 0."},
+        {"text": "Ubuntu 24.04", "candidate": false, "basis": "A version number is not a unit expression."},
+        {"text": "2GB3", "candidate": false, "basis": "A digit after the unit makes the apparent 2GB a partial match."},
+        {"text": "2GB_foo", "candidate": false, "basis": "An underscore after the unit makes the apparent 2GB a partial match."},
+        {"text": "20-30 minutesXYZ", "candidate": false, "basis": "Letters after the range unit make it a partial match."},
+        {"text": "20-30 minutes3", "candidate": false, "basis": "A digit after the range unit makes it a partial match."},
+        {"text": "https://example.com/2GB/file", "candidate": false, "basis": "The 2GB match overlaps the saved URL token span [0,28).", "saved_url_token_spans": [[0,28]]}
+      ]
+    },
+    "constraint_or_prerequisite": {
+      "source": "all saved P/L/U prose units, represented by paragraph and list_item kinds in the 32 blinded packets; code is excluded",
+      "trigger_patterns_case_insensitive": ["\\bprerequisites?\\b", "\\brequir(?:e|es|ed|ing)\\b", "\\bneed(?:s|ed)?\\b", "\\bmust\\b", "\\bmake[ \\t]+sure\\b", "\\bassuming\\b", "\\bonly[ \\t]+if\\b", "\\bat[ \\t]+least\\b", "\\bwithout\\b", "\\bbe[ \\t]+careful\\b"],
+      "annotation": "lexical candidate only; inspect whether the clause constrains the described operation",
+      "calibration_examples": [
+        {"ordinal": 7, "body_quote": "the Kraken API need both a specific header", "trigger": "need"},
+        {"ordinal": 11, "body_quote": "Prerequisites", "trigger": "prerequisite"},
+        {"ordinal": 23, "body_quote": "a prerequisite for running AppImage files", "trigger": "prerequisite"},
+        {"ordinal": 32, "body_quote": "please ensure that you check on all prerequisites", "trigger": "prerequisite"}
+      ],
+      "negative_calibration_examples": [
+        {"ordinal": 21, "body_quote": "I needed to improve my communication skills", "reason": "Need expresses a personal goal, not an implementation prerequisite."},
+        {"ordinal": 1, "body_quote": "you don’t need isSubmitting", "reason": "Negated need describes an effect, not a precondition."}
+      ]
+    }
+  },
+  "freeze_rule": "Freeze this dictionary before reading evaluation packets; independent reviewer and parent decide the frozen version."
+}

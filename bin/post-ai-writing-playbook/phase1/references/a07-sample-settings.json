@@ -1,0 +1,14 @@
+{
+  "version": "a07-fixed-sample-v1",
+  "years": [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
+  "articles_per_year": 20,
+  "calibration_per_year": 4,
+  "selection": "SHA256(42:evidence:article_id) ascending within publication year; take20 or all if fewer",
+  "allocation": "first4 ranked articles calibration, remaining16 evaluation; no outcome-based replacement",
+  "blind_id": "first16 hex SHA256(42:evidence-blind:article_id)",
+  "population": "fixed38980 English, no minimum words or deduplication",
+  "blinding": "omit article/year/author/group metadata and article URL; retain source title/body/reference context with inference limitations",
+  "materials": "full saved body context plus source P/L/U and frozen sentence grid; labels and counting rubric not yet fixed",
+  "evaluation_access": "do not inspect evaluation before rubric freeze; private mapping not opened during coding",
+  "A11": "same sample available later, no new A11 content coding now"
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "A11",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "A11",
+      "title": "具体的な材料までの位置",
+      "description": "具体的な材料までの位置",
+      "priority": 18,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "全採用記事でSカーソルの一致、四機械候補の位置、0/なし/入力欠落/割合NAが区別できる。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "A07固定標本全件に題名の約束、根拠範囲、S外錨または不成立理由があり、別セッション再評価・裁定を保存する。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "機械と内容の対応、層別のnと支持、反例、実際の図の照合がそろう。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

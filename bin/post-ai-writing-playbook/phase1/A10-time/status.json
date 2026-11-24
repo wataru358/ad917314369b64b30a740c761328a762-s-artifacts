@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "A10",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "A10",
+      "title": "変化が始まった時期",
+      "description": "変化が始まった時期",
+      "priority": 17,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "A01",
+        "A02",
+        "A03",
+        "A09"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "全期間格子、支持窓、非支持理由、季節性、対象/固定qのマスクを再現できる。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "固定境界、事前点検、両偽境界、候補BICとブロック再抽出の状態・失敗IDがある。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "暦ラグHACと数値、図点、停止条件を独立計算で確認する。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

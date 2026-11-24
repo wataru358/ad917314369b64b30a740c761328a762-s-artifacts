@@ -1,0 +1,157 @@
+{
+  "version": "t02-structural-controls-v1",
+  "fixed_before_implementation": true,
+  "cases": [
+    {
+      "id": "paragraph",
+      "html": "<div><p>Alpha beta. Gamma delta.</p></div>",
+      "units": [["paragraph", "Alpha beta. Gamma delta."]],
+      "words": { "P": 4, "L": 0, "U": 0 },
+      "bold_intervals": 0,
+      "bold_words": 0,
+      "headings": 0,
+      "M02": 2,
+      "M03": 0
+    },
+    {
+      "id": "nested-list",
+      "html": "<div><ul><li>First item<ul><li><p>Nested words.</p></li></ul>Last part</li></ul></div>",
+      "units": [
+        ["list_item", "First item"],
+        ["list_item", "Nested words."],
+        ["list_item", "Last part"]
+      ],
+      "words": { "P": 0, "L": 6, "U": 0 },
+      "bold_intervals": 0,
+      "bold_words": 0,
+      "headings": 0
+    },
+    {
+      "id": "nested-bold",
+      "html": "<div><p><strong>One <b>two</b> three</strong> four.</p></div>",
+      "units": [["paragraph", "One two three four."]],
+      "words": { "P": 4, "L": 0, "U": 0 },
+      "bold_intervals": 1,
+      "bold_words": 3,
+      "headings": 0
+    },
+    {
+      "id": "non-prose-bold",
+      "html": "<div><h2><b>Heading bold</b></h2><pre><strong>Code bold</strong></pre><blockquote><b>Quote bold</b></blockquote><table><tr><td><b>Table bold</b></td></tr></table><p>Real words.</p></div>",
+      "units": [["paragraph", "Real words."]],
+      "words": { "P": 2, "L": 0, "U": 0 },
+      "bold_intervals": 0,
+      "bold_words": 0,
+      "headings": 1
+    },
+    {
+      "id": "inline-code",
+      "html": "<div><p>Call <code>foo_bar(x)</code> now. <strong>Keep <code>x2</code> going.</strong></p></div>",
+      "units": [["paragraph", "Call now. Keep going."]],
+      "words": { "P": 4, "L": 0, "U": 0 },
+      "bold_intervals": 1,
+      "bold_words": 2,
+      "headings": 0,
+      "M02": 2,
+      "M03": 0
+    },
+    {
+      "id": "P-L-U",
+      "html": "<div>Loose text<p>Plain words.</p><ul><li><b>List words</b></li></ul>Tail words</div>",
+      "units": [
+        ["text", "Loose text"],
+        ["paragraph", "Plain words."],
+        ["list_item", "List words"],
+        ["text", "Tail words"]
+      ],
+      "words": { "P": 2, "L": 2, "U": 4 },
+      "bold_intervals": 1,
+      "bold_words": 2,
+      "headings": 0
+    },
+    {
+      "id": "numeric-bold",
+      "html": "<div><p><b>123 Python3 https://example.com</b> words.</p></div>",
+      "units": [["paragraph", "123 Python3 https://example.com words."]],
+      "words": { "P": 1, "L": 0, "U": 0 },
+      "bold_intervals": 0,
+      "bold_words": 0,
+      "headings": 0
+    },
+    {
+      "id": "two-bold-runs",
+      "html": "<div><p><strong>One</strong> plain <b>two</b>.</p></div>",
+      "units": [["paragraph", "One plain two."]],
+      "words": { "P": 3, "L": 0, "U": 0 },
+      "bold_intervals": 2,
+      "bold_words": 2,
+      "headings": 0
+    },
+    {
+      "id": "adjacent-bold",
+      "html": "<div><p><strong>One</strong><b> two</b>.</p></div>",
+      "units": [["paragraph", "One two."]],
+      "words": { "P": 2, "L": 0, "U": 0 },
+      "bold_intervals": 1,
+      "bold_words": 2,
+      "headings": 0
+    },
+    {
+      "id": "partial-word-bold",
+      "html": "<div><p>un<strong>believable</strong> result.</p></div>",
+      "units": [["paragraph", "unbelievable result."]],
+      "words": { "P": 2, "L": 0, "U": 0 },
+      "bold_intervals": 1,
+      "bold_words": 1,
+      "headings": 0
+    },
+    {
+      "id": "br-and-comma",
+      "html": "<div><p>One,<br>two with 1,000 runs.</p></div>",
+      "units": [["paragraph", "One, two with 1,000 runs."]],
+      "words": { "P": 4, "L": 0, "U": 0 },
+      "bold_intervals": 0,
+      "bold_words": 0,
+      "headings": 0,
+      "comma_count": 1
+    },
+    {
+      "id": "zero-P",
+      "html": "<div><ul><li>Only list</li></ul></div>",
+      "units": [["list_item", "Only list"]],
+      "words": { "P": 0, "L": 2, "U": 0 },
+      "bold_intervals": 0,
+      "bold_words": 0,
+      "headings": 0
+    },
+    {
+      "id": "zero-S",
+      "html": "<div><h3>Only heading</h3><pre>Code</pre></div>",
+      "units": [],
+      "words": { "P": 0, "L": 0, "U": 0 },
+      "bold_intervals": 0,
+      "bold_words": 0,
+      "headings": 1
+    },
+    {
+      "id": "unequal-sentences",
+      "html": "<div><p>One. Two three four.</p></div>",
+      "units": [["paragraph", "One. Two three four."]],
+      "words": { "P": 4, "L": 0, "U": 0 },
+      "bold_intervals": 0,
+      "bold_words": 0,
+      "headings": 0,
+      "M02": 2,
+      "M03": 0.5
+    },
+    {
+      "id": "unmarked-code-kept",
+      "html": "<div><p>const x = foo_bar;</p></div>",
+      "units": [["paragraph", "const x = foo_bar;"]],
+      "words": { "P": 2, "L": 0, "U": 0 },
+      "bold_intervals": 0,
+      "bold_words": 0,
+      "headings": 0
+    }
+  ]
+}

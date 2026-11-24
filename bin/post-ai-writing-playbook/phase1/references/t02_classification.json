@@ -1,0 +1,164 @@
+{
+  "version": "dev-writing-classification-v1",
+  "basis": "Explicit title/tag cues; exploratory coarse classes, not validated semantic labels; unknown retained; multiple topic labels allowed",
+  "type_priority": [
+    "troubleshooting",
+    "tutorial",
+    "reference_comparison",
+    "resources",
+    "announcement",
+    "experience_opinion",
+    "question"
+  ],
+  "types": {
+    "troubleshooting": {
+      "tags": ["debugging"],
+      "title_patterns": ["\\b(debug|debugging|troubleshoot|troubleshooting|fix|fixing|error|errors|bug|bugs)\\b"]
+    },
+    "tutorial": {
+      "tags": ["tutorial"],
+      "title_patterns": [
+        "\\bhow to\\b",
+        "\\btutorial\\b",
+        "\\bstep.by.step\\b",
+        "\\bgetting started\\b",
+        "\\bbuild(ing)?\\b",
+        "\\bimplement(ing)?\\b",
+        "\\bsetup\\b",
+        "\\binstall(ing)?\\b"
+      ]
+    },
+    "reference_comparison": {
+      "tags": ["comparison"],
+      "title_patterns": [
+        "\\bvs\\.?\\b",
+        "\\bversus\\b",
+        "\\bcompar(ison|ing|e)\\b",
+        "\\bcheat.?sheet\\b",
+        "\\bguide\\b",
+        "\\bexplained\\b",
+        "\\bdifference(s)?\\b"
+      ]
+    },
+    "resources": {
+      "tags": ["resources"],
+      "title_patterns": [
+        "\\bresources\\b",
+        "\\b(top|best) [0-9]+\\b",
+        "\\b[0-9]+ (tips|tools|ways|libraries|reasons)\\b",
+        "\\blinks\\b"
+      ]
+    },
+    "announcement": {
+      "tags": ["news", "release", "showdev", "devchallenge"],
+      "title_patterns": [
+        "\\bintroducing\\b",
+        "\\bannounc(e|ing|ement)\\b",
+        "\\breleased?\\b",
+        "\\bchallenge\\b",
+        "\\bupdate(s)?\\b",
+        "\\bweekly\\b"
+      ]
+    },
+    "experience_opinion": {
+      "tags": ["discuss", "career", "watercooler", "opinion"],
+      "title_patterns": [
+        "\\bwhy\\b",
+        "\\bmy\\b",
+        "\\bi (built|learned|tried|used|made)\\b",
+        "\\blessons\\b",
+        "\\bjourney\\b"
+      ]
+    },
+    "question": {
+      "tags": ["help"],
+      "title_patterns": ["\\?\\s*$"]
+    }
+  },
+  "topics": {
+    "web_frontend": [
+      "javascript",
+      "typescript",
+      "react",
+      "vue",
+      "angular",
+      "svelte",
+      "html",
+      "css",
+      "frontend",
+      "nextjs",
+      "tailwindcss"
+    ],
+    "backend_api": [
+      "node",
+      "nodejs",
+      "express",
+      "nestjs",
+      "backend",
+      "api",
+      "rest",
+      "graphql",
+      "django",
+      "flask",
+      "laravel",
+      "spring",
+      "rails"
+    ],
+    "languages": [
+      "python",
+      "java",
+      "rust",
+      "go",
+      "golang",
+      "c",
+      "cpp",
+      "csharp",
+      "ruby",
+      "php",
+      "kotlin",
+      "swift",
+      "elixir",
+      "scala"
+    ],
+    "data_ml": [
+      "ai",
+      "machinelearning",
+      "deeplearning",
+      "datascience",
+      "dataengineering",
+      "llm",
+      "openai",
+      "chatgpt",
+      "pandas",
+      "numpy"
+    ],
+    "database": ["database", "sql", "postgres", "postgresql", "mysql", "mongodb", "redis", "sqlite", "dynamodb"],
+    "cloud_devops": [
+      "aws",
+      "azure",
+      "gcp",
+      "cloud",
+      "devops",
+      "docker",
+      "kubernetes",
+      "terraform",
+      "serverless",
+      "linux",
+      "cicd"
+    ],
+    "testing_security": ["testing", "test", "tdd", "unittest", "security", "cybersecurity", "debugging", "performance"],
+    "tools_workflow": ["git", "github", "vscode", "vim", "opensource", "productivity", "automation", "tools", "cli"],
+    "career_community": [
+      "career",
+      "discuss",
+      "watercooler",
+      "learning",
+      "beginners",
+      "writing",
+      "community",
+      "management",
+      "leadership"
+    ],
+    "mobile_game": ["android", "ios", "flutter", "reactnative", "mobile", "gamedev", "unity", "godot"]
+  }
+}

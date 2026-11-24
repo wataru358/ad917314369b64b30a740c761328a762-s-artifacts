@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "P2-S02",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "P2-S02",
+      "title": "新集合の全文採否を固定する",
+      "description": "新集合の全文採否を固定する",
+      "priority": 23,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "P2-S01"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "全plan IDが計画順にrecordsとdecisionsへ1回ずつ現れ、状態別件数が総数と一致する。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "英語集合が台帳のaccept_englishと一致する。保留、本文なし、取得不能は台帳に残る。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "本文と根拠を原応答へ戻せる。ラベルの封印後に対応スコアを開示した証拠と、原判断を保つ訂正記録が読める。",
+          "met": false
+        },
+        {
+          "id": "C04",
+          "criterion": "校正、診断、未使用確認、全件の範囲を区別し、独立確認が実物の抽出位置・結合・採否・来歴を照合する。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

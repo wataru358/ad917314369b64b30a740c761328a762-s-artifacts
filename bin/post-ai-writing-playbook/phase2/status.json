@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "phase2",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": "2026-11-24T08:48:20.316901+00:00",
+  "user_stories": [
+    {
+      "id": "P2-S01",
+      "title": "比較と収録の実行計画を固定する",
+      "description": "比較と収録の実行計画を固定する",
+      "priority": 22,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "R01",
+        "D03"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "s01-plan/status.json"
+    },
+    {
+      "id": "P2-S02",
+      "title": "新集合の全文採否を固定する",
+      "description": "新集合の全文採否を固定する",
+      "priority": 23,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "P2-S01"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "s02-corpus/status.json"
+    },
+    {
+      "id": "P2-S03",
+      "title": "対象、測定仕様と著者分割を固定する",
+      "description": "対象、測定仕様と著者分割を固定する",
+      "priority": 24,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "P2-S02"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "s03-spec/status.json"
+    },
+    {
+      "id": "P2-S04",
+      "title": "固定仕様で計算と独立判定を実行する",
+      "description": "固定仕様で計算と独立判定を実行する",
+      "priority": 25,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "P2-S03"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "s04-compute/status.json"
+    },
+    {
+      "id": "P2-S05",
+      "title": "18項目の算術と主張の範囲を検証する",
+      "description": "18項目の算術と主張の範囲を検証する",
+      "priority": 26,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "P2-S04"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "s05-review/status.json"
+    },
+    {
+      "id": "P2-S06",
+      "title": "比較結果と追加4資料をまとめる",
+      "description": "比較結果と追加4資料をまとめる",
+      "priority": 27,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "P2-S05"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "末端の全基準と独立確認の証拠がそろい、completeになった。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "child_status": "s06-report/status.json"
+    }
+  ]
+}

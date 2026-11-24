@@ -1,0 +1,1443 @@
+{
+  "schema_version": 1,
+  "tasks": [
+    {
+      "id": "D01",
+      "directory": "cc-index",
+      "title": "Common CrawlのDEV候補を固定する",
+      "dependencies": [],
+      "goal": "CC-MAIN-2025-43の公開Parquet索引から、定義に合うdev.toの候補パスと各パスの保存位置を固定する。",
+      "inputs": [
+        "ルート設定のcrawl、seed、通信上限、pilot.cc_records",
+        "選んだcrawlのcc-index-table.paths.gzとsubset=warcのParquet索引"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "summary.json",
+        "manifest.paths.gz",
+        "index-files.jsonl",
+        "candidates.jsonl"
+      ],
+      "acceptance_criteria": [
+        "保存した圧縮一覧のSHA-256がmanifestと一致し、展開して得た対象キーと処理済み索引台帳が一対一で対応する。",
+        "5候補の少数検証の記録があり、索引上のフィルタ、正規化したパス、保存位置を追跡できる。",
+        "候補行はpath順で一意。IDを再計算して全行で一致し、保存位置は日時と同順位の規則で確定している。",
+        "ファイル別件数と全体件数が一致する。索引の全ファイルを処理済みと確認し、対象範囲と歴史上の参考件数を区別して報告している。"
+      ],
+      "steps": [
+        "一覧の取得元、圧縮上限、フィルタと候補ルートの定義を固定する。保存済み一覧のハッシュを確認して再利用する。",
+        "キー順に必要列と範囲を読む。まず5候補を索引から読戻し、重複排除と保存位置の選択を確かめる。",
+        "ファイルの件数と候補を一緒に確定し、保存した一覧にある全キーの処理が終わるまで、設定の上限ごとに続ける。",
+        "最も早い保存記録を固定した候補を出力する。全ファイルの完了、候補IDとパス、件数を独立検証担当が保存物から確認する。"
+      ],
+      "references": [
+        "../download-spec.md#共通の保存と再開",
+        "../download-spec.md#d01の候補と保存位置を固定する"
+      ],
+      "pitfalls": [
+        "200・HTMLは索引上の取得条件。記事本文、公開年、英語の採否は後で判定する。",
+        "索引の途中集計から全体件数を推計しない。未処理のキーを件数0に置き換えない。"
+      ],
+      "handoff": "download-handoff.md",
+      "resume_instructions": "中断時はmanifest.paths.gzのハッシュと最初の未処理キーを残す。完了後はD02へcandidates.jsonlとmanifest.jsonを渡す。",
+      "branch": "download",
+      "node": "download/cc-index",
+      "priority": 1
+    },
+    {
+      "id": "D02",
+      "directory": "cc-html",
+      "title": "Common CrawlのWARCと生HTMLを保存する",
+      "dependencies": [
+        "D01"
+      ],
+      "goal": "D01で固定した全候補について指定範囲のWARCを取得し、HTMLの元バイト列と成功・失敗を候補単位で残す。",
+      "inputs": [
+        "同じrun_idで完了したD01のoutput_dir",
+        "D01の候補とmanifestのハッシュ",
+        "ルート設定のseed、通信上限、pilot.cc_records"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "summary.json",
+        "acquisitions.jsonl",
+        "attempts.jsonl"
+      ],
+      "acceptance_criteria": [
+        "D01の全候補に固定順の台帳行が1つずつあり、候補の補充や欠落がない。完了行はsucceededまたは理由付きfailed。",
+        "先頭5件で範囲取得、圧縮の検証、元HTMLの保存と読戻しを確認した記録がある。",
+        "成功時は入力位置、受信長、WARCのURL・型・内部200、HTMLとWARCのハッシュを照合できる。公開日時、クロール日時、保存日時を別項目に保持している。",
+        "失敗理由、試行履歴、再試行上限、待機期限が台帳に残る。件数合計と保存済みファイルのハッシュを独立検証担当が確かめている。"
+      ],
+      "steps": [
+        "D01の確定成果物を照合し、seedで全候補の処理順を決める。同じ候補IDをファイル名に使う。",
+        "先頭5件を試行し、HTTP 206と受信長、WARCとHTMLの検証・保存を確認する。",
+        "処理待ちの候補を1件ずつ取得する。通信、WARC保存、HTML保存、台帳の順に進め、止まった区切りの次から再開する。",
+        "再試行対象を上限と待機期限に従って処理する。失敗を残したまま全候補の結果を確定する。成功件数と失敗理由の内訳を報告し、生データと台帳を照合する。"
+      ],
+      "references": [
+        "../download-spec.md#共通の保存と再開",
+        "../download-spec.md#d02の指示範囲からwarcとhtmlを保存する"
+      ],
+      "pitfalls": [
+        "Rangeの206と保存ページの200を別に記録する。",
+        "WARC-Dateは公開日ではない。元ページにある公開日時と取得時刻を残す。",
+        "同じURLのライブ本文、別の保存時点、別候補で失敗を埋めない。"
+      ],
+      "handoff": "download-handoff.md",
+      "resume_instructions": "再開時はnot_beforeと未処理のordinalを確認する。成功した取得証拠と失敗を含む全行をPhase 1のT00へ渡す。",
+      "branch": "download",
+      "node": "download/cc-html",
+      "priority": 2
+    },
+    {
+      "id": "D03",
+      "directory": "dev-api-2026",
+      "title": "DEV APIの2026年1〜10月の固定標本を取得する",
+      "dependencies": [],
+      "goal": "UTCの月別に各1,000件、計10,000件の候補IDを固定し、公開APIの原JSONと取得結果を保存する。",
+      "inputs": [
+        "DEV APIの一覧と個別応答",
+        "2026-01-01を含み2026-11-01を含まないUTC期間",
+        "ルート設定のseed、月別件数、通信上限"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "summary.json",
+        "pages.jsonl",
+        "plan.jsonl",
+        "responses.jsonl",
+        "requests.jsonl"
+      ],
+      "acceptance_criteria": [
+        "5件の接続確認結果があり、一覧ページ番号と最古行から対象期間の下限到達を確認できる。保存済みの一覧ページは1から連続し、オフセットページングの限界を明記している。",
+        "計画はseedのハッシュ順から再計算でき、UTC1〜10月が各1,000件、合計10,000の一意なID。タグと言語属性で絞っていない。",
+        "計画の先頭5件の保存・読戻しの記録がある。全計画IDにsaved、empty、not_found、failedの各結果が対応する。未処理IDと差し替えIDがない。",
+        "200の正常な個別応答は、空本文を含めて保存し、応答IDとハッシュを照合できる。失敗は理由付きで、月別内訳と原JSONに資格情報がないことを独立検証担当が確かめている。"
+      ],
+      "steps": [
+        "一覧1ページを取得して5件のAPI応答の形と保存を検証する。通信は固定のHTTPSホストで行い、利用を許可された資格情報はメモリだけで扱う。",
+        "一覧をページ番号順に確定し、UTCへ変換して期間内のIDを月別に集める。重複、食い違い、下限の根拠を保存する。",
+        "下限到達と候補の充足を検査し、seedのハッシュ順で毎月1,000 IDを選ぶ。1月から10月までの順で月を交互に取り出し、計画位置を固定する。",
+        "先頭5件の個別取得と照合を終えてから、残りを小分けで取得する。予算と待機期限を守り、保存済み原JSONを再利用する。",
+        "全IDの取得結果と、採否前の月別件数を照合する。台帳と原JSONのハッシュを確定し、検証と引継ぎを記録する。"
+      ],
+      "references": [
+        "../download-spec.md#共通の保存と再開",
+        "../download-spec.md#d03で2026年の各月1000件を固定する"
+      ],
+      "pitfalls": [
+        "オフセットページの下限到達から一覧全体の網羅性は分からない。",
+        "APIが返す本文は取得時の版。HTTP 200、本文非空、英語採否はそれぞれ別の結果。",
+        "月の不足を別月で埋めず、失敗したIDを別IDと交換しない。"
+      ],
+      "handoff": "download-handoff.md",
+      "resume_instructions": "一覧が途中なら次ページを、計画確定後なら次の未処理IDを引き継ぐ。全量確定後はPhase 2の収録担当へplan.jsonlとresponses.jsonlを渡す。",
+      "branch": "download",
+      "node": "download/dev-api-2026",
+      "priority": 3
+    },
+    {
+      "id": "T00",
+      "directory": "T00-freeze",
+      "title": "入力と実行条件を固定",
+      "dependencies": [
+        "D02"
+      ],
+      "goal": "候補集合、元HTML、抽出規則、実行環境を固定し、全候補の抽出台帳を作る。",
+      "inputs": [
+        "D02 acquisitions.jsonl、manifest、summary、verification、成功行のHTML"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "verify.py",
+        "input-ledger.csv",
+        "extraction.jsonl",
+        "extract.py",
+        "environment.json",
+        "pilot.json"
+      ],
+      "acceptance_criteria": [
+        "候補IDは一意で、全取得状態とHTMLハッシュがD02と一致する。",
+        "5候補probeと合成負例で取得失敗・抽出失敗・空Sを区別できる。",
+        "全候補の抽出状態があり、不明の捨て行がない。コード・環境・設定のSHA-256を再照合できる。"
+      ],
+      "steps": [
+        "D02の合格済み試行へ読み取り専用で接続し、候補ID・URL・日付・HTML参照と出典を台帳に写す。",
+        "同梱の抽出器をextract.pyとして凍結し、Python、lxml、libxmlとロケール・UTC設定、依存導入手順を記録する。",
+        "D02固定5候補で小規模抽出し、body selectorと元HTML対応を独立確認する。",
+        "同じコードで全候補を抽出する。成功、取得失敗、本文欠落・曖昧、復号・解析失敗を記録し、空Sは成功内に残す。",
+        "入力とシャードのSHA-256、一意性、ID集合、境界ケースを別実装で判定する。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../analysis-methods.md",
+        "../references/article_extraction.py"
+      ],
+      "pitfalls": [
+        "固定件数や旧run IDを採否に使わない。",
+        "候補失敗を欠行にしない。",
+        "5件で止めた試行は完了にしない。"
+      ],
+      "handoff": "phase1-handoff.md",
+      "resume_instructions": "T01へ全候補台帳、抽出結果、probeとコードのハッシュを渡す。途中からは一致するシャードを再利用する。",
+      "branch": "phase1",
+      "node": "phase1/T00-freeze",
+      "priority": 4
+    },
+    {
+      "id": "T01",
+      "directory": "T01-english",
+      "title": "本文言語判定と英語集合",
+      "dependencies": [
+        "T00"
+      ],
+      "goal": "全候補に状態を与え、本文の英語と公開UTC年で分析集合を固定する。",
+      "inputs": [
+        "T00 extraction.jsonl、input-ledger.csv、pilot.jsonおよび元D02出典"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "verify.py",
+        "cohort.csv",
+        "language-evidence.jsonl",
+        "language-rules.py",
+        "language-settings.json",
+        "language-review.json"
+      ],
+      "acceptance_criteria": [
+        "候補と同数の一意な言語・採否行があり、UTC境界と全状態の件数が合う。",
+        "盲検校正・検証・診断を分け、凍結順序、標本不足、手動補正の証拠を保存した。",
+        "採用対象に非英語・判定不能・期間外が流入せず、短文・同文は残る。"
+      ],
+      "steps": [
+        "同梱language_rules.pyをlanguage-rules.pyとして凍結し、Lingua全75言語を固定する。T00のprobe記事でS/P/Lと1200文字区間の保存と再読取を確認する。",
+        "各年の校正20、検証10と別枠診断をhashで固定する。校正と診断は閾値0.70と0.30を固定する際の品質確認に使う。",
+        "全候補を自動採点し、校正・診断の根拠付き全文判定だけを別列の手動補正にする。盲検検証の結果を保存する。",
+        "英語状態でUTC公開年が2018〜2025の候補だけadopted=trueとする。対象外・欠時刻・mixed・空・利用不能の行を残す。",
+        "独立検証で候補別ハッシュ、S区間の完全被覆とラベル、UTC年、標本・採否の集計を再計算する。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../analysis-methods.md",
+        "../references/language_rules.py"
+      ],
+      "pitfalls": [
+        "html lang・CC言語・タグは判定器の代わりにしない。",
+        "英語主体mixedは候補に留める。",
+        "手動補正で検証群を底上げしない。"
+      ],
+      "handoff": "phase1-handoff.md",
+      "resume_instructions": "T02へcohort.csvと凍結済み抽出・言語証拠のハッシュを渡す。支持不足は証拠とともに残す。",
+      "branch": "phase1",
+      "node": "phase1/T01-english",
+      "priority": 5
+    },
+    {
+      "id": "T02",
+      "directory": "T02-features",
+      "title": "分割・特徴量・メタデータ",
+      "dependencies": [
+        "T01"
+      ],
+      "goal": "同じ本文投影から語・文・太字・見出し・メタデータを測り、六主指標と副指標を凍結する。",
+      "inputs": [
+        "T01 cohort.csv、language-review",
+        "T00 extraction.jsonl と frozen extract.py",
+        "D02保存HTML"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "verify.py",
+        "articles.jsonl",
+        "metadata.csv",
+        "metadata-provenance.jsonl",
+        "metrics.csv",
+        "secondary-metrics.csv",
+        "segmentation.py",
+        "fixtures.json",
+        "topic-map.json",
+        "calibration.json"
+      ],
+      "acceptance_criteria": [
+        "採用記事1件につき記事とmetadataが一行、主指標が六行ある。",
+        "S=P+L+U、文・語オフセット、太字重複除去と分母、既知著者IDが独立読取と一致する。",
+        "合成例・固定標本・v2メタデータの根拠を検査し、0、NA、使用なし、投影失敗を区別する。",
+        "下流側が固定コード・fixtureとデータスキーマを再利用できる。"
+      ],
+      "steps": [
+        "同梱segmentation.pyと固定対照を保存し、P/L/U単位・所有ブロック・文・語をUnicodeオフセットで投影する。",
+        "5候補から採用分を試し、採用例不足は合成fixtureで補う。固定標本を年を伏せて読み、文境界、語、組織と著者の根拠を診断する。",
+        "SHA確認の済んだ採用全記事で元DOM順とS語を照合し、H、太字、リスト、コード位置、六主指標、MATTR等の副指標を保存する。",
+        "t02_metadata_v2.pyの規則で単一数値著者、タグ、組織、種別cueと出典を保存する。t02-strata-map.jsonをtopic-map.jsonとして凍結する。",
+        "別検証でID集合、語種、owner→sourceの半開区間、M01〜M06、太字・リンク位置、メタデータ矛盾、NA理由を再構成する。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../analysis-methods.md",
+        "../references/segmentation.py",
+        "../references/t02_structure.py",
+        "../references/t02_controls.json",
+        "../references/t02-strata-map.json",
+        "../references/t02_metadata_v2.py"
+      ],
+      "pitfalls": [
+        "SをPに置き換えない。",
+        "組織handleは著者IDではない。",
+        "インラインコードをS語に再挿入しない。",
+        "片方の構造投影失敗を全指標へ伝播させない。"
+      ],
+      "handoff": "phase1-handoff.md",
+      "resume_instructions": "T03へ cohort、articles、metrics、metadata、topic-map、固定segmentation.pyとfixturesを渡す。",
+      "branch": "phase1",
+      "node": "phase1/T02-features",
+      "priority": 6
+    },
+    {
+      "id": "T03",
+      "directory": "T03-overview",
+      "title": "対象統計と収録範囲",
+      "dependencies": [
+        "T02"
+      ],
+      "goal": "候補数・有効範囲・欠測・分布を説明する対象表と図を作る。",
+      "inputs": [
+        "T00入力と抽出台帳",
+        "T01 cohort.csv",
+        "T02記事、指標、metadata"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "verify.py",
+        "coverage.csv",
+        "scope.csv",
+        "date-ledger.csv",
+        "word-bands.csv",
+        "overview.svg"
+      ],
+      "acceptance_criteria": [
+        "候補から採用までの記事数が保存則に合い、P/L/U/Sの語数・帯・分位を再計算できる。",
+        "8年・96月・32四半期の観測状態と部分年が明示される。",
+        "年・期間の件数と不明日付、既知著者、組織、タグ、重複の対象が区別される。"
+      ],
+      "steps": [
+        "全候補の日時、取得、言語状態、採否を結合し、欠行と重複を検査する。",
+        "採用記事のP/L/U/Sの和・中央値・分位・0を含む語数帯、日時可用性、同文・著者・タグ・組織の分母を集計する。",
+        "UTC年月と四半期の全格子を作り、設定と取得証拠から完結、部分、未観測、不明を割り当てる。",
+        "図の実ファイルを開き、点と年ごとの分母・NAを元表から独立に照合する。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../analysis-methods.md",
+        "../references/t03-settings.json"
+      ],
+      "pitfalls": [
+        "2025年の未観測月を0にしない。",
+        "DEV全体の投稿数と呼ばない。",
+        "保存日の中央値を公開年に転用しない。"
+      ],
+      "handoff": "phase1-handoff.md",
+      "resume_instructions": "A01〜A08へ対象表・日付・coverageと同一採用ID集合を渡す。",
+      "branch": "phase1",
+      "node": "phase1/T03-overview",
+      "priority": 7
+    },
+    {
+      "id": "A01",
+      "directory": "A01-length",
+      "title": "記事と段落の長さ",
+      "dependencies": [
+        "T03"
+      ],
+      "goal": "PとSの長さと段落長を比較し、M01の主比較を作る。",
+      "inputs": [
+        "T03 coverageと対象",
+        "T02記事・metadata・M01",
+        "T00抽出と固定標本の元HTML"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "verify.py",
+        "annual-length.csv",
+        "paragraph-distributions.csv",
+        "length-audit.json",
+        "m01-contrast.csv",
+        "length.svg"
+      ],
+      "acceptance_criteria": [
+        "M01のlog1p年等重み点差、原語数、全記事点と著者区間を再現できる。",
+        "記事等重み段落分布と段落等重み分布が別にある。",
+        "長文診断の抽出規則と照合結果があり、0語とNAを区別する。"
+      ],
+      "steps": [
+        "P/Sの年別語数分布、帯、1〜9月補助、M01の全点・既知著者点・著者cluster区間を計算する。",
+        "所有P段落の中央値、段落および記事を等重みにした分布を作る。",
+        "固定年別上位長文候補と原HTMLを点検する。",
+        "別式で年重み、log尺度、区間反復、図を照合する。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../analysis-methods.md",
+        "../references/a01-settings.json"
+      ],
+      "pitfalls": [
+        "M01の原語数とlog差は交換できない。",
+        "記事が長いことを段落が長いことへ置き換えない。"
+      ],
+      "handoff": "phase1-handoff.md",
+      "resume_instructions": "V01・R01にM01の対象、原尺度と年重み、長文点検を渡す。",
+      "branch": "phase1",
+      "node": "phase1/A01-length",
+      "priority": 8
+    },
+    {
+      "id": "A02",
+      "directory": "A02-rhythm",
+      "title": "文のリズムと句読法",
+      "dependencies": [
+        "T03"
+      ],
+      "goal": "M02〜M04と副指標を、文数と句読点の分母を保持して比較する。",
+      "inputs": [
+        "T03対象・coverage",
+        "T02 P所有ブロック・文・token・M02〜M04"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "verify.py",
+        "sentence-annual.csv",
+        "rhythm-contrasts.csv",
+        "rhythm-diagnostics.json",
+        "rhythm.svg"
+      ],
+      "acceptance_criteria": [
+        "M02〜M04は固定Pから計算され、語なし・一文・低nが区別できる。",
+        "カンマ間隔の文ベースと旧記事近似が別列で、数字内カンマが除かれる。",
+        "著者区間と図を入力から独立に照合できる。"
+      ],
+      "steps": [
+        "機械文、文長と断片、隣接差、段落1文率、句読点を計数する。",
+        "主指標の年等重み差、著者区間、各年の不足を保存する。",
+        "カンマ間隔、5個以上の補助、旧近似を別に計算する。",
+        "低n、極端CV、タグなしコード候補を診断し、負例と集計を別計算で検証する。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../analysis-methods.md",
+        "../references/a02-settings.json"
+      ],
+      "pitfalls": [
+        "1文のCVを0にしない。",
+        "burstinessをCVと独立した発見にしない。"
+      ],
+      "handoff": "phase1-handoff.md",
+      "resume_instructions": "A10・A12・V01・R01へ文長群の尺度、指標別対象と境界上の問題を渡す。",
+      "branch": "phase1",
+      "node": "phase1/A02-rhythm",
+      "priority": 9
+    },
+    {
+      "id": "A03",
+      "directory": "A03-format",
+      "title": "リスト・太字・見出し",
+      "dependencies": [
+        "T03"
+      ],
+      "goal": "構造がある記事の割合、使われる量、S上の位置を比較する。",
+      "inputs": [
+        "T03対象・coverage",
+        "T02記事・DOMイベント・太字・M05/M06"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "verify.py",
+        "format-annual.csv",
+        "format-contrasts.csv",
+        "format-positions.csv",
+        "format-audit.json",
+        "formatting.svg"
+      ],
+      "acceptance_criteria": [
+        "M05/M06の年等重み点差・区間、および構造の有無と条件付き強度が再計算できる。",
+        "各領域のS語・L語・太字語・太字区間のカウントが一致する。",
+        "空領域、S=0、構造なし、投影失敗と例示の役割が区別される。"
+      ],
+      "steps": [
+        "主M05/M06と構造有無・使用量、見出し密度と候補を計算する。",
+        "元S語順位に基づく半分と20/60/20領域別の計数を保存する。",
+        "品質候補を固定選定しraw/clean DOMに照らす。",
+        "独立に位置と分母、主差・区間・図を立て直す。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../analysis-methods.md",
+        "../references/a03-settings.json"
+      ],
+      "pitfalls": [
+        "リストがなくS語が正なら0。S語なしはNA。",
+        "太字区間と太字語、DOMリストとL語有無は同じ量ではない。"
+      ],
+      "handoff": "phase1-handoff.md",
+      "resume_instructions": "A09/A12/V01/R01へ主差・位置範囲と投影の限界を渡す。",
+      "branch": "phase1",
+      "node": "phase1/A03-format",
+      "priority": 10
+    },
+    {
+      "id": "A04",
+      "directory": "A04-vocabulary",
+      "title": "語彙の発見と検証",
+      "dependencies": [
+        "T03"
+      ],
+      "goal": "著者と完全一致Pをまたがせず、固定語句候補の年代差を再検証する。",
+      "inputs": [
+        "T03対象",
+        "T02元P文・所有単位・token、L/H、MATTR、metadata"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "verify.py",
+        "split.csv",
+        "candidates.csv",
+        "candidate-freeze.json",
+        "holdout.csv",
+        "vocabulary-spread.csv",
+        "mattr.csv",
+        "vocabulary-audit.json"
+      ],
+      "acceptance_criteria": [
+        "発見側と検証側の既知著者および完全一致の非空Pハッシュは交差0。",
+        "候補hashは検証結果を開く前に固定され、全採否と未再現を保持する。",
+        "元単位・文・非語境界、0語P分母、レア判定、監視語、MATTR窓不足を別実装で照合できる。"
+      ],
+      "steps": [
+        "非空Pハッシュと既知著者の連結成分を作り、固定seedハッシュで分ける。",
+        "同梱条件で1〜5語の全候補を発見群内で計数し、増減・以前はまれ・固定監視語を凍結する。",
+        "検証群を開き、候補の差・比・方向・再到達と成分cluster区間を計算する。P/L/Hと群を別にする。",
+        "著者への広がり、話題/語数帯、年別MATTR、編集時点とinlineコード境界の限界を保存する。",
+        "独立に漏れ、選定順位、分母、語境界と検証行を照合する。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../analysis-methods.md",
+        "../references/a04-settings.json"
+      ],
+      "pitfalls": [
+        "点差の同方向は有意差ではない。",
+        "候補数を埋めるために閾値を下げない。",
+        "P完全一致を近似重複へ外挿しない。"
+      ],
+      "handoff": "phase1-handoff.md",
+      "resume_instructions": "A06・V01へsplit.csvの群と成分を書き渡す。検証表・未再現・境界リスクをA09/R01へ渡す。",
+      "branch": "phase1",
+      "node": "phase1/A04-vocabulary",
+      "priority": 11
+    },
+    {
+      "id": "A05",
+      "directory": "A05-voice",
+      "title": "書き手の声と呼びかけ",
+      "dependencies": [
+        "T03"
+      ],
+      "goal": "Pの代名詞、短縮形、接続表現、句読記号を辞書で測る。",
+      "inputs": [
+        "T03対象",
+        "T02 P単位、文、token、author ID"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "verify.py",
+        "voice-article.csv",
+        "voice-annual.csv",
+        "voice-contrasts.csv",
+        "voice-audit.json",
+        "voice.svg"
+      ],
+      "acceptance_criteria": [
+        "全記事の語形計数、使用記事率、全記事と使用記事の密度の分母が別に出る。",
+        "曖昧な人称と短縮形を盲検抜粋で点検し、辞書は結果前に固定される。",
+        "単数一人称と短縮形の千P語値をT02 IDへ一意に戻せる。"
+      ],
+      "steps": [
+        "同梱辞書を凍結してP内の語形・句とP段落冒頭を走査する。",
+        "年・期間・語数帯別の使用割合、千P語の密度、条件付き密度、記事語数0の状態を集計する。",
+        "固定抜粋でUS、we、you、引用、短縮形の解釈を点検する。",
+        "辞書マッチと分母・クラスタ再抽出・図の数字を別実装と照合する。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../analysis-methods.md",
+        "../references/a05-settings.json"
+      ],
+      "pitfalls": [
+        "Iを個人経験の計数にしない。",
+        "語形一致をAI使用と読まない。"
+      ],
+      "handoff": "phase1-handoff.md",
+      "resume_instructions": "A07へ同一記事の語形と分母、A12へ単数一人称・短縮形密度を渡す。",
+      "branch": "phase1",
+      "node": "phase1/A05-voice",
+      "priority": 12
+    },
+    {
+      "id": "A06",
+      "directory": "A06-structure",
+      "title": "見出しと冒頭・末尾",
+      "dependencies": [
+        "T03",
+        "A04"
+      ],
+      "goal": "辞書による見出し機能、パターン集中、冒頭末尾表現を比較する。",
+      "inputs": [
+        "T03対象",
+        "T02見出しとS/P位置",
+        "A04 split.csv と候補凍結証拠"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "verify.py",
+        "headings.csv",
+        "heading-sequences.csv",
+        "window-candidates.csv",
+        "window-holdout.csv",
+        "structure-summary.csv",
+        "structure.svg"
+      ],
+      "acceptance_criteria": [
+        "見出し校正・凍結・評価の順序があり、見出しなし・辞書認識なしと集中度が再計算できる。",
+        "まとめ存在、条件付き節長、S位置が各々の分母で読める。",
+        "冒頭末尾候補が検証前に固定され、全候補の検証結果と群漏れが照合される。"
+      ],
+      "steps": [
+        "固定見出し辞書を発見側の盲検60候補で確認し、規則と未一致を凍結する。",
+        "見出しごとのSカーソル・節語数、機能列、年別集中度とサイズ調整を計算する。",
+        "A04群の先頭/末尾50P語を使い、2〜5語列の増減各15を窓ごとに固定して別群で検証する。",
+        "原DOM順、見出し階層、同文と著者の集中、固定候補・図を独立確認する。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../analysis-methods.md",
+        "../references/a06-settings.json"
+      ],
+      "pitfalls": [
+        "まとめ見出しが増えたことだけで構造全体が画一化したと書かない。",
+        "見出し辞書は意味上の正解ではない。"
+      ],
+      "handoff": "phase1-handoff.md",
+      "resume_instructions": "A11へ見出しパス、区間境界と先行S語、R01へ集中と節長を渡す。",
+      "branch": "phase1",
+      "node": "phase1/A06-structure",
+      "priority": 13
+    },
+    {
+      "id": "A07",
+      "directory": "A07-evidence",
+      "title": "経験談と具体的な検証記述",
+      "dependencies": [
+        "T03",
+        "A05"
+      ],
+      "goal": "固定盲検標本で内容記述を読み、全記事の機械代理との対応を調べる。",
+      "inputs": [
+        "T03対象",
+        "T02原DOM、文単位、元本文/metadata",
+        "A05 voice-article.csv"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "verify.py",
+        "sample-manifest.json",
+        "rubric.json",
+        "coding-ledger.jsonl",
+        "rereview.json",
+        "proxy.csv",
+        "correspondence.csv",
+        "evidence-summary.csv"
+      ],
+      "acceptance_criteria": [
+        "固定校正と固定評価は不交差。規則凍結後に評価記事を全文確認し、全件に根拠付き状態と範囲がある。",
+        "再評価は固定subsetを別セッションで行い、初回と再評価と裁定を保つ。",
+        "全量代理、内容標本、S/P分母、判断不能範囲、支持不足を区別できる。"
+      ],
+      "steps": [
+        "各年を固定hashで並べ、校正4、評価16を保存する。年や著者を隠し、内容rubricと代理辞書を別々に凍結する。",
+        "各年4件を抜いて別セッション用の固定packetを残す。評価全文を読み、五カテゴリに根拠・S文ID・状態・内容種別・操作modeを付ける。",
+        "別セッション再評価の未開封入力、実行記録・裁定を保つ。",
+        "全量25代理を固定P語句・数字・リンク・DOM規則で計測し、同一標本内のA05語形と内容対応を点検する。",
+        "上限下限、各分母、記事種・年・帯、代理の不一致を集計する。別読者の根拠監査と別実装のカウント検査を行う。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../analysis-methods.md",
+        "../references/a07-sample-settings.json",
+        "../references/a07-content-rules-v1.json",
+        "../references/a07-proxy-settings-v1.json"
+      ],
+      "pitfalls": [
+        "本人が実施したか、記事がそう記したか、代理が一致したかを分ける。",
+        "判断不能を無として加えない。",
+        "架空の再評価やまとめラベルで穴を埋めない。"
+      ],
+      "handoff": "phase1-handoff.md",
+      "resume_instructions": "A11に固定校正・評価の盲検packetと対応台帳、A09/R01に代理と内容の別出力を渡す。",
+      "branch": "phase1",
+      "node": "phase1/A07-evidence",
+      "priority": 14
+    },
+    {
+      "id": "A08",
+      "directory": "A08-code",
+      "title": "コードと近接散文",
+      "dependencies": [
+        "T03"
+      ],
+      "goal": "コード量・言語ラベル・見出し内の前後散文を別々に測る。",
+      "inputs": [
+        "T03対象",
+        "T00抽出body_html",
+        "T02 S語、DOMイベント、metadata"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "verify.py",
+        "code-events.csv",
+        "code-article.csv",
+        "code-annual.csv",
+        "code-contrasts.csv",
+        "code-audit.json",
+        "code.svg"
+      ],
+      "acceptance_criteria": [
+        "ブロックとinlineの二重計数がなく、元順序と前後対応、状態ごとの分母を復元できる。",
+        "12例の固定診断があり、0と非対応と投影失敗を判別する。",
+        "全22指標の集計と指定12の区間、層別の不成立が残る。"
+      ],
+      "steps": [
+        "固定12例でpre、highlight、inline、未知言語ラベル、隣接コード、見出し境界を確認する。",
+        "全記事のブロックとinline量、明示クラス、状態を保存する。",
+        "同一区間の前後散文を対応付け、元Sと照合し、再利用フラグを付ける。",
+        "同梱の集計・区間閾値で計算し、元HTML・分母・位置・図を独立照合する。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../analysis-methods.md",
+        "../references/a08-code-rules.md",
+        "../references/a08-aggregation.json"
+      ],
+      "pitfalls": [
+        "コードありとblockあり、可視文字比とS語数あたり文字長は区別する。",
+        "言語不明を推定で埋めない。"
+      ],
+      "handoff": "phase1-handoff.md",
+      "resume_instructions": "A11へコードイベントと位置、A09/R01へ集合ごとの分母を渡す。",
+      "branch": "phase1",
+      "node": "phase1/A08-code",
+      "priority": 15
+    },
+    {
+      "id": "A09",
+      "directory": "A09-composition",
+      "title": "話題と書き手の入れ替わり",
+      "dependencies": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "goal": "話題・長さの構成、既知著者への重み、本人内差を測る。",
+      "inputs": [
+        "T02 metrics/metadata/記事",
+        "T03 coverage",
+        "A01〜A08の比較と適用範囲"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "verify.py",
+        "metric-support.csv",
+        "weights.csv",
+        "composition-contrasts.csv",
+        "author-year.csv",
+        "within-author.csv",
+        "decomposition.csv",
+        "ai-cues.csv",
+        "composition.svg"
+      ],
+      "acceptance_criteria": [
+        "指標ごとに六年の支持、共通範囲、固定重み、ESS、除外率を照合できる。",
+        "同一対象の無調整と固定構成、既知著者等重み、本人内の点差・選択率を区別する。",
+        "分解恒等式、各探索の適用範囲、タグ/本文AI語句と未知の判定を検証できる。"
+      ],
+      "steps": [
+        "話題×P語数帯で支持30を満たすセルと基準期固定qを凍結する。指標別cell・年・分類キーを保存する。",
+        "全体と共通範囲、固定組成と同対象の無調整値を比較する。",
+        "年内著者等重みと、両期間に現れる著者の年等重み本人内差を計算する。",
+        "寄与分解、著者cluster区間、A04〜A08の適用範囲を保存し、固定辞書からAI話題タグと本文S語句を別々に付ける。",
+        "重み、分解、区間・独立した適用範囲を元表から再計算する。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../analysis-methods.md",
+        "../references/a09-ai-topic.json",
+        "../references/t02-strata-map.json"
+      ],
+      "pitfalls": [
+        "自分自身の語数帯で層を揃えたM01は別の問い。",
+        "比較の支持不足を母集団に一般化しない。",
+        "語句露出をAI使用や意味話題の真値にしない。"
+      ],
+      "handoff": "phase1-handoff.md",
+      "resume_instructions": "A10へweights.csvをmetric_id、topic_primary、W_P_band、q、support、基準質量で渡す。A12とV01へ構成・著者比較を渡す。",
+      "branch": "phase1",
+      "node": "phase1/A09-composition",
+      "priority": 16
+    },
+    {
+      "id": "A10",
+      "directory": "A10-time",
+      "title": "変化が始まった時期",
+      "dependencies": [
+        "A01",
+        "A02",
+        "A03",
+        "A09"
+      ],
+      "goal": "支持診断後に固定境界、偽境界、探索折点、外挿の限界を報告する。",
+      "inputs": [
+        "T03 coverage/date-ledger",
+        "T02六指標と著者",
+        "A09 weights.csv・支持と対象"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "verify.py",
+        "time-grid.csv",
+        "support.csv",
+        "time-models.csv",
+        "break-candidates.csv",
+        "block-replicates.csv",
+        "time-stability.csv",
+        "time.svg"
+      ],
+      "acceptance_criteria": [
+        "全期間格子、支持窓、非支持理由、季節性、対象/固定qのマスクを再現できる。",
+        "固定境界、事前点検、両偽境界、候補BICとブロック再抽出の状態・失敗IDがある。",
+        "暦ラグHACと数値、図点、停止条件を独立計算で確認する。"
+      ],
+      "steps": [
+        "年・月・四半期、1〜9月補助の格子と対象を作る。支持診断は値を見る前に固定する。",
+        "支持した窓に季節と実暦tを含む固定回帰を当て、2022年11〜12月の扱いと暦HACを検証する。",
+        "事前傾向照合と2020/21偽境界、同月の構成比較を実行し、不成立行も保存する。",
+        "0/1折点で全候補BIC、連続ブロック再抽出、安定基準を計算する。",
+        "欠測ありの合成データと連続例で係数、HAC、候補マスク、反復の一部または全量、図を独立検証する。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../analysis-methods.md",
+        "../references/a10-methods.json"
+      ],
+      "pitfalls": [
+        "S02相当の支持表を推定済みと扱わない。",
+        "行番号で欠測月を詰めない。",
+        "2023年から六指標一斉、反実仮想、AI因果を主張しない。"
+      ],
+      "handoff": "phase1-handoff.md",
+      "resume_instructions": "V01/R01へ日付・期間範囲、支持、結論の反例、推定不能を渡す。",
+      "branch": "phase1",
+      "node": "phase1/A10-time",
+      "priority": 17
+    },
+    {
+      "id": "A11",
+      "directory": "A11-position",
+      "title": "具体的な材料までの位置",
+      "dependencies": [
+        "T03",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "goal": "全記事の機械的位置と、固定評価標本の題名に対応する材料位置を測る。",
+      "inputs": [
+        "T02 S語とDOMの対応",
+        "A06 headings.csv",
+        "A07固定評価と校正",
+        "A08 code-events.csv"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "verify.py",
+        "structure-position.csv",
+        "position-rubric.json",
+        "coded-position.jsonl",
+        "rereview.json",
+        "position-comparisons.csv",
+        "position-correspondence.csv",
+        "position.svg"
+      ],
+      "acceptance_criteria": [
+        "全採用記事でSカーソルの一致、四機械候補の位置、0/なし/入力欠落/割合NAが区別できる。",
+        "A07固定標本全件に題名の約束、根拠範囲、S外錨または不成立理由があり、別セッション再評価・裁定を保存する。",
+        "機械と内容の対応、層別のnと支持、反例、実際の図の照合がそろう。"
+      ],
+      "steps": [
+        "校正標本から候補辞書・タイトル対応rubricを固定する。A06/A08のDOM位置とS語をつないで全記事の機械初出を保存する。",
+        "A07評価標本を年伏せで全文読解し、題名に対応する最初の材料と根拠のS/DOM範囲を記録する。",
+        "固定32件を独立したトップレベルセッションで再評価し、初回を伏せ、差分を裁定する。",
+        "固定層の各年ペアで有無30・位置20の支持条件を適用し、内容の不成立も残す。",
+        "独立の原文再読、位置再計算、誤位置・S=0の負例、図値を検証する。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../analysis-methods.md",
+        "../references/a11-candidate-dictionary.json",
+        "../references/a11-rubric.md"
+      ],
+      "pitfalls": [
+        "歴史runの38,980件は機械、128件は内容。その範囲を混ぜない。",
+        "短い位置は読書時間や質の根拠ではない。",
+        "同じ会話の別ワーカーを別セッションと呼ばない。"
+      ],
+      "handoff": "phase1-handoff.md",
+      "resume_instructions": "V01/R01へ機械と内容の別表、支持不能の範囲と絶対/相対位置の反例を渡す。再評価が未実行なら必須未処理にする。",
+      "branch": "phase1",
+      "node": "phase1/A11-position",
+      "priority": 18
+    },
+    {
+      "id": "A12",
+      "directory": "A12-style",
+      "title": "文体距離と分布の偏り",
+      "dependencies": [
+        "T03",
+        "A01",
+        "A02",
+        "A03",
+        "A05",
+        "A09"
+      ],
+      "goal": "六指標の分布変化と、書式・語り口別の固定基準距離を測る。",
+      "inputs": [
+        "T02主指標・見出し密度とP文",
+        "A05人称と短縮形",
+        "A09話題・P帯・対象表",
+        "T03 coverage"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "verify.py",
+        "quantile-shifts.csv",
+        "fixed-reference.json",
+        "pair-ids.csv",
+        "style-distance.csv",
+        "sentence-sharing.csv",
+        "style.svg"
+      ],
+      "acceptance_criteria": [
+        "基準期年等重みCDF、分位と同点が再現できる。",
+        "各組の完全ケース・共通層・固定重み、別著者のseed付きペアIDと距離を照合できる。",
+        "原尺度、端値、未知種別、対象率、著者等重み、同文診断とペア依存を明記する。"
+      ],
+      "steps": [
+        "六指標の年別分位、使用ゼロ割合、基準閾値両端と同値を作る。",
+        "完全ケースの基準期経験CDFで固定midrankを計算し、組・定数・欠損を切り分ける。",
+        "各組各層で共通支持を測り、別著者ペアを均一に抽出して距離を集計する。",
+        "著者ペアを先に選ぶ副抽出と、保存文の完全一致共有を診断する。",
+        "別実装で基準CDF、重み、選択ペア、分母・図を照合する。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../analysis-methods.md",
+        "../references/a12-distance.json"
+      ],
+      "pitfalls": [
+        "同じ記事・著者を共有するペアを独立nにしない。",
+        "二つの距離を単一AIスコアにしない。",
+        "unknown層の結果を全記事へ広げない。"
+      ],
+      "handoff": "phase1-handoff.md",
+      "resume_instructions": "V01/R01へ分布と書式/語り口の別結果、共通層範囲、適用上の不足を渡す。",
+      "branch": "phase1",
+      "node": "phase1/A12-style",
+      "priority": 19
+    },
+    {
+      "id": "V01",
+      "directory": "V01-sensitivity",
+      "title": "条件を変えた再分析",
+      "dependencies": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08",
+        "A09",
+        "A10",
+        "A11",
+        "A12"
+      ],
+      "goal": "事前に決めた感度条件を一つずつ適用し、結論の適用範囲を確かめる。",
+      "inputs": [
+        "A01〜A12の合格済み出力",
+        "T00〜T03の凍結入力と特徴量",
+        "A04重複成分"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "verify.py",
+        "variant-plan.json",
+        "robustness.csv",
+        "exploration-confirmation.json",
+        "sensitivity.svg"
+      ],
+      "acceptance_criteria": [
+        "予定の変種×六主指標の全セルが計算値または理由付き状態を持つ。必須未処理はない。",
+        "原比較との差・n・欠測・支持を別計算で照合し、定義上のゼロと反転を区別する。",
+        "A04境界・重複の未測定、A11・A12探索、図の反例と制約を保存する。"
+      ],
+      "steps": [
+        "同梱の条件表から具体的な変種IDを固定し、各条件を一つずつ変える。",
+        "部位、文境界、語形、言語、品質、話題、組成、著者、期間、日時、重複の比較を記録する。",
+        "支持ゼロ・不足・必要入力の欠落を数え、実装上のfailureや残作業を別状態にする。",
+        "旧結果と現比較の対象違い、A11/A12の探索と反例を独立に確認する。",
+        "表・図・大偏差の元記事抜き取りを独立実行する。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../analysis-methods.md",
+        "../references/v01-variants.json"
+      ],
+      "pitfalls": [
+        "計算不能を影響なしとみなさない。",
+        "0をまたぐかだけで頑健と決めない。"
+      ],
+      "handoff": "phase1-handoff.md",
+      "resume_instructions": "R01へ全変種の結果状態、印象と異なる反例、原尺度・分母が変わる条件を渡す。",
+      "branch": "phase1",
+      "node": "phase1/V01-sensitivity",
+      "priority": 20
+    },
+    {
+      "id": "R01",
+      "directory": "R01-editorial",
+      "title": "日本語の執筆材料",
+      "dependencies": [
+        "T03",
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08",
+        "A09",
+        "A10",
+        "A11",
+        "A12",
+        "V01"
+      ],
+      "goal": "比較と探索を検証済みの日本語執筆材料にまとめ、Phase 2へ固定入力を渡す。",
+      "inputs": [
+        "T03の対象とcoverage",
+        "A01〜A12とV01の元表、図、manifest、verification",
+        "T00/T01/T02/A09の入力資産"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "verify.py",
+        "primary-metrics.csv",
+        "claims.csv",
+        "figure-captions-ja.csv",
+        "source-result-index.csv",
+        "phase2-inputs.json"
+      ],
+      "acceptance_criteria": [
+        "六主指標の尺度、元表、記事と既知著者の点、区間対象、比較年と未実行検定の表示が一致する。",
+        "主張と保留が元表行・分母・反例・不足へ追跡でき、既存図を実際に開いて照合した。",
+        "Phase 2の必要入力参照がパッケージ相対パスとハッシュで解決し、必須未解決事項はない。"
+      ],
+      "steps": [
+        "対象・主比較・具体的材料・位置・構造と文体・反例・限界を日本語で記す。",
+        "方向未指定の二指標、結果前固定時刻、著者区間の別対象、p/Holmの実行状態を照合する。",
+        "主張台帳と元表index、保留の理由、比較集合ごとの限界を保存する。",
+        "図を開いて値・n・期間・区間の説明を突合する。",
+        "D02、T00抽出器、T01採否と検出器、T02語文・metadata・topic-map、T03 coverage、A09固定qをphase2-inputs.jsonに登録する。",
+        "独立レビュアーが事実・計測・図・ハッシュと相対参照を点検する。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../analysis-methods.md"
+      ],
+      "pitfalls": [
+        "旧runの採用22件と保留4件は期待値ではない。",
+        "日本語草稿の代筆、英訳、公開は別作業。",
+        "関連の裏付けがない異なる集合の結果を結ばない。"
+      ],
+      "handoff": "phase1-handoff.md",
+      "resume_instructions": "新runの成果物とPhase 2入力indexを渡す。CLIで全体statusを同期・検査する。",
+      "branch": "phase1",
+      "node": "phase1/R01-editorial",
+      "priority": 21
+    },
+    {
+      "id": "P2-S01",
+      "directory": "s01-plan",
+      "title": "比較と収録の実行計画を固定する",
+      "dependencies": [
+        "R01",
+        "D03"
+      ],
+      "goal": "二つの取得経路から、固定UTC月窓の比較に必要な入力と実行順を確定する。",
+      "inputs": [
+        "R01の検証済みphase2-inputs.jsonと索引先",
+        "D03の検証済みplan.jsonl、responses.jsonl、保存HTMLと原応答",
+        "固定測定仕様と設定"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "input-index.json",
+        "plan.json",
+        "pilot-plan.json"
+      ],
+      "acceptance_criteria": [
+        "R01とD03のreceipt、入力パス、ハッシュ、必要列、結合キーを照合し、全入力と例外を列挙する。",
+        "主対象、全60年月セル、重み、D/H、盲検、比較、検証、資料の順序と定義版を固定する。",
+        "抽出・言語pilotの選択、閲覧順、標本不足、全量との違いを記録する。"
+      ],
+      "steps": [
+        "R01とD03の受理済みreceiptの出力先を開く。必要列、正規化したパス、本数とID対応を検証する。公開UTC、取得日時、CC capture、編集日時を別項目にする。",
+        "Phase 1との対象・定義差を記録する。旧の採否を固定し、旧2018〜2022年と新2026年の共通UTC1〜10月を主対象にする。",
+        "収録、採否、測定仕様固定、D候補固定、H、独立検算、18項目判断、資料化の順序と閲覧制限をplan.jsonに記録する。正当な0と欠測を分ける。",
+        "抽出pilotは固定planの先頭50件を通常例にする。コード、表、引用、入れ子リスト、埋め込み、カード、短文、警告、空、Markdownのみ、解析失敗の各最大2件をSHA256(42:phase2-extraction:<分類>:<記事ID>)順に選ぶ。重複IDは1件にまとめて選択理由を併記する。",
+        "言語pilotは構造診断を精度標本と分ける。先頭50件を校正、既選択を除いた計画順で各月5件を確認とする。ラベルを先に封印し、スコアは後から開く。元の50/19/50は履歴とする。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../settings.json",
+        "../comparisons.md"
+      ],
+      "pitfalls": [
+        "取得経路と時期が重なる。APIとCCの網羅性を同等とみなさない。",
+        "pilotは小規模の品質確認。fullの採否と比較には全入力での検証が要る。"
+      ],
+      "handoff": "phase2-handoff.md",
+      "resume_instructions": "S02へ入力索引と計画を渡す。再開時は同じplanと入力ハッシュを照合する。",
+      "branch": "phase2",
+      "node": "phase2/s01-plan",
+      "priority": 22
+    },
+    {
+      "id": "P2-S02",
+      "directory": "s02-corpus",
+      "title": "新集合の全文採否を固定する",
+      "dependencies": [
+        "P2-S01"
+      ],
+      "goal": "固定planの全IDに結果を付け、採用した2026年の英語IDと抽出本文を確定する。",
+      "inputs": [
+        "S01のinput-index.json、plan.json、pilot-plan.json",
+        "索引されたD03原応答、HTML、Markdown",
+        "索引されたT00抽出規則、T01言語規則"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "records.jsonl",
+        "decisions.jsonl",
+        "english.jsonl",
+        "summary.json",
+        "language-review-index.json"
+      ],
+      "acceptance_criteria": [
+        "全plan IDが計画順にrecordsとdecisionsへ1回ずつ現れ、状態別件数が総数と一致する。",
+        "英語集合が台帳のaccept_englishと一致する。保留、本文なし、取得不能は台帳に残る。",
+        "本文と根拠を原応答へ戻せる。ラベルの封印後に対応スコアを開示した証拠と、原判断を保つ訂正記録が読める。",
+        "校正、診断、未使用確認、全件の範囲を区別し、独立確認が実物の抽出位置・結合・採否・来歴を照合する。"
+      ],
+      "steps": [
+        "固定plan順で原応答のID、UTC、hashを照合する。HTMLから旧と同じ抽出器でP/L/U、本文順、見出し、太字、DOM対応、警告を保存する。失敗した記事も理由付きで記録する。",
+        "固定のpilotを実行する。180文字未満の構造診断やMarkdownのみを採用除外条件にしない。Markdownの無断代用を避ける。",
+        "旧機械規則でS、P、L、Sの1,200文字区間を採点する。スコアと分けて、機械状態にかかわらず全件のSを内容で読む。既確認のpilot行は同一本文hashを確認して再利用する。残りは最大25件ずつ進める。",
+        "全文を読み、本文ラベルと証拠を封印する。その後、対応スコアだけを開く。バッチの範囲、時刻、判定担当、ハッシュを索引にする。確認後に閾値を変えない。",
+        "混在・不明を保留とし、非英語、本文なし、取得不能を分ける。広告、短さ、技術性は除外条件にしない。訂正は根拠、日時、開示済みフラグ、原記録hashとともに追記する。",
+        "全件の採否と構造、planと原応答の結合を独立に確認する。既存runと同じ入力を使ったか、再収録・再判定したかを報告する。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../settings.json",
+        "../comparisons.md"
+      ],
+      "pitfalls": [
+        "抽出Sの言語と元記事全体の言語は別の範囲。",
+        "元runの8,942採用、220保留、7訂正は比較用の履歴。"
+      ],
+      "handoff": "phase2-handoff.md",
+      "resume_instructions": "S03へ英語ID、records、未採用理由、入力ハッシュを渡す。再開時は検証済みの封印バッチを再利用する。",
+      "branch": "phase2",
+      "node": "phase2/s02-corpus",
+      "priority": 23
+    },
+    {
+      "id": "P2-S03",
+      "directory": "s03-spec",
+      "title": "対象、測定仕様と著者分割を固定する",
+      "dependencies": [
+        "P2-S02"
+      ],
+      "goal": "S04で使う共通月、固定仕様、著者分割と確認標本を結果開示前に確定する。",
+      "inputs": [
+        "S02の英語集合、records、manifest",
+        "S01が索引したR01の採否、構造、語・文実装、タグ",
+        "固定仕様と設定"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "fixed-cohort.jsonl",
+        "metadata-audit.json",
+        "settings.resolved.json",
+        "author-split.jsonl",
+        "samples.jsonl",
+        "fixtures.json"
+      ],
+      "acceptance_criteria": [
+        "旧の採否、新の英語ID、60セルごとの実測数、対象外の理由を元の入力から検証できる。",
+        "著者と非空完全同文による連結成分がD/Hをまたがない。未知著者、成分サイズ、セル支持を出し、近似群の越境をS04の診断へ渡す。",
+        "X02と自動定義標本を分け、D/H別の枠、選択、salt、不足、本文ハッシュが固定される。",
+        "旧Phase 1と異なる6指標の分母とNA、語彙境界、太字投影、重み、bootstrapの小例を確認する。"
+      ],
+      "steps": [
+        "受理済みrunからパスを解決し、設定と入力ハッシュを保存する。共通UTC月を抽出し、日付不明などを理由付きで台帳へ残す。",
+        "旧CCと新APIの記事ID領域を分ける。単一の既知数値著者だけ両経路で統合する。年月別対象、著者、タグ、edited_at、取得日時、capture時刻の欠測を照合する。",
+        "固定SとP/Lの順序から非空完全一致word列を作る。著者の連結成分の最小キーを使い固定SHA256 parityでD/Hを付ける。Hの語彙比較は開かない。",
+        "X02の校正は旧2枠/年月、新10枠/月、確認は旧12、新30を選ぶ。固定saltを使い著者内1記事。別にX02標本を除いて各経路50校正、100確認を選ぶ。IDとblind ID対応を隔離する。",
+        "固定した語・文規則を取り込み、合成小例でapostrophe、Unicode・URL、fragment、P/L、太字区間、0とNA、重み、区間不足を確かめる。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../settings.json",
+        "../comparisons.md"
+      ],
+      "pitfalls": [
+        "S03では仕様を固定し、Hの結果値は見ない。",
+        "経路間で記事IDの数値を結合しない。handleと組織IDは個人著者の代用にしない。"
+      ],
+      "handoff": "phase2-handoff.md",
+      "resume_instructions": "S04へ対象、D/H、設定、標本、テストを渡す。再開時は入力hashと開示履歴を確かめる。",
+      "branch": "phase2",
+      "node": "phase2/s03-spec",
+      "priority": 24
+    },
+    {
+      "id": "P2-S04",
+      "directory": "s04-compute",
+      "title": "固定仕様で計算と独立判定を実行する",
+      "dependencies": [
+        "P2-S03"
+      ],
+      "goal": "対象を変えずに基本6指標、語彙、X01〜X03、C01を計算し、支持・不確かさ・検証を保存する。",
+      "inputs": [
+        "S03が封印した対象、設定、D/H、標本とテスト",
+        "S03のmanifestが指す原入力と固定抽出・語文実装"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "article-measures.jsonl",
+        "lexical-candidates.json",
+        "comparisons-summary.jsonl",
+        "yearly-monthly-index.json",
+        "annotations-index.json",
+        "diagnostics.json",
+        "readback.json"
+      ],
+      "acceptance_criteria": [
+        "元データ、設定、コード、環境、D/H、標本、辞書をhashで追跡でき、Dの選択と分類を封印してからHを開いている。",
+        "Mの6指標をすべての記事に対応させる。V01/V02の全候補、V03の固定5系列、X01〜X03、C01の計算と支持、区間、失敗理由が出力される。",
+        "X02の独立AI判定2系統と自動定義の確認記録があり、陽性span、手数え、欠損、unknownを検証できる。標本支持不足の枠は明示される。",
+        "5000反復、4750有効条件、Holm/BH、0分母、必要月と各固定感度の扱いを独立検算で再現する。比較の全キーを列挙し、網羅性と元値を確かめる。"
+      ],
+      "steps": [
+        "S03のハッシュと合成例を検証する。新データへ旧の語・文規則と太字投影を適用し、旧の規範中間値を再利用する。P文とP+Lの分母を区別し、M01〜M06の数値・分子・分母・理由・位置を各記事に記録する。",
+        "DだけでV01の同じ期間20出現・10著者・最大占有率0.20と順位、V02の旧R≤1%・新R≥2%・新20著者・占有率≤0.10・新F≥0.05/1000を適用する。V01上限200、V02上限100。V03の固定5系列は検索式をそのまま使う。分類、X01辞書、妥当性標本を封印後、Hで全候補を確認する。",
+        "X01ではDで候補5-gramを分類する。主辞書は一般説明で除外フラグなし。H同期間で本人以外の2著者以上が使う一致のword位置unionをW_Bで割る。X03は最初と最後の各50語で5+8表現、主は末尾。見出しと短文重なり、共有signatureは補助に残す。",
+        "S03のblind IDで独立AIの2系統へX02と別の自動定義標本を割り付ける。担当、packet、根拠、原回答を保存し、相互の開示前に封印する。E/Gは文ごとに別ラベル。不一致や判断不能、語率の上下限、一致率とκ、必要セルを記録する。参照のない検証は未検証とする。",
+        "F/R/A、D/Hの件数、NA、未知著者の別探索、年・月の全表を作る。主値、感度、近似同文群、話題支持と除外質量、200語窓、タグ除外を区別する。V01/V02の同じ語の行は保持し、BHは仮説unionに一度だけ適用する。",
+        "固定seed PCG64で著者クラスタの再抽出を行う。月と旧年の重み、C01の各反復での回帰とプールSD、外挿backtest、各補正の対象を記録する。比較一覧、算術・区間の独立readback、再実行コマンドを保存する。"
+      ],
+      "references": [
+        "../measurement-spec.md",
+        "../settings.json",
+        "../comparisons.md"
+      ],
+      "pitfalls": [
+        "結果が弱くても年・月、候補、標本、閾値を選び直さない。",
+        "精度基準の未達と処理失敗を区別する。計算照合と内容妥当性に別の証拠が要る。",
+        "C01は旧4年の年平均の記述外挿。著者ブートストラップは年次構造の変化を測らない。"
+      ],
+      "handoff": "phase2-handoff.md",
+      "resume_instructions": "封印した比較、診断、独立読戻しをS05へ渡す。再開時は最後の検証済みチェックポイントと入力・辞書・判定hashを照合する。",
+      "branch": "phase2",
+      "node": "phase2/s04-compute",
+      "priority": 25
+    },
+    {
+      "id": "P2-S05",
+      "directory": "s05-review",
+      "title": "18項目の算術と主張の範囲を検証する",
+      "dependencies": [
+        "P2-S04"
+      ],
+      "goal": "保存値に対し、測定と比較が支える範囲を判断する。判断と根拠を追跡可能にする。",
+      "inputs": [
+        "S04の比較、記事値、判定、分母、診断と独立readback",
+        "S03の対象、設定、標本、入力ハッシュ"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "item-decisions.json",
+        "robustness.tsv",
+        "evidence-index.json",
+        "independent-review.json"
+      ],
+      "acceptance_criteria": [
+        "M6、V01/V02とV03の5系列、X01、X02 E/G、X03、C01の18判断が重複なくあり、全比較キーと固定感度へたどれる。",
+        "各判断の数値、分母、不確かさ、内容検証、代替説明、許容文がそろう。NAとunknownの両方に理由が読める。",
+        "X02の固定標本差・unknown範囲、V02条件未達、品質24比較、C01の6指標とbacktestが脱落しない。",
+        "独立担当が保存値と記述を照合し、指摘・修正・再検証を保存する。終了は全項目を確認し判断を残したことを示す。"
+      ],
+      "steps": [
+        "対象manifestと比較の全キーを照合する。再利用したS04の検算と、この工程で実施した照合を区別する。既存比較から分母・月支持・有効反復・補正・NA理由を取り出す。",
+        "固定感度を全行つないで、方向、母集団変更、支持不足、適用外を区別する。品質標本のbaseline・表示エラー・広告・署名×M6も理由付きで残す。",
+        "合議参照の有無、分割の手数え差、太字の出典、V03/X01/X03の正負支持を確認する。X02は固定標本のE/G別に、有無、語率、判定可能数、一致・κ、不明範囲を点検する。",
+        "VのF/R/A、著者実数、Q、条件非再現を確認する。C01は元尺度4点の外挿、範囲外、backtest、感度を照合する。取得・生存・編集・話題差が残る箇所を示す。",
+        "18項目を限定採用、保留、判断不能から根拠で決める。観測された自動値と測定妥当性を分け、各項目に許容文と証拠の位置を付ける。別担当が根拠と記述を検証する。"
+      ],
+      "references": [
+        "../comparisons.md",
+        "../phase2-handoff.md",
+        "../measurement-spec.md"
+      ],
+      "pitfalls": [
+        "元runの限定採用2、保留14、判断不能2は履歴。新runの判断の割当には使わない。",
+        "全compute・bootstrapの再実行は、既存照合で足りない具体的な不一致の調査に限る。"
+      ],
+      "handoff": "phase2-handoff.md",
+      "resume_instructions": "S06へ18行の判断と保存値の参照を渡す。再開時はローカル照合でmanifestと根拠の同一性を確認する。",
+      "branch": "phase2",
+      "node": "phase2/s05-review",
+      "priority": 26
+    },
+    {
+      "id": "P2-S06",
+      "directory": "s06-report",
+      "title": "比較結果と追加4資料をまとめる",
+      "dependencies": [
+        "P2-S05"
+      ],
+      "goal": "数字・図・用例・主張を元の比較に結び、読み手が対象と限界を確認できる資料にする。",
+      "inputs": [
+        "S05の18判断、固定感度、evidence-index、独立確認",
+        "S04の比較、候補、年・月表、格納した記事値、X02判定",
+        "S03の対象と保存タグ"
+      ],
+      "outputs": [
+        "report.md",
+        "manifest.json",
+        "verification.json",
+        "claim-ledger.json",
+        "materials-index.json",
+        "index.html",
+        "conditions.tsv",
+        "structure-periods.tsv",
+        "yearly-vocabulary.tsv",
+        "tag-periods.tsv"
+      ],
+      "acceptance_criteria": [
+        "18判断と全固定候補を保持する。分母と出典のある本文・表・図・用例を索引でき、保存比較へ戻れる。",
+        "11月16日の追加4資料を固定条件で作り、行数・対象・欠測・単位・保存値を独立に確認する。",
+        "記事使用率と陽性内量の積、年別の未観測期間、タグ欠測とAIタグ定義が表示から確認できる。",
+        "HTMLの表示、検索、リンクを実物で確認し、確認できない範囲、任意の11月23日作業の有無を記録する。"
+      ],
+      "steps": [
+        "S05にある許容文を18行の主張台帳に写し、数値と根拠を結び付ける。11の問いの入口を作る。対象、分布、年別、感度、X02のE/G組合せを本文・図・表からたどれるようにする。",
+        "固定候補全行とF/R/Aの条件別比較、年別・月別表、必要のある用例と出典を残す。分類の根拠は封印したD文脈を使う。引用は必要最小限とし、AI著作の判定例にしない。",
+        "比較の9条件、M05/M06の使用率と使用内の量、一般説明表現の年別、保存タグ構成の4資料を保存値から作る。全件表と要約を分け、各表の検算、元行、再実行コマンドを索引へ登録する。",
+        "対象世代、分母、point/percentage point、NA理由、残る取得・測定・構成差を見える場所へ置く。図の値・年軸と説明、検索とリンクを独立に照合する。",
+        "11月23日の追加が明示された場合はタグ別書式と固定24記事のHTML有無照合を別の派生ファイルへ保存する。原データ、本compute、候補、正式判断は保持する。"
+      ],
+      "references": [
+        "../supplements.md",
+        "../comparisons.md",
+        "../phase2-handoff.md"
+      ],
+      "pitfalls": [
+        "全件を技術記事として分類した比較ではない。タグ欠測から話題やAI著作を決めない。",
+        "対象は固定観測集合。追加資料は購入・公開・最終稿や測定精度の証明に当たらない。"
+      ],
+      "handoff": "phase2-handoff.md",
+      "resume_instructions": "18判断と資料をrootの取りまとめへ渡す。配布物とrun内で、indexから関連する表と証拠を開けることを確認する。",
+      "branch": "phase2",
+      "node": "phase2/s06-report",
+      "priority": 27
+    }
+  ]
+}

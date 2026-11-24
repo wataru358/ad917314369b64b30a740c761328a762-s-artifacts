@@ -1,0 +1,138 @@
+{
+  "version": "dev-writing-vocabulary-v1",
+  "scope": "A04 only; fixed 38980 English articles; no word minimum or duplicate exclusions",
+  "baseline_years": [2018, 2019, 2020, 2021],
+  "comparison_years": [2023, 2024],
+  "transition_year": 2022,
+  "partial_year": 2025,
+  "same_month_auxiliary": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+  "split": {
+    "P_identity": "SHA256 of saved P prose-unit texts joined in unit_index order with two newlines; nonempty text only, not lexical-word hashes",
+    "components": "known numeric authors joined transitively when nonempty P hashes match; all years included; unknown authors not assigned to either group",
+    "component_key": "minimum numeric DEV author ID, formatted dev:user:<id>",
+    "assignment": "SHA256('42:vocab:'+component_key), first byte <128 => discovery, otherwise holdout",
+    "leakage_limit": "exact nonempty P only; near duplicates not addressed"
+  },
+  "tokens": {
+    "basis": "saved T02 ASCII word values lowercased, no stemming or stopword removal",
+    "ngram_n": [1, 2, 3, 4, 5],
+    "boundaries": "P/L: no crossing owner, sentence, source prose unit, or any non-word token (URL/email/identifier/number/Unicode word); punctuation inside a sentence is not itself a break; H: heading boundary and non-word token breaks",
+    "domains": "P discovery; selected candidates also counted in P/L/H after freeze; unknown authors only full descriptive tables"
+  },
+  "discovery": {
+    "min_articles": 20,
+    "min_authors": 10,
+    "eligibility_scope": "pooled six main-comparison years in discovery, each article counted once; distinct authors across years",
+    "safe_prefilter": "at least20 occurrences in main years is necessary for20 documents; then exact document/author thresholds",
+    "main_estimate": "article document frequency within each year (zero-P articles retained), equal mean of annual rates; post minus pre",
+    "ratio": "post annual-equal frequency / pre frequency; zero pre => NA, not infinity or a ranking key",
+    "directional_per_side": 30,
+    "rank": "absolute document-frequency difference descending, ties shorter n then lexical term; positive and negative separately",
+    "rare": {
+      "baseline_max": 0.001,
+      "comparison_min": 0.01,
+      "comparison_min_authors": 20,
+      "selection": "all eligible terms satisfying rules, no cap; separately labelled"
+    }
+  },
+  "watchlist": ["delve", "robust", "seamless"],
+  "classification": {
+    "version": "a04-lexicon-v1",
+    "precedence": ["AI_topic", "technical_name", "connective", "general_other"],
+    "AI_tokens": ["ai", "llm", "llms", "gpt", "chatgpt", "openai", "generative", "prompts"],
+    "AI_phrases": ["artificial intelligence", "large language model", "large language models", "machine learning"],
+    "technical_tokens": [
+      "javascript",
+      "typescript",
+      "python",
+      "java",
+      "react",
+      "vue",
+      "angular",
+      "svelte",
+      "node",
+      "html",
+      "css",
+      "sql",
+      "docker",
+      "kubernetes",
+      "aws",
+      "azure",
+      "linux",
+      "git",
+      "github",
+      "api",
+      "apis",
+      "npm",
+      "rust",
+      "golang",
+      "php",
+      "ruby",
+      "rails",
+      "django",
+      "flask",
+      "mongodb",
+      "redis",
+      "postgresql",
+      "mysql"
+    ],
+    "connectives": [
+      "however",
+      "therefore",
+      "moreover",
+      "furthermore",
+      "meanwhile",
+      "although",
+      "because",
+      "instead",
+      "in addition",
+      "for example",
+      "for instance",
+      "in conclusion",
+      "on the other hand",
+      "as a result",
+      "in other words"
+    ],
+    "note": "fixed lexical proxies, not semantic ground truth; no dictionary editing based on holdout"
+  },
+  "holdout": {
+    "opened_after": "candidate manifest and discovery selection rules sealed",
+    "outcome": "same_direction if nonzero discovery and holdout differences have same sign; opposite_direction otherwise; exact zero labelled zero; not a significance or equivalence test",
+    "minimums": "report all selected candidates; scarcity and NA retained, do not relax thresholds",
+    "uncertainty": "conditional component-cluster percentile intervals for holdout document-frequency differences; known author components, no p-values/BH tests"
+  },
+  "bootstrap": {
+    "replicates": 2000,
+    "seed": 42,
+    "interval": "percentile95%, linear quantiles",
+    "min_clusters_per_main_year": 30,
+    "lexical_unit": "all holdout components across2018-2025 sampled together, all their articles retained",
+    "diversity_unit": "all known individual authors across2018-2025 sampled together, as previous tasks"
+  },
+  "author_spread": "annual and period known-author prevalence, document hits per using author, occurrence share of top1/top5 authors, and mean per-author article prevalence; period denominators kept explicit, unequal period lengths not posting-frequency comparisons",
+  "strata": {
+    "topic_map": "t02-strata-map.json, first matching priority, absent/unmapped tags =>unknown; article type not used",
+    "word_bands": [
+      ["0", 0, 0],
+      ["1-49", 1, 49],
+      ["50-99", 50, 99],
+      ["100-299", 100, 299],
+      ["300-999", 300, 999],
+      ["1000+", 1000, null]
+    ],
+    "eligible_comparison": "at least20 articles and10 known authors in each of six comparison years; otherwise NA delta with counts preserved"
+  },
+  "diversity": "reuse sealed MATTR100/50 values and NA; article-equal annual summaries, length bands, full and known-author point/author-cluster intervals; no recomputation of T02",
+  "compute": {
+    "duckdb_memory_limit": "2GB",
+    "duckdb_threads": 1,
+    "max_temp_directory_size": "8GB",
+    "minimum_free_disk_GB": 12
+  },
+  "V01_A09_deferred": [
+    "quality/near-duplicate sensitivity",
+    "full topic/composition decomposition",
+    "continuing-author within-person effects"
+  ],
+  "interpretation": "CC-saved conditional vocabulary differences only; no AI use-rate or causal inference"
+}

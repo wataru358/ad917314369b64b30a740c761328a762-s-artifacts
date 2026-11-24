@@ -1,0 +1,21 @@
+{
+  "version": "dev-writing-overview-v1",
+  "scope": "T03 descriptive cohort overview only; no A01 year-comparison estimates, CIs or tests",
+  "cohort": "T01 adopted English articles, UTC publication years 2018-2025; no minimum words; no deduplication",
+  "metadata": "metadata-v2.parquet; never use v1 author/organization fields",
+  "word_parts": ["P", "L", "U", "S"],
+  "quantiles": "linear interpolation at (n-1)*p, including zeros; DuckDB quantile_cont and independent Python check",
+  "word_bands": [
+    ["0", 0, 0],
+    ["1-49", 1, 49],
+    ["50-99", 50, 99],
+    ["100-299", 100, 299],
+    ["300-999", 300, 999],
+    ["1000+", 1000, null]
+  ],
+  "same_month_auxiliary": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+  "2025": "partial publication year; October partial; November/December not observed, not zero-population months",
+  "figure_labels": "English",
+  "figure_ecdf": "positive-word articles only, with zero-word counts shown separately; overall tabular statistics include zeros",
+  "precision_note": "fixed language and sentence calibration are small single-operator reviews, not population accuracy guarantees"
+}

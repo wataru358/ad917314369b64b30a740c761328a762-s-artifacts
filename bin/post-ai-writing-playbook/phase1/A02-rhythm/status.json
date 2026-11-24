@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "A02",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "A02",
+      "title": "文のリズムと句読法",
+      "description": "文のリズムと句読法",
+      "priority": 9,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "M02〜M04は固定Pから計算され、語なし・一文・低nが区別できる。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "カンマ間隔の文ベースと旧記事近似が別列で、数字内カンマが除かれる。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "著者区間と図を入力から独立に照合できる。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

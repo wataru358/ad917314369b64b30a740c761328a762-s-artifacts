@@ -1,0 +1,208 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "check": "fresh fixture validates with zero completed tasks",
+      "result": "PASS",
+      "exit_code": 0
+    },
+    {
+      "check": "start requires initialized run",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "blank owner rejected without changing state",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "run identity cannot silently change",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "unfinished dependency rejects start",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "next selects only dependency-ready work",
+      "result": "PASS"
+    },
+    {
+      "check": "new start returns its attempt, handoff and output directory",
+      "result": "PASS"
+    },
+    {
+      "check": "concurrent claims have exactly one owner",
+      "result": "PASS"
+    },
+    {
+      "check": "same-owner resume repairs a stale parent rollup",
+      "result": "PASS",
+      "exit_code": 0
+    },
+    {
+      "check": "run identity and configuration stay sealed",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "same-owner resume preserves attempt and checkpoint directory",
+      "result": "PASS"
+    },
+    {
+      "check": "missing receipt cannot complete work",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "failed criterion rejected",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "missing declared output rejected",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "self review rejected",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "whitespace and case do not disguise self review",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "nonzero verification rejected",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "pilot receipt rejected for full study",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "wrong attempt rejected",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "path traversal rejected",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "nonstring reviewer rejected",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "nonstring summary rejected",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "nonlist evidence rejected",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "an attempt cannot alias another directory",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "valid artifact receipt finishes leaf",
+      "result": "PASS",
+      "exit_code": 0
+    },
+    {
+      "check": "parent rollup does not finish unrelated work",
+      "result": "PASS"
+    },
+    {
+      "check": "changed output invalidates prior completion",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "stale parent completion rejected",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "parent rollup repairs from leaf truth",
+      "result": "PASS",
+      "exit_code": 0
+    },
+    {
+      "check": "acceptance criteria stay sealed after initialization",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "retry isolates a new attempt and preserves old artifacts",
+      "result": "PASS"
+    },
+    {
+      "check": "root completes only after all leaves complete",
+      "result": "PASS"
+    },
+    {
+      "check": "relative evidence survives relocation",
+      "result": "PASS",
+      "exit_code": 0
+    },
+    {
+      "check": "dependency cycle rejected",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "an empty phase cannot become complete",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "handoff cannot escape its leaf",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "missing active output is not offered as valid resume",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "missing active output still permits block and retry recovery",
+      "result": "PASS",
+      "exit_code": 0
+    },
+    {
+      "check": "an interrupted initialization is detected",
+      "result": "PASS",
+      "exit_code": 1
+    },
+    {
+      "check": "same-run init recovers a partial initialization",
+      "result": "PASS",
+      "exit_code": 0
+    },
+    {
+      "check": "several missing active outputs can be blocked and recovered",
+      "result": "PASS",
+      "exit_code": 0
+    },
+    {
+      "check": "example distinguishes phase denominators, zero and NA",
+      "result": "PASS"
+    }
+  ],
+  "research_executed": false
+}

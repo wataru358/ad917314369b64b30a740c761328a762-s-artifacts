@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "T03",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "T03",
+      "title": "対象統計と収録範囲",
+      "description": "対象統計と収録範囲",
+      "priority": 7,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T02"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "候補から採用までの記事数が保存則に合い、P/L/U/Sの語数・帯・分位を再計算できる。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "8年・96月・32四半期の観測状態と部分年が明示される。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "年・期間の件数と不明日付、既知著者、組織、タグ、重複の対象が区別される。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

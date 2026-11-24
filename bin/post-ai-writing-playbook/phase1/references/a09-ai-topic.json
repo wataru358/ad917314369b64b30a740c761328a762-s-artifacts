@@ -1,0 +1,159 @@
+{
+  "version": "A09-ai-topic-v1",
+  "rules": [
+    {
+      "rule_id": "R01",
+      "forms": [
+        "artificial intelligence"
+      ],
+      "case": "ascii_insensitive",
+      "ambiguity": "explicit_field"
+    },
+    {
+      "rule_id": "R02",
+      "forms": [
+        "generative AI",
+        "generative artificial intelligence"
+      ],
+      "case": "ascii_insensitive",
+      "ambiguity": "explicit_field"
+    },
+    {
+      "rule_id": "R03",
+      "forms": [
+        "large language model",
+        "large language models"
+      ],
+      "case": "ascii_insensitive",
+      "ambiguity": "explicit_field"
+    },
+    {
+      "rule_id": "R04",
+      "forms": [
+        "machine learning"
+      ],
+      "case": "ascii_insensitive",
+      "ambiguity": "broad_AI_subfield_not_specifically_generative"
+    },
+    {
+      "rule_id": "R05",
+      "forms": [
+        "deep learning"
+      ],
+      "case": "ascii_insensitive",
+      "ambiguity": "broad_AI_subfield_not_specifically_generative"
+    },
+    {
+      "rule_id": "R06",
+      "forms": [
+        "neural network",
+        "neural networks"
+      ],
+      "case": "ascii_insensitive",
+      "ambiguity": "broad_AI_subfield_not_specifically_generative"
+    },
+    {
+      "rule_id": "R07",
+      "forms": [
+        "AI",
+        "AIs"
+      ],
+      "case": "exact",
+      "ambiguity": "short_acronym_context_ambiguous"
+    },
+    {
+      "rule_id": "R08",
+      "forms": [
+        "LLM",
+        "LLMs"
+      ],
+      "case": "exact",
+      "ambiguity": "short_acronym_context_ambiguous"
+    },
+    {
+      "rule_id": "R09",
+      "forms": [
+        "GPT",
+        "GPTs"
+      ],
+      "case": "exact",
+      "ambiguity": "short_acronym_context_ambiguous"
+    },
+    {
+      "rule_id": "R10",
+      "forms": [
+        "ChatGPT"
+      ],
+      "case": "ascii_insensitive",
+      "ambiguity": "product_mention_not_topic_truth"
+    },
+    {
+      "rule_id": "R11",
+      "forms": [
+        "OpenAI"
+      ],
+      "case": "ascii_insensitive",
+      "ambiguity": "organization_mention_not_topic_truth"
+    },
+    {
+      "rule_id": "R12",
+      "forms": [
+        "LangChain"
+      ],
+      "case": "ascii_insensitive",
+      "ambiguity": "product_mention_not_topic_truth"
+    },
+    {
+      "rule_id": "R13",
+      "forms": [
+        "GitHub Copilot"
+      ],
+      "case": "ascii_insensitive",
+      "ambiguity": "qualified_product_mention_not_topic_truth"
+    },
+    {
+      "rule_id": "R14",
+      "forms": [
+        "Claude AI"
+      ],
+      "case": "ascii_insensitive",
+      "ambiguity": "qualified_product_mention_not_topic_truth"
+    },
+    {
+      "rule_id": "R15",
+      "forms": [
+        "Llama 2",
+        "Llama 3"
+      ],
+      "case": "ascii_insensitive",
+      "ambiguity": "qualified_product_mention_not_topic_truth"
+    }
+  ],
+  "normalization": {
+    "dashes": "‐‑–—−",
+    "whitespace": "str.isspace each to one ASCII space",
+    "case": "ASCII only; length preserving"
+  },
+  "unit_kinds": [
+    "paragraph",
+    "list_item",
+    "text"
+  ],
+  "sample_seed": "A09-C02-review-v1:",
+  "sample_n_per_stratum": 3,
+  "rule_n": 1,
+  "context_chars": 80,
+  "negative_units": 3,
+  "negative_excerpt_chars": 240,
+  "review_strata": [
+    "positive",
+    "negative",
+    "short_ambiguous",
+    "tag_only",
+    "body_only",
+    "both",
+    "empty_S",
+    "missing_body",
+    "unknown_tags"
+  ]
+}

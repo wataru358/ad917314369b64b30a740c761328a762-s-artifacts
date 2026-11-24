@@ -1,0 +1,108 @@
+{
+  "version": "a08-aggregation-v1",
+  "frozen_at_utc": "2026-11-03T17:47:16.685599+00:00",
+  "frozen_before_temporal_results": true,
+  "task_status": "in_progress",
+  "exploratory": true,
+  "metrics": {
+    "has_code": "タグ付きblockまたはinline有無。空要素も存在あり",
+    "has_block": "最外pre有無。inlineとは別",
+    "block_count": "記事内最外block数",
+    "inline_count": "記事内最外inline数",
+    "block_chars": "block文字数。Unicodeコードポイント",
+    "inline_chars": "inline文字数。Unicodeコードポイント",
+    "block_nonempty_lines": "block非空行数の合計",
+    "inline_nonempty_lines": "inline非空行数の合計",
+    "W_S": "封印済みASCII英語語数P+L+U",
+    "block_chars_per_S_word": "block文字数/W_S。S0はNA",
+    "code_nonwhite_share": "block+inline非空白文字数/可視DOM非空白文字数",
+    "log1p_block_chars": "log(1+block文字数)",
+    "log1p_inline_chars": "log(1+inline文字数)",
+    "log1p_W_S": "log(1+W_S)",
+    "before_matched_share": "記事内matched block数/全block数。blockなしはNA",
+    "before_matched_words_mean": "記事内matched行語数の平均。matchedなしはNA、matched0語は0。再利用を含む近接対応の平均で総説明量ではない",
+    "before_matched_words_median": "記事内matched行語数の中央値。同じ散文の再利用を含む補助量",
+    "before_unique_matched_words": "記事内当該側のunit_indexを一度だけ数えた語数。matchedなしはNA。前後を合算しない",
+    "after_matched_share": "記事内matched block数/全block数。blockなしはNA",
+    "after_matched_words_mean": "記事内matched行語数の平均。matchedなしはNA、matched0語は0。再利用を含む近接対応の平均で総説明量ではない",
+    "after_matched_words_median": "記事内matched行語数の中央値。同じ散文の再利用を含む補助量",
+    "after_unique_matched_words": "記事内当該側のunit_indexを一度だけ数えた語数。matchedなしはNA。前後を合算しない"
+  },
+  "ci_metrics": [
+    "has_code",
+    "has_block",
+    "block_chars",
+    "inline_chars",
+    "block_chars_per_S_word",
+    "code_nonwhite_share",
+    "log1p_block_chars",
+    "log1p_W_S",
+    "before_matched_share",
+    "after_matched_share",
+    "before_matched_words_mean",
+    "after_matched_words_mean"
+  ],
+  "baseline": [
+    2018,
+    2019,
+    2020,
+    2021
+  ],
+  "comparison": [
+    2023,
+    2024
+  ],
+  "main_estimator": "mean of annual article means: post minus pre; all six annual means required",
+  "supplemental_estimators": [
+    "pooled article means",
+    "ratio of total numerator to total denominator; distinct from mean article ratio"
+  ],
+  "transition_year": 2022,
+  "partial_year": 2025,
+  "same_month": "reuse cohort.same_month_aux only; do not infer new month set",
+  "quantiles": [
+    0.1,
+    0.25,
+    0.5,
+    0.75,
+    0.9,
+    0.99
+  ],
+  "bootstrap": {
+    "unit": "known single numeric author, full-period cluster",
+    "replicates": 2000,
+    "seed": 42,
+    "rng": "numpy.default_rng; sorted author IDs; includes authors outside main six years",
+    "percentile": [
+      0.025,
+      0.975
+    ],
+    "quantile_method": "linear",
+    "min_authors_each_year": 30,
+    "min_valid_replicates": 1900,
+    "min_known_fraction_each_year": 0.9,
+    "low_coverage": "NA main interval; no imputation, no threshold relaxation",
+    "targets": "overall main year-equal differences only; no stratum CI or p values"
+  },
+  "strata": {
+    "topic_primary": "t02-strata-map priority over raw saved tags; unmatched unknown",
+    "topic_multi": "metadata-v2 topics, unique article membership per topic; overlaps retained",
+    "tags": "all saved tags unique per article; no-tag sentinel; no normalization beyond saved metadata",
+    "language": "all raw explicit class labels, unique article membership per label across block and inline; unknown if any unlabeled code; no_code separate; plaintext and mixed labels retained",
+    "language_state": "no_code, unknown_only, explicit_only, explicit_and_unknown; multi_label separate flag",
+    "type": "article_type plus ambiguous flag; descriptive only, never primary adjustment",
+    "threshold": "30 member articles in EVERY main comparison year for tag detail and comparable strata; metric valid n must also meet 30 each year for stratum difference",
+    "output": "all membership year counts and rejected reasons; annual metric summaries for all topic/language/type/presence strata and eligible tags plus no_tag; failed metric threshold => reasoned NA difference",
+    "overlap_denominator": "within each label article n; sums across labels are not independent article totals"
+  },
+  "figures": [
+    "W_S distribution by code presence, original and log1p scales",
+    "block/inline characters versus W_S, original and log1p scales, all articles",
+    "article before/after matched-word means, original and log1p; missing reasons explicit",
+    "annual focal means and code quantities; 2022/2025 descriptive"
+  ],
+  "zeros": "observed zero retained; S0 ratio NA; no block NA for adjacency; no matched on side NA for words; missing inputs NA, never zero",
+  "giant_code": "retain all; original and log1p plus max/p99/top-share diagnostics, no trimming",
+  "source_review": "freeze first 2 whitespace_only positions by existing processing order then code_index; old empty sample unchanged; remaining 24 uninspected",
+  "limits": "CC English collection only; proximity is not semantic explanation; no DEV population/AI/causal/quality inference; no A09, final audit or complete"
+}

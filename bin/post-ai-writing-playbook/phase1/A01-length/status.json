@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "A01",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "A01",
+      "title": "記事と段落の長さ",
+      "description": "記事と段落の長さ",
+      "priority": 8,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "M01のlog1p年等重み点差、原語数、全記事点と著者区間を再現できる。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "記事等重み段落分布と段落等重み分布が別にある。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "長文診断の抽出規則と照合結果があり、0語とNAを区別する。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

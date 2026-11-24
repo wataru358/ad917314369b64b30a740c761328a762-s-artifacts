@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "T02",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "T02",
+      "title": "分割・特徴量・メタデータ",
+      "description": "分割・特徴量・メタデータ",
+      "priority": 6,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T01"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "採用記事1件につき記事とmetadataが一行、主指標が六行ある。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "S=P+L+U、文・語オフセット、太字重複除去と分母、既知著者IDが独立読取と一致する。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "合成例・固定標本・v2メタデータの根拠を検査し、0、NA、使用なし、投影失敗を区別する。",
+          "met": false
+        },
+        {
+          "id": "C04",
+          "criterion": "下流側が固定コード・fixtureとデータスキーマを再利用できる。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

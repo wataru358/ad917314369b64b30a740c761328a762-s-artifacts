@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "A05",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "A05",
+      "title": "書き手の声と呼びかけ",
+      "description": "書き手の声と呼びかけ",
+      "priority": 12,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "T03"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "全記事の語形計数、使用記事率、全記事と使用記事の密度の分母が別に出る。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "曖昧な人称と短縮形を盲検抜粋で点検し、辞書は結果前に固定される。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "単数一人称と短縮形の千P語値をT02 IDへ一意に戻せる。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

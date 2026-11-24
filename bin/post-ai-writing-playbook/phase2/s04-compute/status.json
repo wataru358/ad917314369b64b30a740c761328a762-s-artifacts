@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "project": "post-ai-writing",
+  "node_id": "P2-S04",
+  "branchName": "replay/post-ai-writing",
+  "description": "New method-replay run; historical completion is not copied.",
+  "status": "not_started",
+  "updated_at": null,
+  "user_stories": [
+    {
+      "id": "P2-S04",
+      "title": "固定仕様で計算と独立判定を実行する",
+      "description": "固定仕様で計算と独立判定を実行する",
+      "priority": 25,
+      "status": "not_started",
+      "passes": false,
+      "dependencies": [
+        "P2-S03"
+      ],
+      "acceptance_criteria": [
+        {
+          "id": "C01",
+          "criterion": "元データ、設定、コード、環境、D/H、標本、辞書をhashで追跡でき、Dの選択と分類を封印してからHを開いている。",
+          "met": false
+        },
+        {
+          "id": "C02",
+          "criterion": "Mの6指標をすべての記事に対応させる。V01/V02の全候補、V03の固定5系列、X01〜X03、C01の計算と支持、区間、失敗理由が出力される。",
+          "met": false
+        },
+        {
+          "id": "C03",
+          "criterion": "X02の独立AI判定2系統と自動定義の確認記録があり、陽性span、手数え、欠損、unknownを検証できる。標本支持不足の枠は明示される。",
+          "met": false
+        },
+        {
+          "id": "C04",
+          "criterion": "5000反復、4750有効条件、Holm/BH、0分母、必要月と各固定感度の扱いを独立検算で再現する。比較の全キーを列挙し、網羅性と元値を確かめる。",
+          "met": false
+        }
+      ],
+      "notes": "",
+      "owner": null,
+      "attempt": null,
+      "output_dir": null,
+      "receipt": null,
+      "receipt_sha256": null,
+      "blocker": null
+    }
+  ]
+}

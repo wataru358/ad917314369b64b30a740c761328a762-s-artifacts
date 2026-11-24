@@ -1,0 +1,43 @@
+{
+  "version": "dev-writing-rhythm-v1",
+  "scope": "A02 only; fixed 38980 English articles; no minimum words or duplicate exclusions",
+  "baseline_years": [2018, 2019, 2020, 2021],
+  "comparison_years": [2023, 2024],
+  "transition_year": 2022,
+  "partial_year": 2025,
+  "same_month_auxiliary": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+  "unit": "one article, equal weight within each year; equal weight across years within each comparison period",
+  "primary": ["M02", "M03", "M04"],
+  "quantiles": "linear interpolation including observed zeros, excluding only metric-specific NA",
+  "bootstrap": {
+    "replicates": 2000,
+    "seed": 42,
+    "unit": "all known single numeric author IDs across 2018-2025 sampled together with replacement; all their articles retained",
+    "interval": "percentile 95%, linear quantiles",
+    "min_authors_per_main_year": 30,
+    "min_coverage_for_full_cohort_interpretation": 0.9,
+    "p_values": "not_run; no optional six-metric tests or Holm adjustment"
+  },
+  "sentence_count_bands": ["0", "1", "2-4", "5+"],
+  "M02": "mean of positive-word P sentence lengths, terminal fragments included; n=0 => NA",
+  "M03": "population SD / mean of positive-word P sentence lengths; n<2 => NA; 2-4 retained and flagged",
+  "M04": "1000 * P non-numeric-internal commas / W_P; W_P=0 => NA; zero commas => 0",
+  "secondary": {
+    "sentence_burstiness": "(CV-1)/(CV+1), same information as CV, n<2 => NA",
+    "adjacent_sentence_difference_mean": "mean absolute difference of adjacent positive-word sentence lengths within each P owner; zero-word units skipped as in T02; no pair => NA",
+    "equal_adjacent_sentence_share": "exactly equal word-count adjacent pairs / all same-owner positive-word sentence pairs; no pair => NA; exploration, no readability claim",
+    "single_sentence_paragraph_rate": "P owners with exactly 1 positive-word sentence / all P owners, including zero-word owners; no P owner => NA",
+    "paragraph_sentence_count_cv": "population SD / mean of positive-word sentence counts across all P owners, zero counts included; fewer than 2 owners or mean=0 => NA",
+    "comma_interval_sentence_mean": "split every saved P machine sentence at non-numeric-internal commas; include leading/trailing zero-word intervals and zero-word sentences; no comma gives 1 interval; count saved ASCII word tokens per interval then average within article; no P sentence units => NA",
+    "comma_interval_sentence_mean_ge5commas": "same article-level value conditional on >=5 P commas, threshold fixed before annual summaries; below threshold => NA",
+    "comma_interval_legacy_article_proxy": "existing T02 W_P/(commas+1) retained under explicit legacy name; W_P=0 => NA; not a sentence-interval measure"
+  },
+  "sensitivity_deferred_to_V01": [
+    "CV restricted to >=5 positive-word P sentences",
+    "exclude terminal fragments",
+    "P+L sentence segmentation",
+    "word-count bands and paragraph-length matched comparisons",
+    "quality-flag influence and segmentation error sensitivity"
+  ],
+  "quality_diagnostics": "no exclusion; annual zero/one/low sentence counts, zero-word machine units, terminal fragment counts, P/L separation, deterministic 2 diagnostic cases per year (low n and extreme CV), first 3 P owners up to 600 characters"
+}

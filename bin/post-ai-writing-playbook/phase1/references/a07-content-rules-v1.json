@@ -1,0 +1,52 @@
+{
+  "version": "a07-content-rubric-v1",
+  "rubric_document": "../analysis-methods.md",
+  "calibration_articles": 32,
+  "evaluation_articles": 128,
+  "counting_unit": "unchanged fixed S candidate unit_id; source_word_count > 0; per category once per sentence",
+  "categories": [
+    "operation_observation",
+    "failure_response",
+    "measurement_conditions_numbers",
+    "limitation_counterexample",
+    "sourced_claim"
+  ],
+  "labels": [
+    "present",
+    "absent",
+    "uncertain"
+  ],
+  "operation_evidence_modes": [
+    "narrated_performed",
+    "authored_implementation",
+    "walkthrough_completed",
+    "reported_third_party",
+    "uncertain"
+  ],
+  "operation_mode_reporting": "all positive modes included in primary descriptive presence, with mode-specific values retained; do not interpret as executed or personally experienced",
+  "measurement_origin_positive": "own_reported",
+  "measurement_condition_required": "explicit period, input, configuration, trials or cumulative scope; one or more referenced S unit IDs",
+  "zero_words": "context only; never add to S count; density NA when article W_S=0",
+  "article_label": "present if n_present>0, otherwise uncertain if n_uncertain>0, otherwise absent",
+  "count_bounds": "[n_present,n_present+n_uncertain]; retain uncertainty even in positive articles",
+  "density": "1000*count_bound/W_S; NA at W_S=0",
+  "context_only": "record body quote offsets and category separately; excluded from S presence, count and density",
+  "overlap": "retain category overlaps and sentence union; sum of categories is not independent evidence count",
+  "article_types": [
+    "explanation",
+    "tutorial",
+    "project_report",
+    "experience_report",
+    "resource_list",
+    "promotion",
+    "community_report",
+    "question",
+    "other",
+    "uncertain"
+  ],
+  "article_type_source": "primary purpose of full saved body; secondary types allowed; rationale required; no metadata copy",
+  "evaluation_access_gate": "content-rubric checkpoint AND separately frozen proxy-rules checkpoint required before evaluation text display",
+  "truth_assessment": "not_assessed",
+  "annual_A07_results_viewed_before_freeze": false,
+  "sample_reselection": false
+}

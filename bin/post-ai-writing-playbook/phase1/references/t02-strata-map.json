@@ -1,0 +1,81 @@
+{
+  "version": "dev-writing-topic-strata-v1",
+  "fixed_before_year_metric_summaries": true,
+  "basis": "raw saved article-header tags; supplement the multi-label t02_classification.json topics; never infer absent tags from writing features",
+  "priority": ["AI_LLM", "data_ML", "frontend", "backend", "infra", "career_other"],
+  "tags": {
+    "AI_LLM": ["ai", "llm", "openai", "chatgpt", "generativeai", "gpt", "llama", "langchain"],
+    "data_ML": [
+      "machinelearning",
+      "deeplearning",
+      "datascience",
+      "dataengineering",
+      "pandas",
+      "numpy",
+      "database",
+      "sql",
+      "postgres",
+      "postgresql",
+      "mysql",
+      "mongodb",
+      "redis",
+      "sqlite",
+      "dynamodb"
+    ],
+    "frontend": [
+      "javascript",
+      "typescript",
+      "react",
+      "vue",
+      "angular",
+      "svelte",
+      "html",
+      "css",
+      "frontend",
+      "nextjs",
+      "tailwindcss"
+    ],
+    "backend": [
+      "node",
+      "nodejs",
+      "express",
+      "nestjs",
+      "backend",
+      "api",
+      "rest",
+      "graphql",
+      "django",
+      "flask",
+      "laravel",
+      "spring",
+      "rails"
+    ],
+    "infra": [
+      "aws",
+      "azure",
+      "gcp",
+      "cloud",
+      "devops",
+      "docker",
+      "kubernetes",
+      "terraform",
+      "serverless",
+      "linux",
+      "cicd"
+    ],
+    "career_other": [
+      "career",
+      "discuss",
+      "watercooler",
+      "learning",
+      "beginners",
+      "writing",
+      "community",
+      "management",
+      "leadership"
+    ]
+  },
+  "no_matched_tag": "unknown",
+  "article_type_primary_adjustment": false,
+  "article_type_reason": "T02 blind calibration agreement 33/80; no validated content type is available"
+}
